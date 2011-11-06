@@ -1,0 +1,10 @@
+
+
+* implementar o balancing do grid;
+	(nao faco nem ideia como!!!) :)
+	
+* implementar as funcoes de utility;
+
+* implementar a fase de planning (com o estabelecimento dos contratos);
+	(isso implica na entrada das maquinas da cloud)
+	(nao faco ideia como serah o processo de otimizacao) :(
