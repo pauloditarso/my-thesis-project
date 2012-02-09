@@ -25,29 +25,41 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 					while(ptrAuxMachine) {
 
-						if (ptrAuxMachine->status == IDLE) {
+						if (ptrAuxMachine->status == IDLE || ptrAuxMachine->status == DONATING) {
+
+							if (ptrAuxMachine->status == DONATING) {
+
+								// insert a new grid preemption into the event list
+								event *ptrNewGridPreemption;
+
+								if ( ptrAuxMachine->source == LOCAL ) {
+
+									if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
+										ptrNewGridPreemption->eventID = GRIDPREEMPTED;
+										ptrNewGridPreemption->time = ptrCurrentEvent->time;
+										ptrNewGridPreemption->machineInfo.machineID = ptrAuxMachine->machineID;
+										ptrNewGridPreemption->machineInfo.source = ptrAuxMachine->source;
+										ptrNewGridPreemption->machineInfo.status = RUNNING;
+										ptrNewGridPreemption->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
+										ptrNewGridPreemption->machineInfo.departureTime = ptrAuxMachine->departureTime;
+										ptrNewGridPreemption->machineInfo.reservationPrice = ptrAuxMachine->reservationPrice;
+										ptrNewGridPreemption->machineInfo.usagePrice = ptrAuxMachine->usagePrice;
+										ptrNewGridPreemption->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
+										ptrNewGridPreemption->nextEvent = NULL;
+
+										InsertEvent(ptrEventList, ptrNewGridPreemption);
+									}
+									else printf("ERROR (task schedule): merdou o malloc!!!\n");
+
+								}
+
+
+							}
 
 							ptrAuxMachine->status = RUNNING;
 							ptrAuxTask->status = STARTED;
 
 							InsertAccountList(ptrCurrentEvent, ptrAuxMachine, ptrAuxTask, ptrAccountInfoList);
-
-							// insert a new grid preemption into the event list
-							event *ptrNewGridPreemption;
-
-							if ( ptrAuxMachine->source == LOCAL ) {
-
-								if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
-									ptrNewGridPreemption->eventID = GRIDPREEMPTED;
-									ptrNewGridPreemption->time = ptrCurrentEvent->time;
-									ptrNewGridPreemption->flag = 0;
-									ptrNewGridPreemption->nextEvent = NULL;
-
-									InsertEvent(ptrEventList, ptrNewGridPreemption);
-								}
-								else printf("ERROR (task schedule): merdou o malloc!!!\n");
-
-							}
 
 							event *ptrNewEvent;
 
@@ -68,6 +80,24 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 							}
 							else {
 								printf("ERROR (task schedule): merdou o malloc!!!\n");
+							}
+
+							if (ptrAuxTask->taskID == 1) {
+
+								event *ptrNewEvent;
+
+								if( (ptrNewEvent = malloc(sizeof(event))) ) {
+									ptrNewEvent->eventID = JOBSTARTED;
+									ptrNewEvent->time = ptrCurrentEvent->time;
+									ptrNewEvent->jobInfo.jobID = ptrAuxTask->jobID;
+									ptrNewEvent->nextEvent = NULL;
+
+									InsertEvent(ptrEventList, ptrNewEvent);
+								}
+								else {
+									printf("ERROR (task schedule): merdou o malloc!!!\n");
+								}
+
 							}
 
 							printf("eventID %d (Task Scheduled) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);

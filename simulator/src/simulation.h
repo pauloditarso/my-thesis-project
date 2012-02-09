@@ -20,11 +20,16 @@ typedef struct task {
 	struct task *nextTask;
 } task;
 
+typedef struct job {
+	unsigned int jobID, arrivalTime, finnishTime, longestTask, deadline;
+	struct job *nextJob;
+} job;
+
 typedef struct machine {
 	unsigned int machineID;
 	enum {LOCAL, GRID, CLOUD} source;
 //	unsigned short int capacity; // future implementation
-	enum {IDLE, RUNNING} status;
+	enum {IDLE, RUNNING, DONATING} status;
 	unsigned int arrivalTime, departureTime;
 	float usagePrice, reservationPrice;
 	struct machine *nextMachine;
@@ -32,10 +37,11 @@ typedef struct machine {
 
 typedef struct event {
 	enum {SIMSTARTED, MACHARRIVAL, MACHDEPARTURE, GRIDDONATING, GRIDPREEMPTED, TASKARRIVAL, TASKSCHEDULE, TASKPREEMPTED,
-	TASKFINNISHED, SIMFINNISHED} eventID;
+	TASKFINNISHED, JOBARRIVAL, JOBSTARTED, JOBFINNISHED, SIMFINNISHED} eventID;
 	unsigned int time;
 	union {
 		task taskInfo;
+		job jobInfo;
 		machine machineInfo;
 		short int flag;
 	};
@@ -51,6 +57,15 @@ typedef struct accountInfo {
 	struct accountInfo *nextAccountInfo;
 } accountInfo;
 
+typedef struct gridInfo {
+	unsigned int accountID;
+	unsigned int machineID;
+	enum {GRIDLOCAL, GRIDGRID, GRIDCLOUD} source;
+	unsigned int startTime, finnishTime;
+//	unsigned int girdAccumulatedBalance;
+	struct gridInfo *nextGridInfo;
+} gridInfo;
+
 //typedef union handlerInput {
 //	machine *ptrMachineList, **ptrPtrMachineList;
 //	task *ptrTaskList;
@@ -65,13 +80,15 @@ void RemoveEvent(event **ptrPtrEventList, event *ptrOldEvent);
 
 void FillEmptyEventList(event *ptrEventList);
 
-void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList);
+void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList);
 
 void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptrPtrMachineList);
 
-void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList);
+void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridInfo *ptrGridInfoList);
 
-void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList);
+void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridInfo *ptrGridInfoList);
+
+void InsertGridList(event *ptrCurrentEvent, machine *ptrAuxMachine, gridInfo *ptrGridInfoList);
 
 void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList);
 
@@ -85,6 +102,13 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *ptrMachineList, task *ptrTaskList, accountInfo **ptrPtrAccountInfoList);
 
-void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task *ptrTaskList, accountInfo **ptrPtrAccountInfoList);
+void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList);
+
+void JobStarted(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList);
+
+void JobFinnished(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList);
+
+void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task *ptrTaskList, accountInfo **ptrPtrAccountInfoList,
+		gridInfo *ptrGridInfoList, job *ptrJobList);
 
 #endif /* SIMULATION_H_ */

@@ -1,10 +1,10 @@
-
+* implementar as funcoes de utility;
+	como???
 
 * implementar o balancing do grid;
-	(nao faco nem ideia como!!!) :)
+	como calcular o balancing?
 	
-* implementar as funcoes de utility;
-
 * implementar a fase de planning (com o estabelecimento dos contratos);
 	(isso implica na entrada das maquinas da cloud)
 	(nao faco ideia como serah o processo de otimizacao) :(
+	(lembrar da solucao de soh comprar maquinas na cloud para a hora de precisa, ou seja, a ultima)
