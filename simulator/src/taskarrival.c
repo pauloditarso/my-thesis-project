@@ -63,7 +63,7 @@ void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList)
 
 				InsertEvent(ptrEventList, ptrNewEvent);
 			}
-			else printf("ERROR (machine arrival): merdou o malloc!!!\n");
+			else printf("ERROR (task arrival): merdou o malloc!!!\n");
 
 			printf("eventID %d (Task Arrival) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			printf("taskID %d jobID %d AT %d jobSize %d runtime %d status %d utility %f\n",

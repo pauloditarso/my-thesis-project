@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList) {
+void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList) {
 
 	if (ptrCurrentEvent->eventID == MACHARRIVAL) {
 
@@ -23,22 +23,48 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 				ptrMachineList->reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
 				ptrMachineList->nextMachine = NULL;
 
-				// insert a new grid donation into the event list
-				if ( ptrMachineList->source == 0 ) {
+				// insert a new grid donation into the event list, if there is no waiting task
+				if ( ptrMachineList->source == LOCAL ) {  // cloud machines may be inserted here as well
 
-					event *ptrNewDonation;
+					task *ptrAuxTask;
+					ptrAuxTask = ptrTaskList;
+					unsigned short int isThereTaskWaiting = 0;
 
-					if( (ptrNewDonation = malloc(sizeof(event))) ) {
-						ptrNewDonation->eventID = GRIDDONATING;
-						ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after the machine's arrival
-						ptrNewDonation->flag = 0;
-						ptrNewDonation->nextEvent = NULL;
+					while(ptrAuxTask) {
 
-						InsertEvent(ptrEventList, ptrNewDonation);
+						if (ptrAuxTask->taskID != 0 && ptrAuxTask->arrivalTime <= ptrCurrentEvent->time && ptrAuxTask->status == QUEUED) {
+							isThereTaskWaiting = 1;
+							break;
+						}
+
+						ptrAuxTask = ptrAuxTask->nextTask;
 					}
-					else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 
-				}
+					if (isThereTaskWaiting == 0) {
+
+						event *ptrNewDonation;
+
+						if( (ptrNewDonation = malloc(sizeof(event))) ) {
+							ptrNewDonation->eventID = GRIDDONATING;
+							ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after machine's arrival
+							ptrNewDonation->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
+							ptrNewDonation->machineInfo.source = ptrCurrentEvent->machineInfo.source;
+							ptrNewDonation->machineInfo.status = ptrCurrentEvent->machineInfo.status;
+							ptrNewDonation->machineInfo.arrivalTime = ptrCurrentEvent->machineInfo.arrivalTime;
+							ptrNewDonation->machineInfo.departureTime = ptrCurrentEvent->machineInfo.departureTime;
+							ptrNewDonation->machineInfo.usagePrice = ptrCurrentEvent->machineInfo.usagePrice;
+							ptrNewDonation->machineInfo.reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
+							ptrNewDonation->machineInfo.nextMachine = ptrCurrentEvent->machineInfo.nextMachine;
+							ptrNewDonation->nextEvent = NULL;
+
+							InsertEvent(ptrEventList, ptrNewDonation);
+						}
+						else printf("ERROR (machine arrival): merdou o malloc!!!\n");
+
+					}
+
+				} // ending donation if
+
 			}
 			else {
 
@@ -57,22 +83,46 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 				ptrNewMachine->reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
 				ptrNewMachine->nextMachine = NULL;
 
-				// insert a new grid donation into the event list
-				if ( ptrNewMachine->source == 0 ) {
+				// insert a new grid donation into the event list, if there is no waiting task
+				if ( ptrNewMachine->source == LOCAL ) {  // cloud machines may be inserted here as well
 
-					event *ptrNewDonation;
+					task *ptrAuxTask;
+					ptrAuxTask = ptrTaskList;
+					unsigned short int isThereTaskWaiting = 0;
 
-					if( (ptrNewDonation = malloc(sizeof(event))) ) {
-						ptrNewDonation->eventID = GRIDDONATING;
-						ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after the machine's arrival
-						ptrNewDonation->flag = 0;
-						ptrNewDonation->nextEvent = NULL;
+					while(ptrAuxTask) {
 
-						InsertEvent(ptrEventList, ptrNewDonation);
+						if (ptrAuxTask->taskID != 0 && ptrAuxTask->arrivalTime <= ptrCurrentEvent->time && ptrAuxTask->status == QUEUED) {
+							isThereTaskWaiting = 1;
+							break;
+						}
+
+						ptrAuxTask = ptrAuxTask->nextTask;
 					}
-					else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 
-				}
+					if (isThereTaskWaiting == 0) {
+
+						event *ptrNewDonation;
+
+						if( (ptrNewDonation = malloc(sizeof(event))) ) {
+							ptrNewDonation->eventID = GRIDDONATING;
+							ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after machine's arrival
+							ptrNewDonation->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
+							ptrNewDonation->machineInfo.source = ptrCurrentEvent->machineInfo.source;
+							ptrNewDonation->machineInfo.status = ptrCurrentEvent->machineInfo.status;
+							ptrNewDonation->machineInfo.arrivalTime = ptrCurrentEvent->machineInfo.arrivalTime;
+							ptrNewDonation->machineInfo.departureTime = ptrCurrentEvent->machineInfo.departureTime;
+							ptrNewDonation->machineInfo.usagePrice = ptrCurrentEvent->machineInfo.usagePrice;
+							ptrNewDonation->machineInfo.reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
+							ptrNewDonation->machineInfo.nextMachine = ptrCurrentEvent->machineInfo.nextMachine;
+							ptrNewDonation->nextEvent = NULL;
+
+							InsertEvent(ptrEventList, ptrNewDonation);
+						}
+						else printf("ERROR (machine arrival): merdou o malloc!!!\n");
+					}
+
+				} // ending donation if
 
 				machine *ptrAux, *ptrActualMachine, *ptrLastMachine;
 				ptrAux = ptrActualMachine = ptrLastMachine = ptrMachineList;

@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList) {
+void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridInfo *ptrGridInfoList) {
 
 	if (ptrCurrentEvent->eventID == GRIDDONATING) {
 
@@ -16,16 +16,22 @@ void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 		while (ptrAuxMachine) {
 
-			if ( ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == IDLE ) {
+			if ( ptrAuxMachine->machineID == ptrCurrentEvent->machineInfo.machineID &&
+					ptrAuxMachine->source == ptrCurrentEvent->machineInfo.source) {
 
-				printf("eventID %d (Grid Donating) time %d \n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-				//	printf("machineID %d source %d status %d AT %d DT %d UP %f RP %f\n",
-				//			ptrCurrentEvent->machineInfo.machineID, ptrCurrentEvent->machineInfo.source,
-				//			ptrCurrentEvent->machineInfo.status, ptrCurrentEvent->machineInfo.arrivalTime,
-				//			ptrCurrentEvent->machineInfo.departureTime, ptrCurrentEvent->machineInfo.usagePrice,
-				//			ptrCurrentEvent->machineInfo.reservationPrice);
+				if ( ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == IDLE ) {
 
-				break;
+					ptrAuxMachine->status = DONATING;
+
+					InsertGridList(ptrCurrentEvent, ptrAuxMachine, ptrGridInfoList);
+
+					printf("eventID %d (Grid Donating) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+					printf("machineID %d source %d status %d\n", ptrAuxMachine->machineID, ptrAuxMachine->source,
+								ptrAuxMachine->status);
+
+					break;
+				}
+
 			}
 
 			ptrAuxMachine = ptrAuxMachine->nextMachine;

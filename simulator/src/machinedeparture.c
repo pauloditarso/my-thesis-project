@@ -60,22 +60,38 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 
 				}
 
-				if ( ptrActualMachine->source == LOCAL && ptrActualMachine->status == IDLE ) {
+				if ( ptrActualMachine->source == LOCAL && ptrActualMachine->status == DONATING) {
 
 					// insert a new grid preemption into the event list
 					event *ptrNewGridPreemption;
 
-					if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
-						ptrNewGridPreemption->eventID = GRIDPREEMPTED;
-						ptrNewGridPreemption->time = ptrCurrentEvent->time;
-						ptrNewGridPreemption->flag = 0;
-						ptrNewGridPreemption->nextEvent = NULL;
+					if ( ptrActualMachine->source == LOCAL ) {
 
-						InsertEvent(ptrEventList, ptrNewGridPreemption);
+						if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
+							ptrNewGridPreemption->eventID = GRIDPREEMPTED;
+							ptrNewGridPreemption->time = ptrCurrentEvent->time;
+							ptrNewGridPreemption->machineInfo.machineID = ptrActualMachine->machineID;
+							ptrNewGridPreemption->machineInfo.source = ptrActualMachine->source;
+							ptrNewGridPreemption->machineInfo.status = ptrActualMachine->status;
+							ptrNewGridPreemption->machineInfo.arrivalTime = ptrActualMachine->arrivalTime;
+							ptrNewGridPreemption->machineInfo.departureTime = ptrActualMachine->departureTime;
+							ptrNewGridPreemption->machineInfo.reservationPrice = ptrActualMachine->reservationPrice;
+							ptrNewGridPreemption->machineInfo.usagePrice = ptrActualMachine->usagePrice;
+							ptrNewGridPreemption->machineInfo.nextMachine = ptrActualMachine->nextMachine;
+							ptrNewGridPreemption->nextEvent = NULL;
+
+							InsertEvent(ptrEventList, ptrNewGridPreemption);
+						}
+						else printf("ERROR (task schedule): merdou o malloc!!!\n");
+
 					}
-					else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 
 				}
+
+				printf("eventID %d (Machine Departure) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+				printf("machineID %d source %d status %d AT %d DT %d UP %f RP %f\n", ptrActualMachine->machineID, ptrActualMachine->source,
+						ptrActualMachine->status, ptrActualMachine->arrivalTime, ptrActualMachine->departureTime, ptrActualMachine->usagePrice,
+						ptrActualMachine->reservationPrice);
 
 				if (ptrLastMachine != ptrActualMachine) {
 					ptrLastMachine->nextMachine = ptrActualMachine->nextMachine;
@@ -84,13 +100,6 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 				else {
 					*ptrPtrMachineList = (*ptrPtrMachineList)->nextMachine;
 				}
-
-				printf("eventID %d (Machine Departure) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-				printf("machineID %d source %d status %d AT %d DT %d UP %f RP %f\n",
-						ptrCurrentEvent->machineInfo.machineID, ptrCurrentEvent->machineInfo.source,
-						ptrCurrentEvent->machineInfo.status, ptrCurrentEvent->machineInfo.arrivalTime,
-						ptrCurrentEvent->machineInfo.departureTime, ptrCurrentEvent->machineInfo.usagePrice,
-						ptrCurrentEvent->machineInfo.reservationPrice);
 
 			} else printf("ERROR (machine departure): machine not found!!!\n");
 

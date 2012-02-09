@@ -29,6 +29,7 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 			}
 
 			if (ptrAuxTask != NULL) {
+
 				ptrAuxTask->status = ptrCurrentEvent->taskInfo.status; // it must be FINNISHED
 
 				printf("eventID %d (Task Finnished) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
@@ -38,57 +39,114 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 						ptrCurrentEvent->taskInfo.runtime, ptrCurrentEvent->taskInfo.status,
 						ptrCurrentEvent->taskInfo.utilityFunction);
 
+
+				unsigned short int count = 0;
 				while(ptrAuxAccount){
 
-					if (ptrAuxAccount->taskID == ptrAuxTask->taskID && ptrAuxAccount->jobID == ptrAuxTask->jobID) {
+					if (ptrAuxAccount->jobID == ptrAuxTask->jobID) {
 
-						ptrAuxAccount->finnishTime = ptrCurrentEvent->time;
+						count += 1;
 
-						while(ptrAuxMachine) {
+						if (ptrAuxAccount->taskID == ptrAuxTask->taskID) {
 
-							if(ptrAuxMachine->machineID == ptrAuxAccount->machineID &&
-									ptrAuxMachine->source == ptrAuxAccount->source) {
-								ptrAuxMachine->status = IDLE;
-								break;
+							ptrAuxAccount->finnishTime = ptrCurrentEvent->time;
+
+							while(ptrAuxMachine) {
+
+								if(ptrAuxMachine->machineID == ptrAuxAccount->machineID &&
+										ptrAuxMachine->source == ptrAuxAccount->source) {
+									ptrAuxMachine->status = IDLE;
+									break;
+								}
+
+								ptrAuxMachine = ptrAuxMachine->nextMachine;
 							}
 
-							ptrAuxMachine = ptrAuxMachine->nextMachine;
+							if(count == ptrAuxTask->jobSize) {
+
+								event *ptrNewEvent;
+
+								if( (ptrNewEvent = malloc(sizeof(event))) ) {
+									ptrNewEvent->eventID = JOBFINNISHED;
+									ptrNewEvent->time = ptrCurrentEvent->time;
+									ptrNewEvent->jobInfo.jobID = ptrAuxTask->jobID;
+									ptrNewEvent->nextEvent = NULL;
+
+									InsertEvent(ptrEventList, ptrNewEvent);
+								}
+								else {
+									printf("ERROR (task schedule): merdou o malloc!!!\n");
+								}
+
+							}
+
+							printf("passou por aqui!!!\n");
+							break;
 						}
 
-						break;
+						ptrAuxAccount = ptrAuxAccount->nextAccountInfo;
+
 					}
-					ptrAuxAccount = ptrAuxAccount->nextAccountInfo;
 				}
 
 			}
 		}
 //		else printf("lista vazia!!!\n");
 
-		// insert a new schedule into the event list
-		event *ptrNewSchedule;
+		// code to decide if to insert a schedule or a donation event
 
-		if( (ptrNewSchedule = malloc(sizeof(event))) ) {
-			ptrNewSchedule->eventID = TASKSCHEDULE;
-			ptrNewSchedule->time = ptrCurrentEvent->time;
-			ptrNewSchedule->flag = 0;
-			ptrNewSchedule->nextEvent = NULL;
+		ptrAuxTask = ptrTaskList;
+		unsigned short int isThereQueuedTask = 0;
 
-			InsertEvent(ptrEventList, ptrNewSchedule);
+		while(ptrAuxTask) {
+
+			if(ptrAuxTask->taskID != 0 && ptrAuxTask->arrivalTime <= (ptrCurrentEvent->time+1) && ptrAuxTask->status == QUEUED) {
+				isThereQueuedTask = 1;
+				break;
+			}
+
+			ptrAuxTask = ptrAuxTask->nextTask;
 		}
-		else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 
-		// insert a new donation into the event list
-		event *ptrNewDonation;
+		if( isThereQueuedTask == 0 && ptrAuxMachine->source == LOCAL ) {  // cloud machines may be inserted as well
+			// insert a new donation into the event list, if there is no waiting tasks
 
-		if( (ptrNewDonation = malloc(sizeof(event))) ) {
-			ptrNewDonation->eventID = GRIDDONATING;
-			ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after the machine's arrival
-			ptrNewDonation->flag = 0;
-			ptrNewDonation->nextEvent = NULL;
+			event *ptrNewDonation;
 
-			InsertEvent(ptrEventList, ptrNewDonation);
+			if( (ptrNewDonation = malloc(sizeof(event))) ) {
+				ptrNewDonation->eventID = GRIDDONATING;
+				ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after the machine's arrival
+				ptrNewDonation->machineInfo.machineID = ptrAuxMachine->machineID;
+				ptrNewDonation->machineInfo.source = ptrAuxMachine->source;
+				ptrNewDonation->machineInfo.status = DONATING;
+				ptrNewDonation->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
+				ptrNewDonation->machineInfo.departureTime = ptrAuxMachine->departureTime;
+				ptrNewDonation->machineInfo.usagePrice = ptrAuxMachine->usagePrice;
+				ptrNewDonation->machineInfo.reservationPrice = ptrAuxMachine->reservationPrice;
+				ptrNewDonation->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
+				ptrNewDonation->nextEvent = NULL;
+
+				InsertEvent(ptrEventList, ptrNewDonation);
+			}
+			else printf("ERROR (task finnished): merdou o malloc!!!\n");
+
 		}
-		else printf("ERROR (machine arrival): merdou o malloc!!!\n");
+		else {
+			// insert a new schedule into the event list
+
+			event *ptrNewSchedule;
+
+			if( (ptrNewSchedule = malloc(sizeof(event))) ) {
+				ptrNewSchedule->eventID = TASKSCHEDULE;
+				ptrNewSchedule->time = ptrCurrentEvent->time;
+				ptrNewSchedule->flag = 0;
+				ptrNewSchedule->nextEvent = NULL;
+
+				InsertEvent(ptrEventList, ptrNewSchedule);
+			}
+			else printf("ERROR (task finnished): merdou o malloc!!!\n");
+
+		}
 
 	} else printf("ERROR (task finnished): wrong eventID!!!\n");
 

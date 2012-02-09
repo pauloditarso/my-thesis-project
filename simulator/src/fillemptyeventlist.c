@@ -14,6 +14,7 @@ void FillEmptyEventList(event *ptrEventList) {
 	FILE *localMachines;
 	FILE *gridMachines;
 	FILE *workloadTasks;
+	FILE *workloadJobs;
 
 	localMachines = fopen("./src/local-machines.txt", "r");
 	if (!feof(localMachines)) {
@@ -35,6 +36,15 @@ void FillEmptyEventList(event *ptrEventList) {
 
 	workloadTasks = fopen("./src/workload-tasks.txt", "r");
 	if (!feof(workloadTasks)) {
+//		printf("blz!!!\n");
+	}
+	else {
+		printf("ERROR (fill): merdou abrir arquivo!!!");
+		exit(1);
+	}
+
+	workloadJobs = fopen("./src/workload-jobs.txt", "r");
+	if (!feof(workloadJobs)) {
 //		printf("blz!!!\n");
 	}
 	else {
@@ -130,9 +140,33 @@ void FillEmptyEventList(event *ptrEventList) {
 		}
 	}
 
+	while(!feof(workloadJobs)) {
+
+		unsigned int auxTime, auxJobID, auxJobSize, auxLongestTask, auxAccRuntime;
+		fscanf(workloadJobs, "%d %d %d %d %d", &auxTime, &auxJobID, &auxJobSize, &auxLongestTask, &auxAccRuntime);
+
+		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
+			auxPtrEvent1->eventID = JOBARRIVAL;
+			auxPtrEvent1->time = auxTime;
+			auxPtrEvent1->jobInfo.jobID = auxJobID;
+			auxPtrEvent1->jobInfo.arrivalTime = auxTime;
+			auxPtrEvent1->jobInfo.finnishTime = 0; // indicates a non-setted finnish time
+			auxPtrEvent1->jobInfo.longestTask = auxLongestTask;
+			auxPtrEvent1->jobInfo.deadline = (auxTime + auxAccRuntime);
+			auxPtrEvent1->jobInfo.nextJob = NULL;
+			auxPtrEvent1->nextEvent = NULL;
+
+			InsertEvent(ptrEventList, auxPtrEvent1);
+		}
+		else {
+			printf("ERROR (fill): merdou o malloc!!!\n");
+		}
+
+	}
+
 	while(!feof(workloadTasks)) {
 
-		int auxTaskID, auxTime, auxJobID, auxJobSize, auxRuntime;
+		unsigned int auxTaskID, auxTime, auxJobID, auxJobSize, auxRuntime;
 		fscanf(workloadTasks, "%d %d %d %d %d", &auxTaskID, &auxTime, &auxJobID, &auxJobSize, &auxRuntime);
 
 		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
@@ -159,4 +193,5 @@ void FillEmptyEventList(event *ptrEventList) {
 	fclose(localMachines);
 	fclose(gridMachines);
 	fclose(workloadTasks);
+	fclose(workloadJobs);
 }
