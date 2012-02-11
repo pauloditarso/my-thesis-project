@@ -7,8 +7,8 @@
 
 #include "simulation.h"
 
-void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task *ptrTaskList, accountInfo **ptrPtrAccountInfoList,
-		gridInfo *ptrGridInfoList, job *ptrJobList) {
+void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
+		gridAccountInfo *ptrGridInfoList, job *ptrJobList) {
 
 	switch (ptrCurrentEvent->eventID) {
 		case 0:
@@ -36,15 +36,15 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 6:
 			// TASK SCHEDULED
-			TaskSchedule(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, *ptrPtrAccountInfoList);
+			TaskSchedule(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, *ptrPtrTaskAccountInfoList);
 			break;
 		case 7:
 			// TASK PREEMPTED
-			TaskUnSchedule(ptrCurrentEvent, ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrPtrAccountInfoList);
+			TaskUnSchedule(ptrCurrentEvent, ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrPtrTaskAccountInfoList);
 			break;
 		case 8:
 			// TASK FINNISHED
-			TaskFinnished(ptrCurrentEvent, *ptrPtrEventList, ptrTaskList, *ptrPtrAccountInfoList, *ptrPtrMachineList);
+			TaskFinnished(ptrCurrentEvent, *ptrPtrEventList, ptrTaskList, *ptrPtrTaskAccountInfoList, *ptrPtrMachineList);
 			break;
 		case 9:
 			// JOB ARRIVAL

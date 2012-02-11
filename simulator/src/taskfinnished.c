@@ -7,14 +7,14 @@
 
 #include "simulation.h"
 
-void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList, accountInfo *ptrAccountInfoList, machine *ptrMachineList) {
+void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList) {
 
 	if (ptrCurrentEvent->eventID == TASKFINNISHED) {
 
 		task *ptrAuxTask;
 		ptrAuxTask = ptrTaskList;
-		accountInfo *ptrAuxAccount;
-		ptrAuxAccount = ptrAccountInfoList;
+		taskAccountInfo *ptrAuxTaskAccount;
+		ptrAuxTaskAccount = ptrTaskAccountInfoList;
 		machine *ptrAuxMachine;
 		ptrAuxMachine = ptrMachineList;
 
@@ -41,20 +41,20 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 
 
 				unsigned short int count = 0;
-				while(ptrAuxAccount){
+				while(ptrAuxTaskAccount != NULL){
 
-					if (ptrAuxAccount->jobID == ptrAuxTask->jobID) {
+					if (ptrAuxTaskAccount->jobID == ptrAuxTask->jobID) {
 
 						count += 1;
 
-						if (ptrAuxAccount->taskID == ptrAuxTask->taskID) {
+						if (ptrAuxTaskAccount->taskID == ptrAuxTask->taskID) {
 
-							ptrAuxAccount->finnishTime = ptrCurrentEvent->time;
+							ptrAuxTaskAccount->finnishTime = ptrCurrentEvent->time;
 
 							while(ptrAuxMachine) {
 
-								if(ptrAuxMachine->machineID == ptrAuxAccount->machineID &&
-										ptrAuxMachine->source == ptrAuxAccount->source) {
+								if(ptrAuxMachine->machineID == ptrAuxTaskAccount->machineID &&
+										ptrAuxMachine->source == ptrAuxTaskAccount->source) {
 									ptrAuxMachine->status = IDLE;
 									break;
 								}
@@ -80,13 +80,12 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 
 							}
 
-							printf("passou por aqui!!!\n");
 							break;
 						}
-
-						ptrAuxAccount = ptrAuxAccount->nextAccountInfo;
-
 					}
+
+					ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
+
 				}
 
 			}

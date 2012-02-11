@@ -7,16 +7,16 @@
 
 #include "simulation.h"
 
-void RemoveAccountList(accountInfo **ptrPtrAccountInfoList, accountInfo *ptrOldAccount) {
+void RemoveAccountList(taskAccountInfo **ptrPtrTaskAccountInfoList, taskAccountInfo *ptrOldTaskAccount) {
 
-	accountInfo *ptrAux, *ptrActual, *ptrLast;
-	ptrAux = ptrActual = ptrLast = (*ptrPtrAccountInfoList);
+	taskAccountInfo *ptrAux, *ptrActual, *ptrLast;
+	ptrAux = ptrActual = ptrLast = (*ptrPtrTaskAccountInfoList);
 	unsigned short int found = 0;
 
 	while (ptrAux) {
 
-		if(ptrAux->machineID == ptrOldAccount->machineID &&
-				ptrAux->source == ptrOldAccount->source &&
+		if(ptrAux->machineID == ptrOldTaskAccount->machineID &&
+				ptrAux->source == ptrOldTaskAccount->source &&
 				ptrAux->finnishTime == 0) {
 
 			found = 1;
@@ -24,19 +24,19 @@ void RemoveAccountList(accountInfo **ptrPtrAccountInfoList, accountInfo *ptrOldA
 		}
 		else {
 			ptrLast = ptrActual;
-			ptrActual = ptrActual->nextAccountInfo;
+			ptrActual = ptrActual->nextTaskAccountInfo;
 		}
-		ptrAux = ptrAux->nextAccountInfo;
+		ptrAux = ptrAux->nextTaskAccountInfo;
 	}
 
 	if (found) {
 
 		if (ptrLast != ptrActual) {
-			ptrLast->nextAccountInfo = ptrActual->nextAccountInfo;
-			ptrActual->nextAccountInfo = NULL;
+			ptrLast->nextTaskAccountInfo = ptrActual->nextTaskAccountInfo;
+			ptrActual->nextTaskAccountInfo = NULL;
 		}
 		else {
-			*ptrPtrAccountInfoList = (*ptrPtrAccountInfoList)->nextAccountInfo;
+			*ptrPtrTaskAccountInfoList = (*ptrPtrTaskAccountInfoList)->nextTaskAccountInfo;
 		}
 
 	} else printf("ERROR (remove account info): account info not found!!!\n");

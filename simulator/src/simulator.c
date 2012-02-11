@@ -16,9 +16,9 @@ int main(int argc, char *argv[]) {
 	task *taskList;
 	job *jobList;
 //	task *taskList, *ptrAuxTask;
-	accountInfo *accountInfoList, *ptrAuxAccountInfo;
+	taskAccountInfo *taskAccountInfoList, *ptrAuxTaskAccountInfo;
 //	gridInfo *gridInfoList;
-	gridInfo *gridInfoList, *ptrAuxGridInfo;
+	gridAccountInfo *gridInfoList, *ptrAuxGridInfo;
 
 	if ( (eventList = malloc(sizeof(event))) ) {
 		// start simulation event
@@ -58,17 +58,17 @@ int main(int argc, char *argv[]) {
 		printf("ERROR: merdou o malloc!!!\n");
 	}
 
-	if ( (accountInfoList = malloc(sizeof(accountInfo))) ) {
-		accountInfoList->accountID = 0;			// 0 means code for an empty task list
-		accountInfoList->nextAccountInfo = NULL;
+	if ( (taskAccountInfoList = malloc(sizeof(taskAccountInfo))) ) {
+		taskAccountInfoList->taskAccountID = 0;			// 0 means code for an empty task list
+		taskAccountInfoList->nextTaskAccountInfo = NULL;
 	}
 	else {
 		printf("ERROR: merdou o malloc!!!\n");
 	}
 
-	if ( (gridInfoList = malloc(sizeof(gridInfo))) ) {
-			gridInfoList->accountID = 0;			// 0 means code for an empty task list
-			gridInfoList->nextGridInfo = NULL;
+	if ( (gridInfoList = malloc(sizeof(gridAccountInfo))) ) {
+			gridInfoList->gridAccountID = 0;			// 0 means code for an empty task list
+			gridInfoList->nextGridAccountInfo = NULL;
 	}
 	else {
 			printf("ERROR: merdou o malloc!!!\n");
@@ -81,43 +81,43 @@ int main(int argc, char *argv[]) {
 
 		switch (ptrAuxList->eventID) {
 			case 0:
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 1:				// Machine Arrival
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 2:				// Machine Departure
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 3:				// Grid Donating
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 4:				// Grid Preempted
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 5:				// Task Arrival
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 6:				// Task Schedule
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 7:				// Task Preempted
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 8:				// Task Finnished
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 9:				// Job Arrival
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 10:			// Job Started
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 11:			// Job Finnished
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			case 12:				// Simulation Finnished
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &accountInfoList, gridInfoList, jobList);
+				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList);
 				break;
 			default:
 				printf("unkwonk event!!!\n");
@@ -141,14 +141,14 @@ int main(int argc, char *argv[]) {
 
 	printf("a lista tem %d maquinas\n", count);
 
-	ptrAuxAccountInfo = accountInfoList;
+	ptrAuxTaskAccountInfo = taskAccountInfoList;
 	count = 0;
-	while(ptrAuxAccountInfo) {
+	while(ptrAuxTaskAccountInfo) {
 		count++;
-		printf("accountID %d machineID %d source %d taskID %d jobID %d ST %d FT %d\n", ptrAuxAccountInfo->accountID,
-				ptrAuxAccountInfo->machineID, ptrAuxAccountInfo->source, ptrAuxAccountInfo->taskID, ptrAuxAccountInfo->jobID,
-				ptrAuxAccountInfo->startTime, ptrAuxAccountInfo->finnishTime);
-		ptrAuxAccountInfo = ptrAuxAccountInfo->nextAccountInfo;
+		printf("taskAccountID %d machineID %d source %d taskID %d jobID %d ST %d FT %d\n", ptrAuxTaskAccountInfo->taskAccountID,
+				ptrAuxTaskAccountInfo->machineID, ptrAuxTaskAccountInfo->source, ptrAuxTaskAccountInfo->taskID, ptrAuxTaskAccountInfo->jobID,
+				ptrAuxTaskAccountInfo->startTime, ptrAuxTaskAccountInfo->finnishTime);
+		ptrAuxTaskAccountInfo = ptrAuxTaskAccountInfo->nextTaskAccountInfo;
 	}
 
 	printf("a lista tem %d registros\n", count);
@@ -157,10 +157,10 @@ int main(int argc, char *argv[]) {
 	count = 0;
 	while(ptrAuxGridInfo) {
 		count++;
-		printf("gridID %d machineID %d source %d ST %d FT %d\n", ptrAuxGridInfo->accountID,
+		printf("gridAccountID %d machineID %d source %d ST %d FT %d\n", ptrAuxGridInfo->gridAccountID,
 				ptrAuxGridInfo->machineID, ptrAuxGridInfo->source, ptrAuxGridInfo->startTime,
 				ptrAuxGridInfo->finnishTime);
-		ptrAuxGridInfo = ptrAuxGridInfo->nextGridInfo;
+		ptrAuxGridInfo = ptrAuxGridInfo->nextGridAccountInfo;
 	}
 
 	printf("a lista tem %d balances\n", count);

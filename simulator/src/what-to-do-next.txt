@@ -1,5 +1,10 @@
 * implementar as funcoes de utility;
 	como???
+	- primeiro, fazer o registro (na accountList) de todas as execuções de tasks, inclusive as que falharam;
+	(talvez não seja importante no primeiro momento, pois assume-se que apenas as máquinas na grade falham)
+	(mas as máquinas na cloud podem falhar também, caso contrato acabe, por exemplo)
+	- fazer um registro similar ao accountList para os Jobs;
+	(a partir deste registro a gente contabiliza o utilidade produzida)
 
 * implementar o balancing do grid;
 	como calcular o balancing?
@@ -8,3 +13,4 @@
 	(isso implica na entrada das maquinas da cloud)
 	(nao faco ideia como serah o processo de otimizacao) :(
 	(lembrar da solucao de soh comprar maquinas na cloud para a hora de precisa, ou seja, a ultima)
+	(fazer um pre-processamento da quantidade necessária para contratação na cloud)

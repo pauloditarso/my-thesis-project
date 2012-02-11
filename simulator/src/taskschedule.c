@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, accountInfo *ptrAccountInfoList) {
+void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList) {
 
 	if (ptrMachineList && ptrTaskList) {
 
@@ -59,7 +59,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 							ptrAuxMachine->status = RUNNING;
 							ptrAuxTask->status = STARTED;
 
-							InsertAccountList(ptrCurrentEvent, ptrAuxMachine, ptrAuxTask, ptrAccountInfoList);
+							InsertAccountList(ptrCurrentEvent, ptrAuxMachine, ptrAuxTask, ptrTaskAccountInfoList);
 
 							event *ptrNewEvent;
 
