@@ -48,23 +48,32 @@ typedef struct event {
 	struct event *nextEvent;
 } event;
 
-typedef struct accountInfo {
-	unsigned int accountID;
+typedef struct taskAccountInfo {
+	unsigned int taskAccountID;
 	unsigned int machineID;
 	enum {LOCALMACH, GRIDMACH, CLOUDMACH} source;
 	unsigned int taskID, jobID;
 	unsigned int startTime, finnishTime;
-	struct accountInfo *nextAccountInfo;
-} accountInfo;
+	struct taskAccountInfo *nextTaskAccountInfo;
+} taskAccountInfo;
 
-typedef struct gridInfo {
-	unsigned int accountID;
+typedef struct jobAccountInfo {
+	unsigned int jobAccountID;
+	unsigned int machineID;
+	enum {JOBLOCALMACH, JOBGRIDMACH, JOBCLOUDMACH} source;
+	unsigned int taskID, jobID;
+	unsigned int startTime, finnishTime;
+	struct jobAccountInfo *nextJobAccountInfo;
+} jobAccountInfo;
+
+typedef struct gridAccountInfo {
+	unsigned int gridAccountID;
 	unsigned int machineID;
 	enum {GRIDLOCAL, GRIDGRID, GRIDCLOUD} source;
 	unsigned int startTime, finnishTime;
 //	unsigned int girdAccumulatedBalance;
-	struct gridInfo *nextGridInfo;
-} gridInfo;
+	struct gridAccountInfo *nextGridAccountInfo;
+} gridAccountInfo;
 
 //typedef union handlerInput {
 //	machine *ptrMachineList, **ptrPtrMachineList;
@@ -84,23 +93,23 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 
 void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptrPtrMachineList);
 
-void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridInfo *ptrGridInfoList);
+void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridAccountInfo *ptrGridInfoList);
 
-void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridInfo *ptrGridInfoList);
+void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridAccountInfo *ptrGridInfoList);
 
-void InsertGridList(event *ptrCurrentEvent, machine *ptrAuxMachine, gridInfo *ptrGridInfoList);
+void InsertGridList(event *ptrCurrentEvent, machine *ptrAuxMachine, gridAccountInfo *ptrGridInfoList);
 
 void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList);
 
-void TaskFinnished(event *ptrCurrentEvenet, event *ptrEventList, task *ptrTaskList, accountInfo *ptrAccountInfoList, machine *ptrMachineList);
+void TaskFinnished(event *ptrCurrentEvenet, event *ptrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList);
 
-void InsertAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *ptrAuxTask, accountInfo *ptrAccountInfoList);
+void InsertAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *ptrAuxTask, taskAccountInfo *ptrTaskAccountInfoList);
 
-void RemoveAccountList(accountInfo **ptrPtrAccountInfoList, accountInfo *ptrOldAccount);
+void RemoveAccountList(taskAccountInfo **ptrPtrTaskAccountInfoList, taskAccountInfo *ptrOldTaskAccount);
 
-void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, accountInfo *ptrAccountInfoList);
+void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList);
 
-void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *ptrMachineList, task *ptrTaskList, accountInfo **ptrPtrAccountInfoList);
+void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList);
 
 void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList);
 
@@ -108,7 +117,7 @@ void JobStarted(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList);
 
 void JobFinnished(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList);
 
-void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task *ptrTaskList, accountInfo **ptrPtrAccountInfoList,
-		gridInfo *ptrGridInfoList, job *ptrJobList);
+void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
+		gridAccountInfo *ptrGridInfoList, job *ptrJobList);
 
 #endif /* SIMULATION_H_ */

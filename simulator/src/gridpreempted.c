@@ -7,11 +7,11 @@
 
 #include "simulation.h"
 
-void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridInfo *ptrGridInfoList) {
+void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridAccountInfo *ptrGridInfoList) {
 
 	if (ptrCurrentEvent->eventID == GRIDPREEMPTED) {
 
-		gridInfo *ptrAuxGrid, *ptrAuxLast;
+		gridAccountInfo *ptrAuxGrid, *ptrAuxLast;
 		ptrAuxGrid = ptrAuxLast = ptrGridInfoList;
 		unsigned short int found = 0;
 
@@ -31,10 +31,10 @@ void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMach
 
 			}
 
-			if (ptrAuxGrid->accountID > 1) {
+			if (ptrAuxGrid->gridAccountID > 1) {
 				ptrAuxLast = ptrAuxGrid;
 			}
-			ptrAuxGrid = ptrAuxGrid->nextGridInfo;
+			ptrAuxGrid = ptrAuxGrid->nextGridAccountInfo;
 
 		}
 

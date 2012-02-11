@@ -7,31 +7,31 @@
 
 #include "simulation.h"
 
-void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *ptrMachineList, task *ptrTaskList, accountInfo **ptrPtrAccountInfoList) {
+void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList) {
 
 	if (ptrCurrentEvent->eventID == TASKPREEMPTED) {
 
-		accountInfo *ptrAuxAccountList;
-		ptrAuxAccountList = *ptrPtrAccountInfoList;
+		taskAccountInfo *ptrAuxTaskAccountList;
+		ptrAuxTaskAccountList = *ptrPtrTaskAccountInfoList;
 		unsigned short int found = 0;
 
-		while(ptrAuxAccountList) {
+		while(ptrAuxTaskAccountList) {
 
-			if(ptrAuxAccountList->machineID == ptrCurrentEvent->machineInfo.machineID &&
-					ptrAuxAccountList->source == ptrCurrentEvent->machineInfo.source &&
-					ptrAuxAccountList->finnishTime == 0) {
+			if(ptrAuxTaskAccountList->machineID == ptrCurrentEvent->machineInfo.machineID &&
+					ptrAuxTaskAccountList->source == ptrCurrentEvent->machineInfo.source &&
+					ptrAuxTaskAccountList->finnishTime == 0) {
 				found = 1;
 				break;
 			}
 
-			ptrAuxAccountList = ptrAuxAccountList->nextAccountInfo;
+			ptrAuxTaskAccountList = ptrAuxTaskAccountList->nextTaskAccountInfo;
 		}
 
 		if (found) {
 
 			printf("eventID %d (Task Preempted) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-			printf("taskID %d jobID %d machineID %d source %d\n", ptrAuxAccountList->taskID,
-					ptrAuxAccountList->jobID, ptrAuxAccountList->machineID, ptrAuxAccountList->source);
+			printf("taskID %d jobID %d machineID %d source %d\n", ptrAuxTaskAccountList->taskID,
+					ptrAuxTaskAccountList->jobID, ptrAuxTaskAccountList->machineID, ptrAuxTaskAccountList->source);
 
 			// atualizar a task para queued;
 			task *ptrAuxTask;
@@ -39,8 +39,8 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 
 			while(ptrAuxTask){
 
-				if(ptrAuxTask->taskID == ptrAuxAccountList->taskID &&
-						ptrAuxTask->jobID == ptrAuxAccountList->jobID) {
+				if(ptrAuxTask->taskID == ptrAuxTaskAccountList->taskID &&
+						ptrAuxTask->jobID == ptrAuxTaskAccountList->jobID) {
 					ptrAuxTask->status = QUEUED;
 					break;
 				}
@@ -56,8 +56,8 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 			ptrOldEvent = (*ptrPtrEventList);
 
 			while(ptrOldEvent) {
-				if (ptrOldEvent->eventID == TASKFINNISHED && ptrOldEvent->taskInfo.taskID == ptrAuxAccountList->taskID &&
-						ptrOldEvent->taskInfo.jobID == ptrAuxAccountList->jobID) {
+				if (ptrOldEvent->eventID == TASKFINNISHED && ptrOldEvent->taskInfo.taskID == ptrAuxTaskAccountList->taskID &&
+						ptrOldEvent->taskInfo.jobID == ptrAuxTaskAccountList->jobID) {
 					break;
 				}
 				ptrOldEvent = ptrOldEvent->nextEvent;
@@ -66,7 +66,7 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 			RemoveEvent(ptrPtrEventList, ptrOldEvent);
 
 			// remover a entrada na account list
-			RemoveAccountList(ptrPtrAccountInfoList, ptrAuxAccountList);
+			RemoveAccountList(ptrPtrTaskAccountInfoList, ptrAuxTaskAccountList);
 
 			if (ptrCurrentEvent->time < 108000) {
 				// insert a new schedule into the event list

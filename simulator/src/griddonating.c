@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridInfo *ptrGridInfoList) {
+void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridAccountInfo *ptrGridInfoList) {
 
 	if (ptrCurrentEvent->eventID == GRIDDONATING) {
 

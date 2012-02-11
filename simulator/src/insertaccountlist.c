@@ -7,52 +7,52 @@
 
 # include "simulation.h"
 
-void InsertAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *ptrAuxTask, accountInfo *ptrAccountInfoList) {
+void InsertAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *ptrAuxTask, taskAccountInfo *ptrTaskAccountInfoList) {
 
-	if (ptrAccountInfoList) {
+	if (ptrTaskAccountInfoList) {
 
-		if (ptrAccountInfoList->accountID == 0) { // account list empty
-			ptrAccountInfoList->accountID = 1;
-			ptrAccountInfoList->machineID = ptrAuxMachine->machineID;
-			ptrAccountInfoList->source = ptrAuxMachine->source;
-			ptrAccountInfoList->taskID = ptrAuxTask->taskID;
-			ptrAccountInfoList->jobID = ptrAuxTask->jobID;
-			ptrAccountInfoList->startTime = ptrCurrentEvent->time;
-			ptrAccountInfoList->finnishTime = 0; // it must be updated later
-			ptrAccountInfoList->nextAccountInfo = NULL;
+		if (ptrTaskAccountInfoList->taskAccountID == 0) { // account list empty
+			ptrTaskAccountInfoList->taskAccountID = 1;
+			ptrTaskAccountInfoList->machineID = ptrAuxMachine->machineID;
+			ptrTaskAccountInfoList->source = ptrAuxMachine->source;
+			ptrTaskAccountInfoList->taskID = ptrAuxTask->taskID;
+			ptrTaskAccountInfoList->jobID = ptrAuxTask->jobID;
+			ptrTaskAccountInfoList->startTime = ptrCurrentEvent->time;
+			ptrTaskAccountInfoList->finnishTime = 0; // it must be updated later
+			ptrTaskAccountInfoList->nextTaskAccountInfo = NULL;
 
-//			printf("accountID %d machineID %d source %d taskID %d jobID %d ST %d FT %d\n", ptrAccountInfoList->accountID,
-//					ptrAccountInfoList->machineID, ptrAccountInfoList->source, ptrAccountInfoList->taskID, ptrAccountInfoList->jobID,
-//					ptrAccountInfoList->startTime, ptrAccountInfoList->finnishTime);
+//			printf("accountID %d machineID %d source %d taskID %d jobID %d ST %d FT %d\n", ptrTaskAccountInfoList->accountID,
+//					ptrTaskAccountInfoList->machineID, ptrTaskAccountInfoList->source, ptrTaskAccountInfoList->taskID, ptrTaskAccountInfoList->jobID,
+//					ptrTaskAccountInfoList->startTime, ptrTaskAccountInfoList->finnishTime);
 
 		} else {
 
-			accountInfo *ptrAuxAccount;
-			ptrAuxAccount = ptrAccountInfoList;
+			taskAccountInfo *ptrAuxTaskAccount;
+			ptrAuxTaskAccount = ptrTaskAccountInfoList;
 			unsigned int count = 1;
 
-			while(ptrAuxAccount->nextAccountInfo != NULL) {
+			while(ptrAuxTaskAccount->nextTaskAccountInfo != NULL) {
 				count += 1;
-				ptrAuxAccount = ptrAuxAccount->nextAccountInfo;
+				ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
 			}
 
-			accountInfo *ptrNewAccount;
+			taskAccountInfo *ptrNewTaskAccount;
 
-			if ( (ptrNewAccount = malloc(sizeof(accountInfo))) ) {
-				ptrNewAccount->accountID = (count + 1);
-				ptrNewAccount->machineID = ptrAuxMachine->machineID;
-				ptrNewAccount->source = ptrAuxMachine->source;
-				ptrNewAccount->taskID = ptrAuxTask->taskID;
-				ptrNewAccount->jobID = ptrAuxTask->jobID;
-				ptrNewAccount->startTime = ptrCurrentEvent->time;
-				ptrNewAccount->finnishTime = 0; // it must be updated later
-				ptrNewAccount->nextAccountInfo = NULL;
+			if ( (ptrNewTaskAccount = malloc(sizeof(taskAccountInfo))) ) {
+				ptrNewTaskAccount->taskAccountID = (count + 1);
+				ptrNewTaskAccount->machineID = ptrAuxMachine->machineID;
+				ptrNewTaskAccount->source = ptrAuxMachine->source;
+				ptrNewTaskAccount->taskID = ptrAuxTask->taskID;
+				ptrNewTaskAccount->jobID = ptrAuxTask->jobID;
+				ptrNewTaskAccount->startTime = ptrCurrentEvent->time;
+				ptrNewTaskAccount->finnishTime = 0; // it must be updated later
+				ptrNewTaskAccount->nextTaskAccountInfo = NULL;
 
-				ptrAuxAccount->nextAccountInfo = ptrNewAccount;
+				ptrAuxTaskAccount->nextTaskAccountInfo = ptrNewTaskAccount;
 
-//				printf("accountID %d machineID %d source %d taskID %d jobID %d ST %d FT %d\n", ptrNewAccount->accountID,
-//									ptrNewAccount->machineID, ptrNewAccount->source, ptrNewAccount->taskID, ptrNewAccount->jobID,
-//									ptrNewAccount->startTime, ptrNewAccount->finnishTime);
+//				printf("accountID %d machineID %d source %d taskID %d jobID %d ST %d FT %d\n", ptrNewTaskAccount->accountID,
+//									ptrNewTaskAccount->machineID, ptrNewTaskAccount->source, ptrNewTaskAccount->taskID, ptrNewTaskAccount->jobID,
+//									ptrNewTaskAccount->startTime, ptrNewTaskAccount->finnishTime);
 
 			} else printf("ERROR (insert account): merdou o malloc!!!\n");
 		}
