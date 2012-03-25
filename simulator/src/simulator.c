@@ -22,12 +22,12 @@ int main(int argc, char *argv[]) {
 
 	if ( (eventList = malloc(sizeof(event))) ) {
 		// start simulation event
-		eventList->eventID = 0; eventList->time = 0; eventList->flag = -1; eventList->nextEvent = NULL;
+		eventList->eventNumber = 0; eventList->eventID = 0; eventList->time = 0; eventList->flag = -1; eventList->nextEvent = NULL;
 	} else printf("ERROR: merdou o malloc!!!\n");
 
 	// finish simulation event
 	if ( (ptrLastNode = malloc(sizeof(event))) ) {
-		ptrLastNode->eventID = SIMFINNISHED; ptrLastNode->time = 108001; ptrLastNode->flag = -1; ptrLastNode->nextEvent = NULL;
+		ptrLastNode->eventNumber = 1; ptrLastNode->eventID = SIMFINNISHED; ptrLastNode->time = 108001; ptrLastNode->flag = -1; ptrLastNode->nextEvent = NULL;
 	} else printf("ERROR: merdou o malloc!!!\n");
 
 	eventList->nextEvent = ptrLastNode;
@@ -60,6 +60,7 @@ int main(int argc, char *argv[]) {
 
 	if ( (taskAccountInfoList = malloc(sizeof(taskAccountInfo))) ) {
 		taskAccountInfoList->taskAccountID = 0;			// 0 means code for an empty task list
+		taskAccountInfoList->status = ACCOUNTUNFINNISHED;
 		taskAccountInfoList->nextTaskAccountInfo = NULL;
 	}
 	else {
@@ -78,6 +79,7 @@ int main(int argc, char *argv[]) {
 	int count = 0;
 	while(ptrAuxList) {
 		count++;
+//		printf("eventNumber %d eventID %d\n", ptrAuxList->eventNumber, ptrAuxList->eventID);
 
 		switch (ptrAuxList->eventID) {
 			case 0:
@@ -145,9 +147,9 @@ int main(int argc, char *argv[]) {
 	count = 0;
 	while(ptrAuxTaskAccountInfo) {
 		count++;
-		printf("taskAccountID %d machineID %d source %d taskID %d jobID %d ST %d FT %d\n", ptrAuxTaskAccountInfo->taskAccountID,
+		printf("taskAccountID %d machineID %d source %d taskID %d jobID %d runtime %d ST %d FT %d\n", ptrAuxTaskAccountInfo->taskAccountID,
 				ptrAuxTaskAccountInfo->machineID, ptrAuxTaskAccountInfo->source, ptrAuxTaskAccountInfo->taskID, ptrAuxTaskAccountInfo->jobID,
-				ptrAuxTaskAccountInfo->startTime, ptrAuxTaskAccountInfo->finnishTime);
+				(ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime), ptrAuxTaskAccountInfo->startTime, ptrAuxTaskAccountInfo->finnishTime);
 		ptrAuxTaskAccountInfo = ptrAuxTaskAccountInfo->nextTaskAccountInfo;
 	}
 

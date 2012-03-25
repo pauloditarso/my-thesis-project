@@ -39,9 +39,11 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 				if ( ptrActualMachine->status == RUNNING ) {
 
 					// insert a new event into the event list
-					event *ptrNewEvent;
+					event *ptrNewEvent, *ptrTargetEvent;
+					ptrTargetEvent = ptrCurrentEvent;
 
 					if( (ptrNewEvent = malloc(sizeof(event))) ) {
+						ptrNewEvent->eventNumber = 0;
 						ptrNewEvent->eventID = TASKPREEMPTED;
 						ptrNewEvent->time = ptrCurrentEvent->time;
 						ptrNewEvent->machineInfo.machineID = ptrActualMachine->machineID;
@@ -54,7 +56,7 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 						ptrNewEvent->machineInfo.nextMachine = NULL;
 						ptrNewEvent->nextEvent = NULL;
 
-						InsertEvent(ptrEventList, ptrNewEvent);
+						InsertAfterEvent(ptrEventList, ptrNewEvent, ptrTargetEvent);
 					}
 					else printf("ERROR (machine departure): merdou o malloc!!!\n");
 
@@ -63,11 +65,13 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 				if ( ptrActualMachine->source == LOCAL && ptrActualMachine->status == DONATING) {
 
 					// insert a new grid preemption into the event list
-					event *ptrNewGridPreemption;
+					event *ptrNewGridPreemption, *ptrTargetEvent;
+					ptrTargetEvent = ptrCurrentEvent;
 
 					if ( ptrActualMachine->source == LOCAL ) {
 
 						if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
+							ptrNewGridPreemption->eventNumber = 0;
 							ptrNewGridPreemption->eventID = GRIDPREEMPTED;
 							ptrNewGridPreemption->time = ptrCurrentEvent->time;
 							ptrNewGridPreemption->machineInfo.machineID = ptrActualMachine->machineID;
@@ -80,7 +84,7 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 							ptrNewGridPreemption->machineInfo.nextMachine = ptrActualMachine->nextMachine;
 							ptrNewGridPreemption->nextEvent = NULL;
 
-							InsertEvent(ptrEventList, ptrNewGridPreemption);
+							InsertAfterEvent(ptrEventList, ptrNewGridPreemption, ptrTargetEvent);
 						}
 						else printf("ERROR (task schedule): merdou o malloc!!!\n");
 

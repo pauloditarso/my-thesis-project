@@ -7,7 +7,7 @@
 
 # include "simulation.h"
 
-void InsertAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *ptrAuxTask, taskAccountInfo *ptrTaskAccountInfoList) {
+void InsertTaskAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *ptrAuxTask, taskAccountInfo *ptrTaskAccountInfoList) {
 
 	if (ptrTaskAccountInfoList) {
 
@@ -19,6 +19,7 @@ void InsertAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *pt
 			ptrTaskAccountInfoList->jobID = ptrAuxTask->jobID;
 			ptrTaskAccountInfoList->startTime = ptrCurrentEvent->time;
 			ptrTaskAccountInfoList->finnishTime = 0; // it must be updated later
+			ptrTaskAccountInfoList->status = 0;
 			ptrTaskAccountInfoList->nextTaskAccountInfo = NULL;
 
 //			printf("accountID %d machineID %d source %d taskID %d jobID %d ST %d FT %d\n", ptrTaskAccountInfoList->accountID,
@@ -46,6 +47,7 @@ void InsertAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *pt
 				ptrNewTaskAccount->jobID = ptrAuxTask->jobID;
 				ptrNewTaskAccount->startTime = ptrCurrentEvent->time;
 				ptrNewTaskAccount->finnishTime = 0; // it must be updated later
+				ptrNewTaskAccount->status = 0;
 				ptrNewTaskAccount->nextTaskAccountInfo = NULL;
 
 				ptrAuxTaskAccount->nextTaskAccountInfo = ptrNewTaskAccount;

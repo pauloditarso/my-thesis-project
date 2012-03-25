@@ -42,9 +42,11 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 
 					if (isThereTaskWaiting == 0) {
 
-						event *ptrNewDonation;
+						event *ptrNewDonation;//, *ptrTargetEvent;
+//						ptrTargetEvent = ptrCurrentEvent;
 
 						if( (ptrNewDonation = malloc(sizeof(event))) ) {
+							ptrNewDonation->eventNumber = 0;
 							ptrNewDonation->eventID = GRIDDONATING;
 							ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after machine's arrival
 							ptrNewDonation->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
@@ -57,6 +59,7 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 							ptrNewDonation->machineInfo.nextMachine = ptrCurrentEvent->machineInfo.nextMachine;
 							ptrNewDonation->nextEvent = NULL;
 
+//							InsertAfterEvent(ptrEventList, ptrNewDonation, ptrTargetEvent);
 							InsertEvent(ptrEventList, ptrNewDonation);
 						}
 						else printf("ERROR (machine arrival): merdou o malloc!!!\n");
@@ -102,9 +105,11 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 
 					if (isThereTaskWaiting == 0) {
 
-						event *ptrNewDonation;
+						event *ptrNewDonation;//, *ptrTargetEvent;
+//						ptrTargetEvent = ptrCurrentEvent;
 
 						if( (ptrNewDonation = malloc(sizeof(event))) ) {
+							ptrNewDonation->eventNumber = 0;
 							ptrNewDonation->eventID = GRIDDONATING;
 							ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after machine's arrival
 							ptrNewDonation->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
@@ -117,6 +122,7 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 							ptrNewDonation->machineInfo.nextMachine = ptrCurrentEvent->machineInfo.nextMachine;
 							ptrNewDonation->nextEvent = NULL;
 
+//							InsertAfterEvent(ptrEventList, ptrNewDonation, ptrTargetEvent);
 							InsertEvent(ptrEventList, ptrNewDonation);
 						}
 						else printf("ERROR (machine arrival): merdou o malloc!!!\n");
@@ -147,15 +153,17 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 			} // end else
 
 			// insert a new schedule into the event list
-			event *ptrNewSchedule;
+			event *ptrNewSchedule, *ptrTargetEvent;
+			ptrTargetEvent = ptrCurrentEvent;
 
 			if( (ptrNewSchedule = malloc(sizeof(event))) ) {
+				ptrNewSchedule->eventNumber = 0;
 				ptrNewSchedule->eventID = TASKSCHEDULE;
 				ptrNewSchedule->time = ptrCurrentEvent->time;
 				ptrNewSchedule->flag = 0;
 				ptrNewSchedule->nextEvent = NULL;
 
-				InsertEvent(ptrEventList, ptrNewSchedule);
+				InsertAfterEvent(ptrEventList, ptrNewSchedule, ptrTargetEvent);
 			}
 			else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 

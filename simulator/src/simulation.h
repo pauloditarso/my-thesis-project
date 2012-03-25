@@ -36,6 +36,7 @@ typedef struct machine {
 } machine;
 
 typedef struct event {
+	unsigned int eventNumber;
 	enum {SIMSTARTED, MACHARRIVAL, MACHDEPARTURE, GRIDDONATING, GRIDPREEMPTED, TASKARRIVAL, TASKSCHEDULE, TASKPREEMPTED,
 	TASKFINNISHED, JOBARRIVAL, JOBSTARTED, JOBFINNISHED, SIMFINNISHED} eventID;
 	unsigned int time;
@@ -54,14 +55,15 @@ typedef struct taskAccountInfo {
 	enum {LOCALMACH, GRIDMACH, CLOUDMACH} source;
 	unsigned int taskID, jobID;
 	unsigned int startTime, finnishTime;
+	enum {ACCOUNTUNFINNISHED, ACCOUNTFINNISHED} status;
 	struct taskAccountInfo *nextTaskAccountInfo;
 } taskAccountInfo;
 
 typedef struct jobAccountInfo {
 	unsigned int jobAccountID;
-	unsigned int machineID;
-	enum {JOBLOCALMACH, JOBGRIDMACH, JOBCLOUDMACH} source;
-	unsigned int taskID, jobID;
+//	unsigned int machineID;
+//	enum {JOBLOCALMACH, JOBGRIDMACH, JOBCLOUDMACH} source;
+//	unsigned int taskID, jobID;
 	unsigned int startTime, finnishTime;
 	struct jobAccountInfo *nextJobAccountInfo;
 } jobAccountInfo;
@@ -75,15 +77,11 @@ typedef struct gridAccountInfo {
 	struct gridAccountInfo *nextGridAccountInfo;
 } gridAccountInfo;
 
-//typedef union handlerInput {
-//	machine *ptrMachineList, **ptrPtrMachineList;
-//	task *ptrTaskList;
-//	short int flag;
-//} handlerInput;
-
 //machine *ReturnCorrectMachine(event *ptrCurrentEvent, machine *ptrMachineList);
 
 void InsertEvent(event *ptrEventList, event *ptrNewEvent);
+
+void InsertAfterEvent(event *ptrEventList, event *ptrNewEvent, event *ptrTargetEvent);
 
 void RemoveEvent(event **ptrPtrEventList, event *ptrOldEvent);
 
@@ -97,15 +95,17 @@ void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridAccountInfo *ptrGridInfoList);
 
-void InsertGridList(event *ptrCurrentEvent, machine *ptrAuxMachine, gridAccountInfo *ptrGridInfoList);
+void InsertGridAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine, gridAccountInfo *ptrGridInfoList);
 
 void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList);
 
 void TaskFinnished(event *ptrCurrentEvenet, event *ptrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList);
 
-void InsertAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *ptrAuxTask, taskAccountInfo *ptrTaskAccountInfoList);
+void InsertTaskAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *ptrAuxTask, taskAccountInfo *ptrTaskAccountInfoList);
 
-void RemoveAccountList(taskAccountInfo **ptrPtrTaskAccountInfoList, taskAccountInfo *ptrOldTaskAccount);
+void InsertJobAccountList(event *ptrCurrentEvent, job *ptrAuxJob, jobAccountInfo *ptrJobAccountInfoList);
+
+void RemoveTaskAccountList(taskAccountInfo **ptrPtrTaskAccountInfoList, taskAccountInfo *ptrOldTaskAccount);
 
 void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList);
 

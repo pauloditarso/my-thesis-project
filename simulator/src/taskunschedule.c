@@ -49,7 +49,7 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 			}
 
 			// atualizar o finnishTime da task na account list;
-//			ptrAuxAccountList->finnishTime = ptrCurrentEvent->time; ACHO QUE DEVE SER ZERO
+			ptrAuxTaskAccountList->finnishTime = ptrCurrentEvent->time;
 
 			// remover o evento TASKFINNISHED da lista de eventos
 			event *ptrOldEvent;
@@ -66,11 +66,13 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 			RemoveEvent(ptrPtrEventList, ptrOldEvent);
 
 			// remover a entrada na account list
-			RemoveAccountList(ptrPtrTaskAccountInfoList, ptrAuxTaskAccountList);
+//			RemoveTaskAccountList(ptrPtrTaskAccountInfoList, ptrAuxTaskAccountList);
+//			comentado pq n‹o mais ser‹o removidas essas entradas, para efeito do calculo de custo (8/3/12)
 
 			if (ptrCurrentEvent->time < 108000) {
 				// insert a new schedule into the event list
-				event *ptrNewEvent;
+				event *ptrNewEvent, *ptrTargetEvent;
+				ptrTargetEvent = ptrCurrentEvent;
 
 				if( (ptrNewEvent = malloc(sizeof(event))) ) {
 					ptrNewEvent->eventID = TASKSCHEDULE;
@@ -78,7 +80,7 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 					ptrNewEvent->flag = 0;
 					ptrNewEvent->nextEvent = NULL;
 
-					InsertEvent(*ptrPtrEventList, ptrNewEvent);
+					InsertAfterEvent(*ptrPtrEventList, ptrNewEvent, ptrTargetEvent);
 				}
 				else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 			}

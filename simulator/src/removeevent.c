@@ -34,11 +34,23 @@ void RemoveEvent(event **ptrPtrEventList, event *ptrOldEvent) {
 		if (found) {
 
 			if (ptrLastEvent != ptrActualEvent) {
+
+				while(ptrAux) {	// decreasing the event number for the following events
+					ptrAux->eventNumber -= 1;
+					ptrAux = ptrAux->nextEvent;
+				}
 				ptrLastEvent->nextEvent = ptrActualEvent->nextEvent;
 				ptrActualEvent->nextEvent = NULL;
+
 			}
 			else {
+
+				while(ptrAux) {	// decreasing the event number for the following events
+					ptrAux->eventNumber -= 1;
+					ptrAux = ptrAux->nextEvent;
+				}
 				*ptrPtrEventList = (*ptrPtrEventList)->nextEvent;
+
 			}
 
 		} else printf("ERROR (remove event): event not found!!!\n");

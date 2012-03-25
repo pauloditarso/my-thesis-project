@@ -58,6 +58,7 @@ void FillEmptyEventList(event *ptrEventList) {
 		fscanf(localMachines, "%d %d %d", &aux1, &aux2, &aux3);
 
 		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
+			auxPtrEvent1->eventNumber = 0;
 			auxPtrEvent1->eventID = MACHARRIVAL;
 			auxPtrEvent1->time = aux2;
 			auxPtrEvent1->machineInfo.machineID = aux1;
@@ -77,6 +78,7 @@ void FillEmptyEventList(event *ptrEventList) {
 		}
 
 		if( (auxPtrEvent2 = malloc(sizeof(event))) ) {
+			auxPtrEvent2->eventNumber = 0;
 			auxPtrEvent2->eventID = MACHDEPARTURE;
 			auxPtrEvent2->time = aux3;
 			auxPtrEvent2->machineInfo.machineID = aux1;
@@ -102,6 +104,7 @@ void FillEmptyEventList(event *ptrEventList) {
 		fscanf(gridMachines, "%d %d %d", &aux1, &aux2, &aux3);
 
 		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
+			auxPtrEvent1->eventNumber = 0;
 			auxPtrEvent1->eventID = MACHARRIVAL;
 			auxPtrEvent1->time = aux2;
 			auxPtrEvent1->machineInfo.machineID = aux1;
@@ -121,6 +124,7 @@ void FillEmptyEventList(event *ptrEventList) {
 		}
 
 		if( (auxPtrEvent2 = malloc(sizeof(event))) ) {
+			auxPtrEvent2->eventNumber = 0;
 			auxPtrEvent2->eventID = MACHDEPARTURE;
 			auxPtrEvent2->time = aux3;
 			auxPtrEvent2->machineInfo.machineID = aux1;
@@ -146,6 +150,7 @@ void FillEmptyEventList(event *ptrEventList) {
 		fscanf(workloadJobs, "%d %d %d %d %d", &auxTime, &auxJobID, &auxJobSize, &auxLongestTask, &auxAccRuntime);
 
 		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
+			auxPtrEvent1->eventNumber = 0;
 			auxPtrEvent1->eventID = JOBARRIVAL;
 			auxPtrEvent1->time = auxTime;
 			auxPtrEvent1->jobInfo.jobID = auxJobID;
@@ -170,6 +175,7 @@ void FillEmptyEventList(event *ptrEventList) {
 		fscanf(workloadTasks, "%d %d %d %d %d", &auxTaskID, &auxTime, &auxJobID, &auxJobSize, &auxRuntime);
 
 		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
+			auxPtrEvent1->eventNumber = 0;
 			auxPtrEvent1->eventID = TASKARRIVAL;
 			auxPtrEvent1->time = auxTime;
 			auxPtrEvent1->taskInfo.taskID = auxTaskID;
