@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-void RemoveAccountList(taskAccountInfo **ptrPtrTaskAccountInfoList, taskAccountInfo *ptrOldTaskAccount) {
+void RemoveTaskAccountList(taskAccountInfo **ptrPtrTaskAccountInfoList, taskAccountInfo *ptrOldTaskAccount) {
 
 	taskAccountInfo *ptrAux, *ptrActual, *ptrLast;
 	ptrAux = ptrActual = ptrLast = (*ptrPtrTaskAccountInfoList);

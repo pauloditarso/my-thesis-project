@@ -7,7 +7,7 @@
 
 # include "simulation.h"
 
-void InsertGridList(event *ptrCurrentEvent, machine *ptrAuxMachine, gridAccountInfo *ptrGridInfoList) {
+void InsertGridAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine, gridAccountInfo *ptrGridInfoList) {
 
 	if (ptrGridInfoList) {
 

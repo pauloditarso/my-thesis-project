@@ -16,18 +16,28 @@ void InsertEvent(event *ptrEventList, event *ptrNewEvent) {
 		ptrAuxEvent = ptrActualEvent = ptrLastEvent = ptrEventList;
 
 		while(ptrAuxEvent){
-			if (ptrActualEvent->time <= ptrNewEvent->time) {
-				ptrLastEvent = ptrActualEvent;
-				ptrActualEvent = ptrActualEvent->nextEvent;
+			if (ptrActualEvent->time > ptrNewEvent->time) {
+				break;
 			}
+
+			ptrLastEvent = ptrActualEvent;
+			ptrActualEvent = ptrActualEvent->nextEvent;
+
 			ptrAuxEvent = ptrAuxEvent->nextEvent;
 		}
 
 		if (ptrActualEvent) {
+
+			ptrNewEvent->eventNumber = ptrActualEvent->eventNumber;
+			while(ptrAuxEvent) {
+				ptrAuxEvent->eventNumber += 1;
+				ptrAuxEvent = ptrAuxEvent->nextEvent;
+			}
 			ptrNewEvent->nextEvent = ptrActualEvent;
 			ptrLastEvent->nextEvent = ptrNewEvent;
 		}
 		else { 			// resolves the last-node problem
+			ptrNewEvent->eventNumber = (ptrLastEvent->eventNumber + 1);
 			ptrNewEvent->nextEvent = NULL;
 			ptrLastEvent->nextEvent = ptrNewEvent;
 		}
