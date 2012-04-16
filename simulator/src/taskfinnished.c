@@ -7,7 +7,8 @@
 
 #include "simulation.h"
 
-void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList) {
+void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList,
+		balanceAccountInfo *ptrBalanceAccountInfo) {
 
 	if (ptrCurrentEvent->eventID == TASKFINNISHED) {
 
@@ -52,14 +53,16 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 							ptrAuxTaskAccount->finnishTime = ptrCurrentEvent->time;
 							ptrAuxTaskAccount->status = ACCOUNTFINNISHED;
 
-							while(ptrAuxMachine) {
+							if (ptrAuxTaskAccount->source == GRID) {
+								DecrementBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time, (ptrAuxTaskAccount->finnishTime - ptrAuxTaskAccount->startTime));
+							}
 
+							while(ptrAuxMachine) {
 								if(ptrAuxMachine->machineID == ptrAuxTaskAccount->machineID &&
 										ptrAuxMachine->source == ptrAuxTaskAccount->source) {
 									ptrAuxMachine->status = IDLE;
 									break;
 								}
-
 								ptrAuxMachine = ptrAuxMachine->nextMachine;
 							}
 
