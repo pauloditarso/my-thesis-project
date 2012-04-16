@@ -7,7 +7,8 @@
 
 #include "simulation.h"
 
-void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList) {
+void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
+		balanceAccountInfo *ptrBalanceAccountInfo) {
 
 	if (ptrCurrentEvent->eventID == TASKPREEMPTED) {
 
@@ -50,6 +51,11 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 
 			// atualizar o finnishTime da task na account list;
 			ptrAuxTaskAccountList->finnishTime = ptrCurrentEvent->time;
+
+			// decrement on the grid's balnace
+			if (ptrAuxTaskAccountList->source == GRID) {
+				DecrementBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time, (ptrAuxTaskAccountList->finnishTime - ptrAuxTaskAccountList->startTime));
+			}
 
 			// remover o evento TASKFINNISHED da lista de eventos
 			event *ptrOldEvent;

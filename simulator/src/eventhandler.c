@@ -8,7 +8,7 @@
 #include "simulation.h"
 
 void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
-		gridAccountInfo *ptrGridInfoList, job *ptrJobList) {
+		gridAccountInfo *ptrGridInfoList, job *ptrJobList, jobAccountInfo *ptrJobAccountInfo, balanceAccountInfo *ptrBalanceAccountInfo) {
 
 	switch (ptrCurrentEvent->eventID) {
 		case 0:
@@ -28,7 +28,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 4:
 			// GRID PREEMPTED
-			GridPreempted(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrGridInfoList);
+			GridPreempted(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrGridInfoList, ptrBalanceAccountInfo);
 			break;
 		case 5:
 			// TASK ARRIVAL
@@ -40,23 +40,23 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 7:
 			// TASK PREEMPTED
-			TaskUnSchedule(ptrCurrentEvent, ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrPtrTaskAccountInfoList);
+			TaskUnSchedule(ptrCurrentEvent, ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrPtrTaskAccountInfoList, ptrBalanceAccountInfo);
 			break;
 		case 8:
 			// TASK FINNISHED
-			TaskFinnished(ptrCurrentEvent, *ptrPtrEventList, ptrTaskList, *ptrPtrTaskAccountInfoList, *ptrPtrMachineList);
+			TaskFinnished(ptrCurrentEvent, *ptrPtrEventList, ptrTaskList, *ptrPtrTaskAccountInfoList, *ptrPtrMachineList, ptrBalanceAccountInfo);
 			break;
 		case 9:
 			// JOB ARRIVAL
-			JobArrival(ptrCurrentEvent, *ptrPtrEventList, ptrJobList);
+			JobArrival(ptrCurrentEvent, *ptrPtrEventList, ptrJobList, ptrBalanceAccountInfo);
 			break;
 		case 10:
 			// JOB STARTED
-			JobStarted(ptrCurrentEvent, *ptrPtrEventList, ptrJobList);
+			JobStarted(ptrCurrentEvent, ptrJobAccountInfo, ptrJobList);
 			break;
 		case 11:
 			// JOB FINNISHED
-			JobFinnished(ptrCurrentEvent, *ptrPtrEventList, ptrJobList);
+			JobFinnished(ptrCurrentEvent, ptrJobAccountInfo, ptrJobList);
 			break;
 		case 12:
 			printf("eventID %d (Simulation Finnished) time %d\n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);

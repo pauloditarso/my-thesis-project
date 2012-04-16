@@ -7,16 +7,13 @@
 
 # include "simulation.h"
 
-void InsertJobAccountList(event *ptrCurrentEvent, job *ptrAuxJob, jobAccountInfo *ptrJobAccountInfoList) {
+void InsertJobAccountList(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfoList) {
 
 	if (ptrJobAccountInfoList) {
 
 		if (ptrJobAccountInfoList->jobAccountID == 0) { // account list empty
 			ptrJobAccountInfoList->jobAccountID = 1;
-//			ptrJobAccountInfoList->machineID = ptrAuxMachine->machineID;
-//			ptrJobAccountInfoList->source = ptrAuxMachine->source;
-//			ptrJobAccountInfoList->taskID = ptrAuxJob->taskID;
-//			ptrJobAccountInfoList->jobID = ptrAuxJob->jobID;
+			ptrJobAccountInfoList->jobID = ptrCurrentEvent->jobInfo.jobID;
 			ptrJobAccountInfoList->startTime = ptrCurrentEvent->time;
 			ptrJobAccountInfoList->finnishTime = 0; // it must be updated later
 			ptrJobAccountInfoList->nextJobAccountInfo = NULL;
@@ -36,25 +33,23 @@ void InsertJobAccountList(event *ptrCurrentEvent, job *ptrAuxJob, jobAccountInfo
 				ptrAuxJobAccount = ptrAuxJobAccount->nextJobAccountInfo;
 			}
 
-			jobAccountInfo *ptrNewTaskAccount;
+			jobAccountInfo *ptrNewJobAccount;
 
-			if ( (ptrNewTaskAccount = malloc(sizeof(jobAccountInfo))) ) {
-				ptrNewTaskAccount->jobAccountID = (count + 1);
-//				ptrNewTaskAccount->machineID = ptrAuxMachine->machineID;
-//				ptrNewTaskAccount->source = ptrAuxMachine->source;
-//				ptrNewTaskAccount->taskID = ptrAuxJob->taskID;
-//				ptrNewTaskAccount->jobID = ptrAuxJob->jobID;
-				ptrNewTaskAccount->startTime = ptrCurrentEvent->time;
-				ptrNewTaskAccount->finnishTime = 0; // it must be updated later
-				ptrNewTaskAccount->nextJobAccountInfo = NULL;
-
-				ptrAuxJobAccount->nextJobAccountInfo = ptrNewTaskAccount;
+			if ( (ptrNewJobAccount = malloc(sizeof(jobAccountInfo))) ) {
+				ptrNewJobAccount->jobAccountID = (count + 1);
+				ptrNewJobAccount->jobID = ptrCurrentEvent->jobInfo.jobID;
+				ptrNewJobAccount->startTime = ptrCurrentEvent->time;
+				ptrNewJobAccount->finnishTime = 0; // it must be updated later
+				ptrNewJobAccount->nextJobAccountInfo = NULL;
 
 //				printf("accountID %d machineID %d source %d taskID %d jobID %d ST %d FT %d\n", ptrNewTaskAccount->accountID,
 //									ptrNewTaskAccount->machineID, ptrNewTaskAccount->source, ptrNewTaskAccount->taskID, ptrNewTaskAccount->jobID,
 //									ptrNewTaskAccount->startTime, ptrNewTaskAccount->finnishTime);
 
 			} else printf("ERROR (insert jobaccount): merdou o malloc!!!\n");
+
+			ptrAuxJobAccount->nextJobAccountInfo = ptrNewJobAccount;
+
 		}
 
 	} else printf("ERROR (insert jobaccount): there is no account list!!!\n");

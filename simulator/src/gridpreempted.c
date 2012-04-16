@@ -7,7 +7,8 @@
 
 #include "simulation.h"
 
-void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridAccountInfo *ptrGridInfoList) {
+void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, gridAccountInfo *ptrGridInfoList,
+		balanceAccountInfo *ptrBalanceAccountInfo) {
 
 	if (ptrCurrentEvent->eventID == GRIDPREEMPTED) {
 
@@ -23,6 +24,8 @@ void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMach
 
 				found = 1;
 				ptrAuxGrid->finnishTime = ptrCurrentEvent->time;
+
+				IncrementBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time, (ptrAuxGrid->finnishTime - ptrAuxGrid->startTime));
 
 				printf("eventID %d (Grid Preempted) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 				printf("machineID %d source %d\n", ptrAuxGrid->machineID, ptrAuxGrid->source);
