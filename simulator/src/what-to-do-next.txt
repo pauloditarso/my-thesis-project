@@ -11,3 +11,9 @@
 	(nao faco ideia como serah o processo de otimizacao) :(
 	(lembrar da solucao de soh comprar maquinas na cloud para a hora de precisa, ou seja, a ultima)
 	(fazer um pre-processamento da quantidade necessária para contratação na cloud)
+	
+	- fazer um FOR para os pontos desejados de terminos (a cada hora, ex);
+	- criar um evento CheckPoint para cada ponto deste e tomar acoes em cada check point
+		* terminou realmente o job no ponto desejado?
+		* caso nao, esse check point nao interessa [encerrar ou nao a simulacao? (indo pro final dela)]
+		* caso sim, calcular o profit
