@@ -33,7 +33,8 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 		}
 
 		printf("eventID %d (Job Finnished) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-		printf("JobID %d\n", ptrCurrentEvent->jobInfo.jobID);
+		printf("JobID %d AR %d FT %d LT %d DL %d\n", ptrAuxJobList->jobID, ptrAuxJobList->arrivalTime, ptrAuxJobList->finnishTime,
+				ptrAuxJobList->longestTask, ptrAuxJobList->deadline);
 
 	} else printf("ERROR (job finnished): wrong eventID!!!\n");
 }

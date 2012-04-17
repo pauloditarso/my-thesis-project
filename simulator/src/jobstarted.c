@@ -15,6 +15,9 @@ void JobStarted(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *
 
 		printf("eventID %d (Job Started) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 		printf("JobID %d\n", ptrCurrentEvent->jobInfo.jobID);
+//		printf("eventID %d (Job Started) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+//		printf("JobID %d AT %d FT %d LT %d DL %d\n", ptrCurrentEvent->jobInfo.jobID, ptrCurrentEvent->jobInfo.arrivalTime, ptrCurrentEvent->jobInfo.finnishTime,
+//				ptrCurrentEvent->jobInfo.longestTask, ptrCurrentEvent->jobInfo.deadline);
 
 	} else printf("ERROR (job started): wrong eventID!!!\n");
 }
