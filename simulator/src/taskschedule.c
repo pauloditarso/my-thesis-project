@@ -13,6 +13,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 		task *ptrAuxTask;
 		ptrAuxTask = ptrTaskList;
+		unsigned short int found = 0;
 
 		while(ptrAuxTask) {
 
@@ -61,6 +62,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 							}
 
+							found = 1;
 							ptrAuxMachine->status = RUNNING;
 							ptrAuxTask->status = STARTED;
 
@@ -124,6 +126,10 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 			}
 
 			ptrAuxTask = ptrAuxTask->nextTask;
+		}
+
+		if (found == 0) {
+			printf("eventID %d (Task Scheduled) time %d (NOTHING_TO_DO!!!)\n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 		}
 
 	} else printf("ERROR (arrival): there is no machine or task list!!!\n");

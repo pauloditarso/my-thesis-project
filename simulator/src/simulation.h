@@ -95,7 +95,7 @@ void InsertAfterEvent(event *ptrEventList, event *ptrNewEvent, event *ptrTargetE
 
 void RemoveEvent(event **ptrPtrEventList, event *ptrOldEvent);
 
-void FillEmptyEventList(event *ptrEventList);
+void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3);
 
 void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList);
 
@@ -108,7 +108,7 @@ void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMach
 
 void InsertGridAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine, gridAccountInfo *ptrGridInfoList);
 
-void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList);
+void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList, machine *ptrMachineList);
 
 void TaskFinnished(event *ptrCurrentEvenet, event *ptrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList,
 		balanceAccountInfo *ptrBalanceAccountInfo);

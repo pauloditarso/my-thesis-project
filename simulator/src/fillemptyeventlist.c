@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-void FillEmptyEventList(event *ptrEventList) {
+void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3) {
 
 	event *auxPtrEvent1, *auxPtrEvent2;
 
@@ -97,6 +97,52 @@ void FillEmptyEventList(event *ptrEventList) {
 			printf("ERROR (fill): merdou o malloc!!!\n");
 		}
 	}
+
+	// filling envent list with cloud machines
+	unsigned short int i;
+	for (i = 1; i <= numberMachinesP3; i++) {
+
+		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
+			auxPtrEvent1->eventNumber = 0;
+			auxPtrEvent1->eventID = MACHARRIVAL;
+			auxPtrEvent1->time = 0;
+			auxPtrEvent1->machineInfo.machineID = i;
+			auxPtrEvent1->machineInfo.source = CLOUD;
+			auxPtrEvent1->machineInfo.status = IDLE;
+			auxPtrEvent1->machineInfo.arrivalTime = 0;
+			auxPtrEvent1->machineInfo.departureTime = TIME;
+			auxPtrEvent1->machineInfo.usagePrice = 0.0;
+			auxPtrEvent1->machineInfo.reservationPrice = 0.0;
+			auxPtrEvent1->machineInfo.nextMachine = NULL;
+			auxPtrEvent1->nextEvent = NULL;
+
+			InsertEvent(ptrEventList, auxPtrEvent1);
+		}
+		else {
+			printf("ERROR (fill): merdou o malloc!!!\n");
+		}
+
+		if( (auxPtrEvent2 = malloc(sizeof(event))) ) {
+			auxPtrEvent2->eventNumber = 0;
+			auxPtrEvent2->eventID = MACHDEPARTURE;
+			auxPtrEvent2->time = TIME;
+			auxPtrEvent2->machineInfo.machineID = i;
+			auxPtrEvent2->machineInfo.source = CLOUD;
+			auxPtrEvent2->machineInfo.status = IDLE;
+			auxPtrEvent2->machineInfo.arrivalTime = 0;
+			auxPtrEvent2->machineInfo.departureTime = TIME;
+			auxPtrEvent2->machineInfo.usagePrice = 0.0;
+			auxPtrEvent2->machineInfo.reservationPrice = 0.0;
+			auxPtrEvent2->machineInfo.nextMachine = NULL;
+			auxPtrEvent2->nextEvent = NULL;
+
+			InsertEvent(ptrEventList, auxPtrEvent2);
+		}
+		else {
+			printf("ERROR (fill): merdou o malloc!!!\n");
+		}
+
+	} // end for (filling event list with cloud machines)
 
 	while(!feof(gridMachines)) {
 

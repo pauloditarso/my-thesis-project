@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[]) {
 
-	event *eventList, *ptrAuxList, *ptrLastNode;
+	event *eventList, *ptrAuxList, *ptrLastNode, *ptrAuxAux;
 	machine *machineList, *ptrAuxMachine;
 	task *taskList, *ptrAuxTask;
 	job *jobList, *ptrAuxJob;
@@ -19,6 +19,8 @@ int main(int argc, char *argv[]) {
 	gridAccountInfo *gridInfoList, *ptrAuxGridInfo;
 	jobAccountInfo *jobAccountInfoList, *ptrAuxJobAccountInfo;
 	balanceAccountInfo *balanceAccountInfoList, *ptrAuxBalanceAccountInfo;
+
+	unsigned short int numberMachinesP3 = atoi(argv[1]);
 
 	// starting a new event list
 	if ( (eventList = malloc(sizeof(event))) ) {
@@ -34,7 +36,21 @@ int main(int argc, char *argv[]) {
 	eventList->nextEvent = ptrLastNode;
 
 	// filling the event list with local and grid (???) machines, and workload jobs and tasks
-	FillEmptyEventList(eventList);
+	FillEmptyEventList(eventList, numberMachinesP3);
+
+//	ptrAuxAux = eventList;
+//	int count1 = 0;
+//	while(ptrAuxAux) {
+//		count1++;
+//		if (ptrAuxAux->eventID == 1 || ptrAuxAux->eventID == 2) {
+//			printf("eventID %d time %d machineID %d source %d status %d AT %d DT %d UP %f RP %f\n", ptrAuxAux->eventID, ptrAuxAux->time, ptrAuxAux->machineInfo.machineID,
+//					ptrAuxAux->machineInfo.source, ptrAuxAux->machineInfo.status, ptrAuxAux->machineInfo.arrivalTime, ptrAuxAux->machineInfo.departureTime,
+//					ptrAuxAux->machineInfo.usagePrice, ptrAuxAux->machineInfo.reservationPrice);
+//		}
+//		ptrAuxAux = ptrAuxAux->nextEvent;
+//	}
+//	printf("a lista tem %d eventos\n", count1);
+//	printf("\n");
 
 	// starting a machine list
 	if ( (machineList = malloc(sizeof(machine))) ) {
@@ -106,7 +122,7 @@ int main(int argc, char *argv[]) {
 	int count = 0;
 	while(ptrAuxList) {
 		count++;
-//		printf("eventNumber %d eventID %d\n", ptrAuxList->eventNumber, ptrAuxList->eventID);
+		printf("event# %d ", ptrAuxList->eventNumber);
 
 		switch (ptrAuxList->eventID) {
 			case 0:

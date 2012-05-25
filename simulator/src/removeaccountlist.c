@@ -34,9 +34,15 @@ void RemoveTaskAccountList(taskAccountInfo **ptrPtrTaskAccountInfoList, taskAcco
 		if (ptrLast != ptrActual) {
 			ptrLast->nextTaskAccountInfo = ptrActual->nextTaskAccountInfo;
 			ptrActual->nextTaskAccountInfo = NULL;
+			free(ptrActual);
+			ptrActual = NULL;
 		}
 		else {
+			taskAccountInfo *ptrPtrAux;
+			ptrPtrAux = *ptrPtrTaskAccountInfoList;
 			*ptrPtrTaskAccountInfoList = (*ptrPtrTaskAccountInfoList)->nextTaskAccountInfo;
+			free(ptrPtrAux);
+			ptrPtrAux = NULL;
 		}
 
 	} else printf("ERROR (remove account info): account info not found!!!\n");

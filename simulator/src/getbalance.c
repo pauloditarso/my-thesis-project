@@ -12,6 +12,7 @@ unsigned int GetBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned int 
 	balanceAccountInfo *ptrAuxBalanceAccount;
 	ptrAuxBalanceAccount = ptrBalanceAccountInfo;
 
+	// looking for the time point in the balance account info list
 	while(ptrAuxBalanceAccount->nextBalanceAccountInfo != NULL) {
 		if (ptrAuxBalanceAccount->time > time) {
 			break;
@@ -19,5 +20,6 @@ unsigned int GetBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned int 
 		ptrAuxBalanceAccount = ptrAuxBalanceAccount->nextBalanceAccountInfo;
 	}
 
+	// returning the accumulated balance at that point
 	return ptrAuxBalanceAccount->value;
 }

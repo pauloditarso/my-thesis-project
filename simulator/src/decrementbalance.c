@@ -15,6 +15,7 @@ void DecrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned int ti
 		ptrAux = ptrLast = ptrBalanceAccountInfo;
 		unsigned int count = 0;
 
+		// going to the end of the balance account info list
 		while(ptrAux->nextBalanceAccountInfo != NULL) {
 			count++;
 			ptrLast = ptrAux;

@@ -1,3 +1,29 @@
+* terminar a analise no NOTHING_TO_DO!!!
+
+* implementar as INVARIANTES!!!!
+
+* implementar a fase de planning (com o estabelecimento dos contratos);
+	(isso implica na entrada das maquinas da cloud)
+	(lembrar da solucao de soh comprar maquinas na cloud para a hora de precisa, ou seja, a ultima)
+	(fazer um pre-processamento da quantidade necessária para contratação na cloud)
+	
+	- receber de entrada da simulacao (???):
+		* workloads de jobs e tasks;
+			- talvez sejam gerados internamente de forma "aleatoria";
+		* quantidade reservada de maquinas na cloud (em cada provedor, inclusive o spot-market);
+			- depois devo verificar como será o fator de variabilidade nos precos;
+		* fator de "consumo" da grade (pdpc);
+		* quantidade de dias de simulacao;
+		* fator de variacao na demanda;
+		* rodada da simulacao ([minima-maxima]);
+		* fator de execucao do workload in-house (lambda);
+		
+	- fazer um FOR para os pontos desejados de terminos (a cada hora, ex);
+	- criar um evento CheckPoint para cada ponto deste e tomar acoes em cada check point
+		* terminou realmente o job no ponto desejado?
+		* caso nao, esse check point nao interessa [encerrar ou nao a simulacao? (indo pro final dela)]
+		* caso sim, calcular o profit
+
 * implementar as funcoes de utility;
 	como???
 	- primeiro, fazer o registro (na accountList) de todas as execuções de tasks, inclusive as que falharam;
@@ -5,15 +31,3 @@
 	(mas as máquinas na cloud podem falhar também, caso contrato acabe, por exemplo)
 	- fazer um registro similar ao accountList para os Jobs;
 	(a partir deste registro e da função de utility a gente contabiliza o utilidade produzida)
-	
-* implementar a fase de planning (com o estabelecimento dos contratos);
-	(isso implica na entrada das maquinas da cloud)
-	(nao faco ideia como serah o processo de otimizacao) :(
-	(lembrar da solucao de soh comprar maquinas na cloud para a hora de precisa, ou seja, a ultima)
-	(fazer um pre-processamento da quantidade necessária para contratação na cloud)
-	
-	- fazer um FOR para os pontos desejados de terminos (a cada hora, ex);
-	- criar um evento CheckPoint para cada ponto deste e tomar acoes em cada check point
-		* terminou realmente o job no ponto desejado?
-		* caso nao, esse check point nao interessa [encerrar ou nao a simulacao? (indo pro final dela)]
-		* caso sim, calcular o profit
