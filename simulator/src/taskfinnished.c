@@ -158,7 +158,7 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 			if( (ptrNewSchedule = malloc(sizeof(event))) ) {
 				ptrNewSchedule->eventNumber = 0;
 				ptrNewSchedule->eventID = TASKSCHEDULE;
-				ptrNewSchedule->time = ptrCurrentEvent->time;
+				ptrNewSchedule->time = (ptrCurrentEvent->time + 1);
 				ptrNewSchedule->flag = 0;
 				ptrNewSchedule->nextEvent = NULL;
 

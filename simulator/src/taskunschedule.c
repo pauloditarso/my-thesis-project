@@ -82,7 +82,7 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 
 				if( (ptrNewEvent = malloc(sizeof(event))) ) {
 					ptrNewEvent->eventID = TASKSCHEDULE;
-					ptrNewEvent->time = ptrCurrentEvent->time;
+					ptrNewEvent->time = (ptrCurrentEvent->time + 1);
 					ptrNewEvent->flag = 0;
 					ptrNewEvent->nextEvent = NULL;
 

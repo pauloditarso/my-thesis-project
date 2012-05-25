@@ -32,6 +32,7 @@ void InsertTaskAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task
 			ptrAuxTaskAccount = ptrTaskAccountInfoList;
 			unsigned int count = 1;
 
+			// going to the end of the task account info list
 			while(ptrAuxTaskAccount->nextTaskAccountInfo != NULL) {
 				count += 1;
 				ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;

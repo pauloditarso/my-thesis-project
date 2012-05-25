@@ -32,7 +32,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 5:
 			// TASK ARRIVAL
-			TaskArrival(ptrCurrentEvent, *ptrPtrEventList, ptrTaskList);
+			TaskArrival(ptrCurrentEvent, *ptrPtrEventList, ptrTaskList, *ptrPtrMachineList);
 			break;
 		case 6:
 			// TASK SCHEDULED

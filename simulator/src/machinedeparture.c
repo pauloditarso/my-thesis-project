@@ -32,6 +32,7 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 					ptrActualMachine = ptrActualMachine->nextMachine;
 				}
 				ptrAux = ptrAux->nextMachine;
+
 			}
 
 			if (found) {
@@ -100,9 +101,15 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 				if (ptrLastMachine != ptrActualMachine) {
 					ptrLastMachine->nextMachine = ptrActualMachine->nextMachine;
 					ptrActualMachine->nextMachine = NULL;
+					free(ptrActualMachine);
+					ptrActualMachine = NULL;
 				}
 				else {
+					machine *ptrAux;
+					ptrAux = *ptrPtrMachineList;
 					*ptrPtrMachineList = (*ptrPtrMachineList)->nextMachine;
+					free(ptrAux);
+					ptrAux = NULL;
 				}
 
 			} else printf("ERROR (machine departure): machine not found!!!\n");

@@ -41,6 +41,8 @@ void RemoveEvent(event **ptrPtrEventList, event *ptrOldEvent) {
 				}
 				ptrLastEvent->nextEvent = ptrActualEvent->nextEvent;
 				ptrActualEvent->nextEvent = NULL;
+				free(ptrActualEvent);
+				ptrActualEvent = NULL;
 
 			}
 			else {
@@ -49,7 +51,11 @@ void RemoveEvent(event **ptrPtrEventList, event *ptrOldEvent) {
 					ptrAux->eventNumber -= 1;
 					ptrAux = ptrAux->nextEvent;
 				}
+				event *ptrPtrAux;
+				ptrPtrAux = *ptrPtrEventList;
 				*ptrPtrEventList = (*ptrPtrEventList)->nextEvent;
+				free(ptrPtrAux);
+				ptrPtrAux = NULL;
 
 			}
 

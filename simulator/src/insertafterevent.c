@@ -17,7 +17,7 @@ void InsertAfterEvent(event *ptrEventList, event *ptrNewEvent, event *ptrTargetE
 
 		while(ptrActualEvent) {
 
-//			printf("passou por aqui!!\n");
+			// looking for the target event in which the new one will be inserted after
 			if ( ptrActualEvent->eventNumber == ptrTargetEvent->eventNumber && ptrActualEvent->eventID == ptrTargetEvent->eventID
 					&& ptrActualEvent->time == ptrTargetEvent->time ) {
 				ptrNextEvent = ptrActualEvent->nextEvent;

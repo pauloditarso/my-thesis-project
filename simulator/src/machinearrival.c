@@ -23,27 +23,29 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 				ptrMachineList->reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
 				ptrMachineList->nextMachine = NULL;
 
-				// insert a new grid donation into the event list, if there is no waiting task
-				if ( ptrMachineList->source == LOCAL ) {  // cloud machines may be inserted here as well
 
-					task *ptrAuxTask;
-					ptrAuxTask = ptrTaskList;
-					unsigned short int isThereTaskWaiting = 0;
+				task *ptrAuxTask;
+				ptrAuxTask = ptrTaskList;
+				unsigned short int isThereTaskWaiting = 0;
 
-					while(ptrAuxTask) {
+				while(ptrAuxTask) {
 
-						if (ptrAuxTask->taskID != 0 && ptrAuxTask->arrivalTime <= ptrCurrentEvent->time && ptrAuxTask->status == QUEUED) {
-							isThereTaskWaiting = 1;
-							break;
-						}
-
-						ptrAuxTask = ptrAuxTask->nextTask;
+					if (ptrAuxTask->taskID != 0 && ptrAuxTask->arrivalTime <= ptrCurrentEvent->time && ptrAuxTask->status == QUEUED) {
+						isThereTaskWaiting = 1;
+						break;
 					}
 
-					if (isThereTaskWaiting == 0) {
+					ptrAuxTask = ptrAuxTask->nextTask;
+				}
+
+				if (isThereTaskWaiting == 0) {
+
+					// insert a new grid donation into the event list, if it is a local machine
+					// cloud machines may be inserted here as well, in a near future
+					if ( ptrMachineList->source == LOCAL ) {
 
 						event *ptrNewDonation;//, *ptrTargetEvent;
-//						ptrTargetEvent = ptrCurrentEvent;
+						//						ptrTargetEvent = ptrCurrentEvent;
 
 						if( (ptrNewDonation = malloc(sizeof(event))) ) {
 							ptrNewDonation->eventNumber = 0;
@@ -59,14 +61,34 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 							ptrNewDonation->machineInfo.nextMachine = ptrCurrentEvent->machineInfo.nextMachine;
 							ptrNewDonation->nextEvent = NULL;
 
-//							InsertAfterEvent(ptrEventList, ptrNewDonation, ptrTargetEvent);
+							//							InsertAfterEvent(ptrEventList, ptrNewDonation, ptrTargetEvent);
 							InsertEvent(ptrEventList, ptrNewDonation);
 						}
 						else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 
-					}
+					} // ending donation if
+				}
+				else {
 
-				} // ending donation if
+					// insert a new schedule into the event list since there is waiting tasks
+					event *ptrNewSchedule; //, *ptrTargetEvent;
+		//			ptrTargetEvent = ptrCurrentEvent;
+
+					if( (ptrNewSchedule = malloc(sizeof(event))) ) {
+						ptrNewSchedule->eventNumber = 0;
+						ptrNewSchedule->eventID = TASKSCHEDULE;
+						ptrNewSchedule->time = (ptrCurrentEvent->time + 1);
+						ptrNewSchedule->flag = 0;
+						ptrNewSchedule->nextEvent = NULL;
+
+						// investigar se nao eh possivel inserir um evento no tempo errado
+						// pois NewSchedule e TargetEvent possuem tempos diferentes
+		//				InsertAfterEvent(ptrEventList, ptrNewSchedule, ptrTargetEvent);
+						InsertEvent(ptrEventList, ptrNewSchedule);
+					}
+					else printf("ERROR (machine arrival): merdou o malloc!!!\n");
+
+				}
 
 			}
 			else {
@@ -85,50 +107,6 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 				ptrNewMachine->usagePrice = ptrCurrentEvent->machineInfo.usagePrice;
 				ptrNewMachine->reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
 				ptrNewMachine->nextMachine = NULL;
-
-				// insert a new grid donation into the event list, if there is no waiting task
-				if ( ptrNewMachine->source == LOCAL ) {  // cloud machines may be inserted here as well
-
-					task *ptrAuxTask;
-					ptrAuxTask = ptrTaskList;
-					unsigned short int isThereTaskWaiting = 0;
-
-					while(ptrAuxTask) {
-
-						if (ptrAuxTask->taskID != 0 && ptrAuxTask->arrivalTime <= ptrCurrentEvent->time && ptrAuxTask->status == QUEUED) {
-							isThereTaskWaiting = 1;
-							break;
-						}
-
-						ptrAuxTask = ptrAuxTask->nextTask;
-					}
-
-					if (isThereTaskWaiting == 0) {
-
-						event *ptrNewDonation;//, *ptrTargetEvent;
-//						ptrTargetEvent = ptrCurrentEvent;
-
-						if( (ptrNewDonation = malloc(sizeof(event))) ) {
-							ptrNewDonation->eventNumber = 0;
-							ptrNewDonation->eventID = GRIDDONATING;
-							ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after machine's arrival
-							ptrNewDonation->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
-							ptrNewDonation->machineInfo.source = ptrCurrentEvent->machineInfo.source;
-							ptrNewDonation->machineInfo.status = ptrCurrentEvent->machineInfo.status;
-							ptrNewDonation->machineInfo.arrivalTime = ptrCurrentEvent->machineInfo.arrivalTime;
-							ptrNewDonation->machineInfo.departureTime = ptrCurrentEvent->machineInfo.departureTime;
-							ptrNewDonation->machineInfo.usagePrice = ptrCurrentEvent->machineInfo.usagePrice;
-							ptrNewDonation->machineInfo.reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
-							ptrNewDonation->machineInfo.nextMachine = ptrCurrentEvent->machineInfo.nextMachine;
-							ptrNewDonation->nextEvent = NULL;
-
-//							InsertAfterEvent(ptrEventList, ptrNewDonation, ptrTargetEvent);
-							InsertEvent(ptrEventList, ptrNewDonation);
-						}
-						else printf("ERROR (machine arrival): merdou o malloc!!!\n");
-					}
-
-				} // ending donation if
 
 				machine *ptrAux, *ptrActualMachine, *ptrLastMachine;
 				ptrAux = ptrActualMachine = ptrLastMachine = ptrMachineList;
@@ -150,22 +128,76 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 					ptrLastMachine->nextMachine = ptrNewMachine;
 				}
 
+				task *ptrAuxTask;
+				ptrAuxTask = ptrTaskList;
+				unsigned short int isThereTaskWaiting = 0;
+
+				while(ptrAuxTask) {
+
+					// investigar se nao eh possivel uma situacao de erro com tasks que
+					// podem chegar um segundo depois do evento atual
+					if (ptrAuxTask->taskID != 0 && ptrAuxTask->arrivalTime <= ptrCurrentEvent->time && ptrAuxTask->status == QUEUED) {
+						isThereTaskWaiting = 1;
+						break;
+					}
+
+					ptrAuxTask = ptrAuxTask->nextTask;
+				}
+
+				if (isThereTaskWaiting == 0) {
+
+					// insert a new grid donation into the event list, if there is no waiting task
+					// cloud machines may be inserted here as well, in a near future
+					if ( ptrNewMachine->source == LOCAL ) {
+
+						event *ptrNewDonation;//, *ptrTargetEvent;
+						//						ptrTargetEvent = ptrCurrentEvent;
+
+						if( (ptrNewDonation = malloc(sizeof(event))) ) {
+							ptrNewDonation->eventNumber = 0;
+							ptrNewDonation->eventID = GRIDDONATING;
+							ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after machine's arrival
+							ptrNewDonation->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
+							ptrNewDonation->machineInfo.source = ptrCurrentEvent->machineInfo.source;
+							ptrNewDonation->machineInfo.status = ptrCurrentEvent->machineInfo.status;
+							ptrNewDonation->machineInfo.arrivalTime = ptrCurrentEvent->machineInfo.arrivalTime;
+							ptrNewDonation->machineInfo.departureTime = ptrCurrentEvent->machineInfo.departureTime;
+							ptrNewDonation->machineInfo.usagePrice = ptrCurrentEvent->machineInfo.usagePrice;
+							ptrNewDonation->machineInfo.reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
+							ptrNewDonation->machineInfo.nextMachine = ptrCurrentEvent->machineInfo.nextMachine;
+							ptrNewDonation->nextEvent = NULL;
+
+							//							InsertAfterEvent(ptrEventList, ptrNewDonation, ptrTargetEvent);
+							InsertEvent(ptrEventList, ptrNewDonation);
+						}
+						else printf("ERROR (machine arrival): merdou o malloc!!!\n");
+
+					} // ending donation if
+
+				}
+				else {
+
+					// insert a new schedule into the event list, since there is waiting tasks
+					event *ptrNewSchedule; //, *ptrTargetEvent;
+					//ptrTargetEvent = ptrCurrentEvent;
+
+					if( (ptrNewSchedule = malloc(sizeof(event))) ) {
+						ptrNewSchedule->eventNumber = 0;
+						ptrNewSchedule->eventID = TASKSCHEDULE;
+						ptrNewSchedule->time = (ptrCurrentEvent->time + 1);
+						ptrNewSchedule->flag = 0;
+						ptrNewSchedule->nextEvent = NULL;
+
+						// investigar se nao eh possivel inserir um evento no tempo errado
+						// pois NewSchedule e TargetEvent possuem tempos diferentes
+						//InsertAfterEvent(ptrEventList, ptrNewSchedule, ptrTargetEvent);
+						InsertEvent(ptrEventList, ptrNewSchedule);
+					}
+					else printf("ERROR (machine arrival): merdou o malloc!!!\n");
+
+				}
+
 			} // end else
-
-			// insert a new schedule into the event list
-			event *ptrNewSchedule, *ptrTargetEvent;
-			ptrTargetEvent = ptrCurrentEvent;
-
-			if( (ptrNewSchedule = malloc(sizeof(event))) ) {
-				ptrNewSchedule->eventNumber = 0;
-				ptrNewSchedule->eventID = TASKSCHEDULE;
-				ptrNewSchedule->time = ptrCurrentEvent->time;
-				ptrNewSchedule->flag = 0;
-				ptrNewSchedule->nextEvent = NULL;
-
-				InsertAfterEvent(ptrEventList, ptrNewSchedule, ptrTargetEvent);
-			}
-			else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 
 			printf("eventID %d (Machine Arrival) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			printf("machineID %d source %d status %d AT %d DT %d UP %f RP %f\n",
