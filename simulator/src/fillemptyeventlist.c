@@ -110,7 +110,7 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 			auxPtrEvent1->machineInfo.source = CLOUD;
 			auxPtrEvent1->machineInfo.status = IDLE;
 			auxPtrEvent1->machineInfo.arrivalTime = 0;
-			auxPtrEvent1->machineInfo.departureTime = TIME;
+			auxPtrEvent1->machineInfo.departureTime = simulationTime;
 			auxPtrEvent1->machineInfo.usagePrice = 0.0;
 			auxPtrEvent1->machineInfo.reservationPrice = 0.0;
 			auxPtrEvent1->machineInfo.nextMachine = NULL;
@@ -125,12 +125,12 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 		if( (auxPtrEvent2 = malloc(sizeof(event))) ) {
 			auxPtrEvent2->eventNumber = 0;
 			auxPtrEvent2->eventID = MACHDEPARTURE;
-			auxPtrEvent2->time = TIME;
+			auxPtrEvent2->time = simulationTime;
 			auxPtrEvent2->machineInfo.machineID = i;
 			auxPtrEvent2->machineInfo.source = CLOUD;
 			auxPtrEvent2->machineInfo.status = IDLE;
 			auxPtrEvent2->machineInfo.arrivalTime = 0;
-			auxPtrEvent2->machineInfo.departureTime = TIME;
+			auxPtrEvent2->machineInfo.departureTime = simulationTime;
 			auxPtrEvent2->machineInfo.usagePrice = 0.0;
 			auxPtrEvent2->machineInfo.reservationPrice = 0.0;
 			auxPtrEvent2->machineInfo.nextMachine = NULL;

@@ -1,7 +1,3 @@
-* terminar a analise no NOTHING_TO_DO!!!
-
-* implementar as INVARIANTES!!!!
-
 * implementar a fase de planning (com o estabelecimento dos contratos);
 	(isso implica na entrada das maquinas da cloud)
 	(lembrar da solucao de soh comprar maquinas na cloud para a hora de precisa, ou seja, a ultima)
@@ -13,7 +9,7 @@
 		* quantidade reservada de maquinas na cloud (em cada provedor, inclusive o spot-market);
 			- depois devo verificar como ser‡ o fator de variabilidade nos precos;
 		* fator de "consumo" da grade (pdpc);
-		* quantidade de dias de simulacao;
+		* quantidade de dias (ou horas) de simulacao;
 		* fator de variacao na demanda;
 		* rodada da simulacao ([minima-maxima]);
 		* fator de execucao do workload in-house (lambda);
@@ -23,6 +19,8 @@
 		* terminou realmente o job no ponto desejado?
 		* caso nao, esse check point nao interessa [encerrar ou nao a simulacao? (indo pro final dela)]
 		* caso sim, calcular o profit
+
+* implementar mais INVARIANTES em decorrencia da fase de planning!!!!
 
 * implementar as funcoes de utility;
 	como???

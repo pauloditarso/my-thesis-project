@@ -59,7 +59,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			JobFinnished(ptrCurrentEvent, ptrJobAccountInfo, ptrJobList);
 			break;
 		case 12:
-			printf("eventID %d (Simulation Finnished) time %d\n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+			printf("eventID %d (Simulation Finnished) time %d", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			break;
 		default:
 			printf("unkwonk event!!!\n");
