@@ -11,7 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TIME 108000
+//#define TIME 108000
+unsigned int simulationTime;
 
 typedef struct task {
 	unsigned int taskID, arrivalTime, jobID, jobSize, runtime;
@@ -54,7 +55,7 @@ typedef struct taskAccountInfo {
 	unsigned int machineID;
 	enum {LOCALMACH, GRIDMACH, CLOUDMACH} source;
 	unsigned int taskID, jobID;
-	unsigned int startTime, finnishTime;
+	unsigned int runtime, startTime, finnishTime;
 	enum {ACCOUNTUNFINNISHED, ACCOUNTFINNISHED} status;
 	struct taskAccountInfo *nextTaskAccountInfo;
 } taskAccountInfo;

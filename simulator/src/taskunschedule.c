@@ -75,7 +75,7 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 //			RemoveTaskAccountList(ptrPtrTaskAccountInfoList, ptrAuxTaskAccountList);
 //			comentado pq n‹o mais ser‹o removidas essas entradas, para efeito do calculo de custo (8/3/12)
 
-			if (ptrCurrentEvent->time < 108000) {
+			if (ptrCurrentEvent->time < simulationTime) {
 				// insert a new schedule into the event list
 				event *ptrNewEvent, *ptrTargetEvent;
 				ptrTargetEvent = ptrCurrentEvent;

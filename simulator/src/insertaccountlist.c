@@ -17,6 +17,7 @@ void InsertTaskAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task
 			ptrTaskAccountInfoList->source = ptrAuxMachine->source;
 			ptrTaskAccountInfoList->taskID = ptrAuxTask->taskID;
 			ptrTaskAccountInfoList->jobID = ptrAuxTask->jobID;
+			ptrTaskAccountInfoList->runtime = ptrAuxTask->runtime;
 			ptrTaskAccountInfoList->startTime = ptrCurrentEvent->time;
 			ptrTaskAccountInfoList->finnishTime = 0; // it must be updated later
 			ptrTaskAccountInfoList->status = 0;
@@ -46,6 +47,7 @@ void InsertTaskAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task
 				ptrNewTaskAccount->source = ptrAuxMachine->source;
 				ptrNewTaskAccount->taskID = ptrAuxTask->taskID;
 				ptrNewTaskAccount->jobID = ptrAuxTask->jobID;
+				ptrNewTaskAccount->runtime = ptrAuxTask->runtime;
 				ptrNewTaskAccount->startTime = ptrCurrentEvent->time;
 				ptrNewTaskAccount->finnishTime = 0; // it must be updated later
 				ptrNewTaskAccount->status = 0;
