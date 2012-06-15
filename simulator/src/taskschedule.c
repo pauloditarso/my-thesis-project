@@ -3,23 +3,34 @@
  *
  *  Created on: Aug 29, 2011
  *      Author: PauloDitarso
+ *
+ *  What is done:
+ *  	1. it tests if it is the correct event;
+ *  	2. it tests both machine and task lists;
+ *  	3. it looks for a task tagged as queued;
+ *  	4. it looks for an idle or a donating machine;
+ *  	5. if the machine is local and it is donating, it creates a grid preemption event;
+ *      6. it changes the machine status to RUNNING and the task status to STARTED;
+ *      7. it creates a task finish event;
+ *      8. it creates a job start event if the task ID is 1 (first task);
  */
 
 #include "simulation.h"
 
 void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList) {
 
-	if (ptrMachineList && ptrTaskList) {
+	if (ptrCurrentEvent->eventID == TASKSCHEDULE) {
 
-		task *ptrAuxTask;
-		ptrAuxTask = ptrTaskList;
-		unsigned short int found = 0;
+		if (ptrMachineList && ptrTaskList) {
 
-		while(ptrAuxTask) {
+			task *ptrAuxTask;
+			ptrAuxTask = ptrTaskList;
+			unsigned short int found = 0;
 
-			if ( ptrAuxTask->arrivalTime <= ptrCurrentEvent->time && ptrAuxTask->status == QUEUED ) {
+			while(ptrAuxTask) {
 
-				if (ptrAuxTask->taskID > 0) { // 0 means code for an empty task list
+				if ( ptrAuxTask->taskID > 0 && ptrAuxTask->arrivalTime <= ptrCurrentEvent->time &&
+						ptrAuxTask->status == QUEUED ) {  // taskID 0 means code for an empty task list
 
 					machine *ptrAuxMachine;
 					ptrAuxMachine = ptrMachineList;
@@ -112,18 +123,17 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 						ptrAuxMachine = ptrAuxMachine->nextMachine;
 					}
 
-				} // else printf("lista vazia!!!\n");
+					break;
+				}
 
-				break;
+				ptrAuxTask = ptrAuxTask->nextTask;
 			}
 
-			ptrAuxTask = ptrAuxTask->nextTask;
-		}
+			if (found == 0) {
+				printf("eventID %d (Task Scheduled) time %d (NOTHING_TO_DO!!!)\n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+			}
 
-		if (found == 0) {
-			printf("eventID %d (Task Scheduled) time %d (NOTHING_TO_DO!!!)\n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-		}
+		} else printf("ERROR (arrival): there is no machine or task list!!!\n");
 
-	} else printf("ERROR (arrival): there is no machine or task list!!!\n");
-
+	} else printf("ERROR (task scheduling): wrong eventID!!!\n");
 }

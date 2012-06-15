@@ -1,37 +1,34 @@
 /*
- * jobarrival.c
+ * jobarrivalOpt.c
  *
- *  Created on: Jan 23, 2012
+ *  Created on: Jun 12, 2012
  *      Author: PauloDitarso
  *
  *  What is done:
  *  	1. it tests if it is the correct event;
- *  	2. it tests if thereis a job list;
+ *  	2. it tests if there are job, machine and task lists;
  *  	3. it creates a new node in the job list;
- *  	4. it calls AllocationPlanning(); (???)
+ *  	4. it creates the grid machines; (???)
+ *  	. it plans the schedule map:
+ *  		.1. it creates an ordered task list (from the longest to the shortest);
+ *  		.2. it creates an ordered (by hours) machine list (in-house, cloud and grid machines);
+ *  		.3.
+ *
+ *  	2. it looks for a task tagged as queued;
+ *  	3. it looks for an idle or a donating machine;
+ *  	4. if the machine is local and it is donating, it creates a grid preemption event;
+ *      5. it changes the machine status to RUNNING and the task status to STARTED;
+ *      6. it creates a task finish event;
+ *      7. it creates a job start event if the task ID is 1 (first task);
  */
 
 #include "simulation.h"
 
-void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, task *ptrTaskList, balanceAccountInfo *ptrBalanceAccountInfo) {
+void JobArrivalOpt(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, task *ptrTaskList, balanceAccountInfo *ptrBalanceAccountInfo) {
 
 	if (ptrCurrentEvent->eventID == JOBARRIVAL) {
 
-		// creation of a new node in the job list
 		if (ptrJobList) {
-
-//			task *ptrAuxTaskList;
-//			ptrAuxTaskList = ptrTaskList;
-//			unsigned int jobSize = 0;
-//
-//			while(ptrAuxTaskList) {
-//
-//				if (ptrAuxTaskList->jobID == ptrCurrentEvent->jobInfo.jobID) {
-//					jobSize += 1;
-//				}
-//
-//				ptrAuxTaskList = ptrAuxTaskList->nextTask;
-//			}
 
 			if (ptrJobList->jobID == 0) {	// code for an empty job list
 				ptrJobList->jobID = ptrCurrentEvent->jobInfo.jobID;
@@ -77,10 +74,6 @@ void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, ta
 					ptrCurrentEvent->jobInfo.deadline);
 
 		} else printf("ERROR (job arrival): there is no job list!!!\n");
-
-		// creation of the grid machines
-
-
 
 	} else printf("ERROR (job arrival): wrong eventID!!!\n");
 

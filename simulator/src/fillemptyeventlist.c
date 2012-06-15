@@ -190,31 +190,6 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 		}
 	}
 
-	while(!feof(workloadJobs)) {
-
-		unsigned int auxTime, auxJobID, auxJobSize, auxLongestTask, auxAccRuntime;
-		fscanf(workloadJobs, "%d %d %d %d %d", &auxTime, &auxJobID, &auxJobSize, &auxLongestTask, &auxAccRuntime);
-
-		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
-			auxPtrEvent1->eventNumber = 0;
-			auxPtrEvent1->eventID = JOBARRIVAL;
-			auxPtrEvent1->time = auxTime;
-			auxPtrEvent1->jobInfo.jobID = auxJobID;
-			auxPtrEvent1->jobInfo.arrivalTime = auxTime;
-			auxPtrEvent1->jobInfo.finnishTime = 0; // indicates a non-setted finnish time
-			auxPtrEvent1->jobInfo.longestTask = auxLongestTask;
-			auxPtrEvent1->jobInfo.deadline = (auxTime + auxAccRuntime);
-			auxPtrEvent1->jobInfo.nextJob = NULL;
-			auxPtrEvent1->nextEvent = NULL;
-
-			InsertEvent(ptrEventList, auxPtrEvent1);
-		}
-		else {
-			printf("ERROR (fill): merdou o malloc!!!\n");
-		}
-
-	}
-
 	while(!feof(workloadTasks)) {
 
 		unsigned int auxTaskID, auxTime, auxJobID, auxJobSize, auxRuntime;
@@ -232,6 +207,32 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 			auxPtrEvent1->taskInfo.status = QUEUED;
 			auxPtrEvent1->taskInfo.utilityFunction = 0.0;
 			auxPtrEvent1->taskInfo.nextTask = NULL;
+			auxPtrEvent1->nextEvent = NULL;
+
+			InsertEvent(ptrEventList, auxPtrEvent1);
+		}
+		else {
+			printf("ERROR (fill): merdou o malloc!!!\n");
+		}
+
+	}
+
+	while(!feof(workloadJobs)) {
+
+		unsigned int auxTime, auxJobID, auxJobSize, auxLongestTask, auxAccRuntime;
+		fscanf(workloadJobs, "%d %d %d %d %d", &auxTime, &auxJobID, &auxJobSize, &auxLongestTask, &auxAccRuntime);
+
+		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
+			auxPtrEvent1->eventNumber = 0;
+			auxPtrEvent1->eventID = JOBARRIVAL;
+			auxPtrEvent1->time = auxTime;
+			auxPtrEvent1->jobInfo.jobID = auxJobID;
+			auxPtrEvent1->jobInfo.jobSize = auxJobSize;
+			auxPtrEvent1->jobInfo.arrivalTime = auxTime;
+			auxPtrEvent1->jobInfo.finnishTime = 0; // indicates a non-setted finnish time
+			auxPtrEvent1->jobInfo.longestTask = auxLongestTask;
+			auxPtrEvent1->jobInfo.deadline = (auxTime + auxAccRuntime);
+			auxPtrEvent1->jobInfo.nextJob = NULL;
 			auxPtrEvent1->nextEvent = NULL;
 
 			InsertEvent(ptrEventList, auxPtrEvent1);
