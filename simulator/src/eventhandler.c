@@ -48,7 +48,12 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 9:
 			// JOB ARRIVAL
-			JobArrival(ptrCurrentEvent, *ptrPtrEventList, ptrJobList, ptrBalanceAccountInfo);
+//			printf("optflag %d\n", optFlag);
+			if (optFlag == 0) {
+				JobArrival(ptrCurrentEvent, *ptrPtrEventList, ptrJobList, ptrTaskList, ptrBalanceAccountInfo);
+			} else {
+				JobArrivalOpt(ptrCurrentEvent, *ptrPtrEventList, ptrJobList, ptrTaskList, ptrBalanceAccountInfo);
+			}
 			break;
 		case 10:
 			// JOB STARTED
@@ -59,6 +64,10 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			JobFinnished(ptrCurrentEvent, ptrJobAccountInfo, ptrJobList);
 			break;
 		case 12:
+			// PLANNING
+			AllocationPlanning();
+			break;
+		case 13:
 			printf("eventID %d (Simulation Finnished) time %d", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			break;
 		default:

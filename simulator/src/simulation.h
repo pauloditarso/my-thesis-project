@@ -12,7 +12,13 @@
 #include <stdlib.h>
 
 //#define TIME 108000
+# define TASK_AVG_TIME 1800
+# define TASK_SDV_TIME 300
+
+unsigned short int optFlag;
 unsigned int simulationTime;
+float gridQoSFactor;
+
 
 typedef struct task {
 	unsigned int taskID, arrivalTime, jobID, jobSize, runtime;
@@ -22,7 +28,7 @@ typedef struct task {
 } task;
 
 typedef struct job {
-	unsigned int jobID, arrivalTime, finnishTime, longestTask, deadline;
+	unsigned int jobID, jobSize, arrivalTime, finnishTime, longestTask, deadline;
 	struct job *nextJob;
 } job;
 
@@ -36,15 +42,22 @@ typedef struct machine {
 	struct machine *nextMachine;
 } machine;
 
+typedef struct schedule {
+	unsigned int taskID, jobID;
+	unsigned int machineID;
+	enum {MACHLOCAL, MACHGRID, MACHCLOUD} source;
+} schedule;
+
 typedef struct event {
 	unsigned int eventNumber;
 	enum {SIMSTARTED, MACHARRIVAL, MACHDEPARTURE, GRIDDONATING, GRIDPREEMPTED, TASKARRIVAL, TASKSCHEDULE, TASKPREEMPTED,
-	TASKFINNISHED, JOBARRIVAL, JOBSTARTED, JOBFINNISHED, SIMFINNISHED} eventID;
+	TASKFINNISHED, JOBARRIVAL, JOBSTARTED, JOBFINNISHED, ALLOCATIONPLANNING, SIMFINNISHED} eventID;
 	unsigned int time;
 	union {
 		task taskInfo;
 		job jobInfo;
 		machine machineInfo;
+		schedule scheduleInfo;
 		short int flag;
 	};
 	struct event *nextEvent;
@@ -125,7 +138,9 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
 		balanceAccountInfo *ptrBalanceAccountInfo);
 
-void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, balanceAccountInfo *ptrBalanceAccountInfo);
+void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, task *ptrTaskList, balanceAccountInfo *ptrBalanceAccountInfo);
+
+void JobArrivalOpt(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, task *ptrTaskList, balanceAccountInfo *ptrBalanceAccountInfo);
 
 void JobStarted(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *ptrJobList);
 
@@ -133,5 +148,7 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 
 void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
 		gridAccountInfo *ptrGridInfoList, job *ptrJobList, jobAccountInfo *ptrJobAccountInfo, balanceAccountInfo *ptrBalanceAccountInfo);
+
+void AllocationPlanning();
 
 #endif /* SIMULATION_H_ */

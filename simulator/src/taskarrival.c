@@ -71,7 +71,7 @@ void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList,
 						ptrNewEvent->flag = 0;
 						ptrNewEvent->nextEvent = NULL;
 
-						//				InsertAfterEvent(ptrEventList, ptrNewEvent, ptrTargetEvent);
+						// InsertAfterEvent(ptrEventList, ptrNewEvent, ptrTargetEvent);
 						InsertEvent(ptrEventList, ptrNewEvent);
 					}
 					else printf("ERROR (task arrival): merdou o malloc!!!\n");

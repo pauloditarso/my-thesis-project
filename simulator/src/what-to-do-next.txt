@@ -1,3 +1,6 @@
+* implementar as maquinas da grade de acordo com o que foi doado antes da chegada de cada job
+	- PRIORIDADE MAXIMA!!!!
+
 * implementar a fase de planning (com o estabelecimento dos contratos);
 	(isso implica na entrada das maquinas da cloud)
 	(lembrar da solucao de soh comprar maquinas na cloud para a hora de precisa, ou seja, a ultima)
@@ -14,13 +17,25 @@
 		* rodada da simulacao ([minima-maxima]);
 		* fator de execucao do workload in-house (lambda);
 		
+	- opções:
+		* trazer a complexidade do planning para JobArrival() e deixar TaskSchedule() 
+		  para o efetivo escalonamento da task em tal horário, tal máquina; ou deixar a 
+		  complexidade em TaskSchedule();
+		* abrir um novo projeto; ou criar novas funções no mesmo projeto;
+		(prefiro a complexidade em JobArrival() e novas funções!!!)
+		   
 	- fazer um FOR para os pontos desejados de terminos (a cada hora, ex);
 	- criar um evento CheckPoint para cada ponto deste e tomar acoes em cada check point
 		* terminou realmente o job no ponto desejado?
-		* caso nao, esse check point nao interessa [encerrar ou nao a simulacao? (indo pro final dela)]
+		* caso nao, esse check point nao interessa 
+		   [encerrar ou nao a simulacao? (indo pro final dela)?]
+		   [ou continuar pq existem outras apps?]
 		* caso sim, calcular o profit
+	- tirar (ou nao) a complexidade de TASKSCHEDULE e colocar em TASKARRIVAL (OU JOBARRIVAL)???
+	- lembrar que um ou mais jobs podem ser executados simultaneamente (vide logo abaixo)
 
 * implementar mais INVARIANTES em decorrencia da fase de planning!!!!
+(NAO VOU TRATAR O CASO DA EXECUCAO SIMULTANEA DE VARIOS JOBS, OU SEJA, UM JOB POR VEZ!!!)
 
 * implementar as funcoes de utility;
 	como???
@@ -29,3 +44,10 @@
 	(mas as máquinas na cloud podem falhar também, caso contrato acabe, por exemplo)
 	- fazer um registro similar ao accountList para os Jobs;
 	(a partir deste registro e da função de utility a gente contabiliza o utilidade produzida)
+	
+* metodologia de avaliacao do ambiente proposto
+	- fazer a avaliacao numa ordem diferente do artigo long-term management
+		* avaliar um escalonamento "naive" apenas com maquinas locais e a cloud
+		* avaliar um escalonamento "naive" introduzindo a grade
+		* avaliar um escalonamento "enviesado" (ou seja, usando dados do ano anterior), com e sem a grade
+		* avaliar um escalonamento "inteligente" (alguma variacao do bin-packinng)
