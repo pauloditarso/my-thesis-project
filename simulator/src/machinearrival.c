@@ -3,6 +3,12 @@
  *
  *  Created on: Aug 26, 2011
  *      Author: PauloDitarso
+ *
+ *  What is done:
+ *  	1. it tests if this is the correct event
+ *  	2. it tests if there is a machine list
+ *  	3. it tests if the machine list is empty or not
+ *  	4.
  */
 
 #include "simulation.h"
@@ -14,6 +20,7 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 		if (ptrMachineList) {
 
 			if (ptrMachineList->machineID == 0) {		// code for an empty machine list
+
 				ptrMachineList->machineID = ptrCurrentEvent->machineInfo.machineID;
 				ptrMachineList->source = ptrCurrentEvent->machineInfo.source;
 				ptrMachineList->status = ptrCurrentEvent->machineInfo.status;
@@ -70,23 +77,60 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 				}
 				else {
 
-					// insert a new schedule into the event list since there is waiting tasks
-					event *ptrNewSchedule; //, *ptrTargetEvent;
-		//			ptrTargetEvent = ptrCurrentEvent;
+					// if there is donating machines, it creates grid preempted events
+					machine *ptrAuxMachine;
+					ptrAuxMachine = ptrMachineList;
+					while(ptrAuxMachine) {
 
-					if( (ptrNewSchedule = malloc(sizeof(event))) ) {
-						ptrNewSchedule->eventNumber = 0;
-						ptrNewSchedule->eventID = TASKSCHEDULE;
-						ptrNewSchedule->time = (ptrCurrentEvent->time + 1);
-						ptrNewSchedule->flag = 0;
-						ptrNewSchedule->nextEvent = NULL;
+						if (ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == DONATING) {
 
-						// investigar se nao eh possivel inserir um evento no tempo errado
-						// pois NewSchedule e TargetEvent possuem tempos diferentes
-		//				InsertAfterEvent(ptrEventList, ptrNewSchedule, ptrTargetEvent);
-						InsertEvent(ptrEventList, ptrNewSchedule);
-					}
-					else printf("ERROR (machine arrival): merdou o malloc!!!\n");
+							ptrAuxMachine->status = IDLE;
+							event *ptrNewGridPreemption;
+
+							if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
+								ptrNewGridPreemption->eventNumber = 0;
+								ptrNewGridPreemption->eventID = GRIDPREEMPTED;
+								ptrNewGridPreemption->time = ptrCurrentEvent->time;
+								ptrNewGridPreemption->machineInfo.machineID = ptrAuxMachine->machineID;
+								ptrNewGridPreemption->machineInfo.source = ptrAuxMachine->source;
+								ptrNewGridPreemption->machineInfo.status = QUEUED;
+								ptrNewGridPreemption->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
+								ptrNewGridPreemption->machineInfo.departureTime = ptrAuxMachine->departureTime;
+								ptrNewGridPreemption->machineInfo.reservationPrice = ptrAuxMachine->reservationPrice;
+								ptrNewGridPreemption->machineInfo.usagePrice = ptrAuxMachine->usagePrice;
+								ptrNewGridPreemption->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
+								ptrNewGridPreemption->nextEvent = NULL;
+
+								InsertEvent(ptrEventList, ptrNewGridPreemption);
+							}
+							else printf("ERROR (job arrival): merdou o malloc!!!\n");
+
+						}
+
+						ptrAuxMachine = ptrAuxMachine->nextMachine;
+					} // end while(ptrAuxMachine)
+
+					// insert a new planning into the event list
+					event *ptrNewEvent;
+					if( (ptrNewEvent = malloc(sizeof(event))) ) {
+
+						ptrNewEvent->eventNumber = 0;
+						ptrNewEvent->eventID = ALLOCATIONPLANNING;
+						ptrNewEvent->time = (ptrCurrentEvent->time + 1);
+						ptrNewEvent->flag = 1;
+//						ptrNewEvent->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
+//						ptrNewEvent->machineInfo.source = ptrCurrentEvent->machineInfo.source;
+//						ptrNewEvent->machineInfo.status = ptrCurrentEvent->machineInfo.status;
+//						ptrNewEvent->machineInfo.arrivalTime = ptrCurrentEvent->machineInfo.arrivalTime;
+//						ptrNewEvent->machineInfo.departureTime = ptrCurrentEvent->machineInfo.departureTime;
+//						ptrNewEvent->machineInfo.usagePrice = ptrCurrentEvent->machineInfo.usagePrice;
+//						ptrNewEvent->machineInfo.reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
+//						ptrNewEvent->machineInfo.nextMachine = NULL;
+						ptrNewEvent->nextEvent = NULL;
+
+						InsertEvent(ptrEventList, ptrNewEvent);
+
+					} else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 
 				}
 
@@ -177,23 +221,60 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 				}
 				else {
 
-					// insert a new schedule into the event list, since there is waiting tasks
-					event *ptrNewSchedule; //, *ptrTargetEvent;
-					//ptrTargetEvent = ptrCurrentEvent;
+					// if there is donating machines, it creates grid preempted events
+					machine *ptrAuxMachine;
+					ptrAuxMachine = ptrMachineList;
+					while(ptrAuxMachine) {
 
-					if( (ptrNewSchedule = malloc(sizeof(event))) ) {
-						ptrNewSchedule->eventNumber = 0;
-						ptrNewSchedule->eventID = TASKSCHEDULE;
-						ptrNewSchedule->time = (ptrCurrentEvent->time + 1);
-						ptrNewSchedule->flag = 0;
-						ptrNewSchedule->nextEvent = NULL;
+						if (ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == DONATING) {
 
-						// investigar se nao eh possivel inserir um evento no tempo errado
-						// pois NewSchedule e TargetEvent possuem tempos diferentes
-						//InsertAfterEvent(ptrEventList, ptrNewSchedule, ptrTargetEvent);
-						InsertEvent(ptrEventList, ptrNewSchedule);
-					}
-					else printf("ERROR (machine arrival): merdou o malloc!!!\n");
+							ptrAuxMachine->status = IDLE;
+							event *ptrNewGridPreemption;
+
+							if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
+								ptrNewGridPreemption->eventNumber = 0;
+								ptrNewGridPreemption->eventID = GRIDPREEMPTED;
+								ptrNewGridPreemption->time = ptrCurrentEvent->time;
+								ptrNewGridPreemption->machineInfo.machineID = ptrAuxMachine->machineID;
+								ptrNewGridPreemption->machineInfo.source = ptrAuxMachine->source;
+								ptrNewGridPreemption->machineInfo.status = QUEUED;
+								ptrNewGridPreemption->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
+								ptrNewGridPreemption->machineInfo.departureTime = ptrAuxMachine->departureTime;
+								ptrNewGridPreemption->machineInfo.reservationPrice = ptrAuxMachine->reservationPrice;
+								ptrNewGridPreemption->machineInfo.usagePrice = ptrAuxMachine->usagePrice;
+								ptrNewGridPreemption->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
+								ptrNewGridPreemption->nextEvent = NULL;
+
+								InsertEvent(ptrEventList, ptrNewGridPreemption);
+							}
+							else printf("ERROR (job arrival): merdou o malloc!!!\n");
+
+						}
+
+						ptrAuxMachine = ptrAuxMachine->nextMachine;
+					} // end while(ptrAuxMachine)
+
+					// insert a new planning into the event list
+					event *ptrNewEvent;
+					if( (ptrNewEvent = malloc(sizeof(event))) ) {
+
+						ptrNewEvent->eventNumber = 0;
+						ptrNewEvent->eventID = ALLOCATIONPLANNING;
+						ptrNewEvent->time = (ptrCurrentEvent->time + 1);
+						ptrNewEvent->flag = 1;
+//						ptrNewEvent->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
+//						ptrNewEvent->machineInfo.source = ptrCurrentEvent->machineInfo.source;
+//						ptrNewEvent->machineInfo.status = ptrCurrentEvent->machineInfo.status;
+//						ptrNewEvent->machineInfo.arrivalTime = ptrCurrentEvent->machineInfo.arrivalTime;
+//						ptrNewEvent->machineInfo.departureTime = ptrCurrentEvent->machineInfo.departureTime;
+//						ptrNewEvent->machineInfo.usagePrice = ptrCurrentEvent->machineInfo.usagePrice;
+//						ptrNewEvent->machineInfo.reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
+//						ptrNewEvent->machineInfo.nextMachine = NULL;
+						ptrNewEvent->nextEvent = NULL;
+
+						InsertEvent(ptrEventList, ptrNewEvent);
+
+					} else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 
 				}
 

@@ -12,7 +12,7 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 	event *auxPtrEvent1, *auxPtrEvent2;
 
 	FILE *localMachines;
-	FILE *gridMachines;
+//	FILE *gridMachines;
 	FILE *workloadTasks;
 	FILE *workloadJobs;
 
@@ -25,14 +25,14 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 		exit(1);
 	}
 
-	gridMachines = fopen("./src/grid-machines.txt", "r");
-	if (!feof(gridMachines)) {
-//		printf("blz!!!\n");
-	}
-	else {
-		printf("ERROR (fill): merdou abrir arquivo!!!");
-		exit(1);
-	}
+//	gridMachines = fopen("./src/grid-machines.txt", "r");
+//	if (!feof(gridMachines)) {
+////		printf("blz!!!\n");
+//	}
+//	else {
+//		printf("ERROR (fill): merdou abrir arquivo!!!");
+//		exit(1);
+//	}
 
 	workloadTasks = fopen("./src/workload-tasks.txt", "r");
 	if (!feof(workloadTasks)) {
@@ -144,51 +144,51 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 
 	} // end for (filling event list with cloud machines)
 
-	while(!feof(gridMachines)) {
-
-		int aux1, aux2, aux3;
-		fscanf(gridMachines, "%d %d %d", &aux1, &aux2, &aux3);
-
-		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
-			auxPtrEvent1->eventNumber = 0;
-			auxPtrEvent1->eventID = MACHARRIVAL;
-			auxPtrEvent1->time = aux2;
-			auxPtrEvent1->machineInfo.machineID = aux1;
-			auxPtrEvent1->machineInfo.source = GRID;
-			auxPtrEvent1->machineInfo.status = IDLE;
-			auxPtrEvent1->machineInfo.arrivalTime = aux2;
-			auxPtrEvent1->machineInfo.departureTime = aux3;
-			auxPtrEvent1->machineInfo.usagePrice = 0.0;
-			auxPtrEvent1->machineInfo.reservationPrice = 0.0;
-			auxPtrEvent1->machineInfo.nextMachine = NULL;
-			auxPtrEvent1->nextEvent = NULL;
-
-			InsertEvent(ptrEventList, auxPtrEvent1);
-		}
-		else {
-			printf("ERROR (fill): merdou o malloc!!!\n");
-		}
-
-		if( (auxPtrEvent2 = malloc(sizeof(event))) ) {
-			auxPtrEvent2->eventNumber = 0;
-			auxPtrEvent2->eventID = MACHDEPARTURE;
-			auxPtrEvent2->time = aux3;
-			auxPtrEvent2->machineInfo.machineID = aux1;
-			auxPtrEvent2->machineInfo.source = GRID;
-			auxPtrEvent2->machineInfo.status = IDLE;
-			auxPtrEvent2->machineInfo.arrivalTime = aux2;
-			auxPtrEvent2->machineInfo.departureTime = aux3;
-			auxPtrEvent2->machineInfo.usagePrice = 0.0;
-			auxPtrEvent2->machineInfo.reservationPrice = 0.0;
-			auxPtrEvent2->machineInfo.nextMachine = NULL;
-			auxPtrEvent2->nextEvent = NULL;
-
-			InsertEvent(ptrEventList, auxPtrEvent2);
-		}
-		else {
-			printf("ERROR (fill): merdou o malloc!!!\n");
-		}
-	}
+//	while(!feof(gridMachines)) {
+//
+//		int aux1, aux2, aux3;
+//		fscanf(gridMachines, "%d %d %d", &aux1, &aux2, &aux3);
+//
+//		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
+//			auxPtrEvent1->eventNumber = 0;
+//			auxPtrEvent1->eventID = MACHARRIVAL;
+//			auxPtrEvent1->time = aux2;
+//			auxPtrEvent1->machineInfo.machineID = aux1;
+//			auxPtrEvent1->machineInfo.source = GRID;
+//			auxPtrEvent1->machineInfo.status = IDLE;
+//			auxPtrEvent1->machineInfo.arrivalTime = aux2;
+//			auxPtrEvent1->machineInfo.departureTime = aux3;
+//			auxPtrEvent1->machineInfo.usagePrice = 0.0;
+//			auxPtrEvent1->machineInfo.reservationPrice = 0.0;
+//			auxPtrEvent1->machineInfo.nextMachine = NULL;
+//			auxPtrEvent1->nextEvent = NULL;
+//
+//			InsertEvent(ptrEventList, auxPtrEvent1);
+//		}
+//		else {
+//			printf("ERROR (fill): merdou o malloc!!!\n");
+//		}
+//
+//		if( (auxPtrEvent2 = malloc(sizeof(event))) ) {
+//			auxPtrEvent2->eventNumber = 0;
+//			auxPtrEvent2->eventID = MACHDEPARTURE;
+//			auxPtrEvent2->time = aux3;
+//			auxPtrEvent2->machineInfo.machineID = aux1;
+//			auxPtrEvent2->machineInfo.source = GRID;
+//			auxPtrEvent2->machineInfo.status = IDLE;
+//			auxPtrEvent2->machineInfo.arrivalTime = aux2;
+//			auxPtrEvent2->machineInfo.departureTime = aux3;
+//			auxPtrEvent2->machineInfo.usagePrice = 0.0;
+//			auxPtrEvent2->machineInfo.reservationPrice = 0.0;
+//			auxPtrEvent2->machineInfo.nextMachine = NULL;
+//			auxPtrEvent2->nextEvent = NULL;
+//
+//			InsertEvent(ptrEventList, auxPtrEvent2);
+//		}
+//		else {
+//			printf("ERROR (fill): merdou o malloc!!!\n");
+//		}
+//	}
 
 	while(!feof(workloadTasks)) {
 
@@ -244,7 +244,7 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 	}
 
 	fclose(localMachines);
-	fclose(gridMachines);
+//	fclose(gridMachines);
 	fclose(workloadTasks);
 	fclose(workloadJobs);
 }

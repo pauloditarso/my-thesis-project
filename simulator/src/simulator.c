@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
 	gridQoSFactor = (atof(argv[2]));
 	simulationTime = (atoi(argv[3]) * 3600);		// simulationTime is a global variable (seconds) based on the input parameter (hours)
 	unsigned short int numberMachinesP3 = atoi(argv[4]);
+	gridMachinesID = 0;
 
 	// starting a new event list
 	if ( (eventList = malloc(sizeof(event))) ) {
@@ -180,7 +181,7 @@ int main(int argc, char *argv[]) {
 				break;
 			case 12:			// Allocation Planning
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-										balanceAccountInfoList);
+						balanceAccountInfoList);
 				break;
 			case 13:			// Simulation Finnished
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,

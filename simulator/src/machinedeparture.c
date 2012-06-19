@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptrPtrMachineList) {
+void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptrPtrMachineList, taskAccountInfo *ptrTaskAccountInfoList) {
 
 	if (ptrCurrentEvent->eventID == MACHDEPARTURE) {
 
@@ -18,7 +18,10 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 
 			ptrAux = ptrLastMachine = ptrActualMachine = (*ptrPtrMachineList);
 
+//			printf("currentID %d source %d DT %d\n", ptrCurrentEvent->machineInfo.machineID, ptrCurrentEvent->machineInfo.source, ptrCurrentEvent->machineInfo.departureTime);
 			while(ptrAux) {
+
+//				printf("machineID %d source %d DT %d\n", ptrAux->machineID, ptrAux->source, ptrAux->departureTime);
 
 				if ( ptrCurrentEvent->machineInfo.machineID == ptrAux->machineID &&
 						ptrCurrentEvent->machineInfo.source == ptrAux->source  &&
@@ -39,29 +42,69 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 
 				if ( ptrActualMachine->status == RUNNING ) {
 
-					// insert a new event into the event list
-					event *ptrNewEvent, *ptrTargetEvent;
-					ptrTargetEvent = ptrCurrentEvent;
+					// TRATAR DO CASO EM QUE A TASK FINALIZA NO MESMO TEMPO DE PARTIDA DA MAQUINA, MAS O EVENTO DE PARTIDA VEM ANTES NA LISTA
+					// PROCURAR PELA TASK NA ACCOUNT LIST
 
-					if( (ptrNewEvent = malloc(sizeof(event))) ) {
-						ptrNewEvent->eventNumber = 0;
-						ptrNewEvent->eventID = TASKPREEMPTED;
-						ptrNewEvent->time = ptrCurrentEvent->time;
-						ptrNewEvent->machineInfo.machineID = ptrActualMachine->machineID;
-						ptrNewEvent->machineInfo.source = ptrActualMachine->source;
-						ptrNewEvent->machineInfo.arrivalTime = ptrActualMachine->arrivalTime;
-						ptrNewEvent->machineInfo.departureTime = ptrActualMachine->departureTime;
-						ptrNewEvent->machineInfo.status = ptrActualMachine->status;
-						ptrNewEvent->machineInfo.reservationPrice = ptrActualMachine->reservationPrice;
-						ptrNewEvent->machineInfo.usagePrice = ptrActualMachine->usagePrice;
-						ptrNewEvent->machineInfo.nextMachine = NULL;
-						ptrNewEvent->nextEvent = NULL;
+					taskAccountInfo *ptrAuxTaskAccount;
+					ptrAuxTaskAccount = ptrTaskAccountInfoList;
+					event *ptrAuxEventList;
+					ptrAuxEventList = ptrEventList;
+					unsigned short int taskFound = 0;
+					unsigned short int eventFound = 0;
 
-						InsertAfterEvent(ptrEventList, ptrNewEvent, ptrTargetEvent);
+					while(ptrAuxTaskAccount) {
+
+						if ( ptrAuxTaskAccount->machineID == ptrActualMachine->machineID && ptrAuxTaskAccount->source == ptrActualMachine->source
+								&& ptrAuxTaskAccount->finnishTime == 0 && ptrAuxTaskAccount->status == ACCOUNTUNFINNISHED ) {
+							taskFound = 1;
+							break;
+						}
+
+						ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
 					}
-					else printf("ERROR (machine departure): merdou o malloc!!!\n");
 
-				}
+					if (taskFound) {
+
+						while(ptrAuxEventList) {
+
+							if ( ptrAuxEventList->time == ptrCurrentEvent->time && ptrAuxEventList->eventID == TASKFINNISHED &&
+									ptrAuxEventList->taskInfo.taskID == ptrAuxTaskAccount->taskID && ptrAuxEventList->taskInfo.jobID == ptrAuxTaskAccount->jobID ) {
+								eventFound = 1;
+								break;
+							}
+
+							ptrAuxEventList = ptrAuxEventList->nextEvent;
+						}
+
+					} else printf("(machine departure) task not found!!!\n");
+
+					// insert a new event into the event list
+					if (!eventFound) {
+
+						event *ptrNewEvent, *ptrTargetEvent;
+						ptrTargetEvent = ptrCurrentEvent;
+
+						if( (ptrNewEvent = malloc(sizeof(event))) ) {
+							ptrNewEvent->eventNumber = 0;
+							ptrNewEvent->eventID = TASKPREEMPTED;
+							ptrNewEvent->time = ptrCurrentEvent->time;
+							ptrNewEvent->machineInfo.machineID = ptrActualMachine->machineID;
+							ptrNewEvent->machineInfo.source = ptrActualMachine->source;
+							ptrNewEvent->machineInfo.arrivalTime = ptrActualMachine->arrivalTime;
+							ptrNewEvent->machineInfo.departureTime = ptrActualMachine->departureTime;
+							ptrNewEvent->machineInfo.status = ptrActualMachine->status;
+							ptrNewEvent->machineInfo.reservationPrice = ptrActualMachine->reservationPrice;
+							ptrNewEvent->machineInfo.usagePrice = ptrActualMachine->usagePrice;
+							ptrNewEvent->machineInfo.nextMachine = NULL;
+							ptrNewEvent->nextEvent = NULL;
+
+							InsertAfterEvent(ptrEventList, ptrNewEvent, ptrTargetEvent);
+						}
+						else printf("ERROR (machine departure): merdou o malloc!!!\n");
+
+					}
+
+				} // end if ( ptrActualMachine->status == RUNNING )
 
 				if ( ptrActualMachine->source == LOCAL && ptrActualMachine->status == DONATING) {
 
