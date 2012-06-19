@@ -13,25 +13,12 @@
 
 #include "simulation.h"
 
-void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, task *ptrTaskList, balanceAccountInfo *ptrBalanceAccountInfo) {
+void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, task *ptrTaskList, machine *ptrMachineList, balanceAccountInfo *ptrBalanceAccountInfo) {
 
 	if (ptrCurrentEvent->eventID == JOBARRIVAL) {
 
 		// creation of a new node in the job list
 		if (ptrJobList) {
-
-//			task *ptrAuxTaskList;
-//			ptrAuxTaskList = ptrTaskList;
-//			unsigned int jobSize = 0;
-//
-//			while(ptrAuxTaskList) {
-//
-//				if (ptrAuxTaskList->jobID == ptrCurrentEvent->jobInfo.jobID) {
-//					jobSize += 1;
-//				}
-//
-//				ptrAuxTaskList = ptrAuxTaskList->nextTask;
-//			}
 
 			if (ptrJobList->jobID == 0) {	// code for an empty job list
 				ptrJobList->jobID = ptrCurrentEvent->jobInfo.jobID;
@@ -76,11 +63,61 @@ void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, ta
 					ptrCurrentEvent->jobInfo.arrivalTime, ptrCurrentEvent->jobInfo.finnishTime, ptrCurrentEvent->jobInfo.longestTask,
 					ptrCurrentEvent->jobInfo.deadline);
 
+			// if there is donating machines, it creates grid preempted events
+			machine *ptrAuxMachine;
+			ptrAuxMachine = ptrMachineList;
+			while(ptrAuxMachine) {
+
+				if (ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == DONATING) {
+
+					ptrAuxMachine->status = IDLE;
+					event *ptrNewGridPreemption;
+
+					if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
+						ptrNewGridPreemption->eventNumber = 0;
+						ptrNewGridPreemption->eventID = GRIDPREEMPTED;
+						ptrNewGridPreemption->time = ptrCurrentEvent->time;
+						ptrNewGridPreemption->machineInfo.machineID = ptrAuxMachine->machineID;
+						ptrNewGridPreemption->machineInfo.source = ptrAuxMachine->source;
+						ptrNewGridPreemption->machineInfo.status = QUEUED;
+						ptrNewGridPreemption->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
+						ptrNewGridPreemption->machineInfo.departureTime = ptrAuxMachine->departureTime;
+						ptrNewGridPreemption->machineInfo.reservationPrice = ptrAuxMachine->reservationPrice;
+						ptrNewGridPreemption->machineInfo.usagePrice = ptrAuxMachine->usagePrice;
+						ptrNewGridPreemption->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
+						ptrNewGridPreemption->nextEvent = NULL;
+
+						InsertEvent(ptrEventList, ptrNewGridPreemption);
+					}
+					else printf("ERROR (job arrival): merdou o malloc!!!\n");
+
+				}
+
+				ptrAuxMachine = ptrAuxMachine->nextMachine;
+			} // end while(ptrAuxMachine)
+
+			// insert a new planning into the event list
+			event *ptrNewEvent;
+			if( (ptrNewEvent = malloc(sizeof(event))) ) {
+
+				ptrNewEvent->eventNumber = 0;
+				ptrNewEvent->eventID = ALLOCATIONPLANNING;
+				ptrNewEvent->time = (ptrCurrentEvent->time + 1);
+				ptrNewEvent->flag = 1;
+//				ptrNewEvent->jobInfo.jobID = ptrCurrentEvent->jobInfo.jobID;
+//				ptrNewEvent->jobInfo.jobSize = ptrCurrentEvent->jobInfo.jobSize;
+//				ptrNewEvent->jobInfo.arrivalTime = ptrCurrentEvent->jobInfo.arrivalTime;
+//				ptrNewEvent->jobInfo.finnishTime = ptrCurrentEvent->jobInfo.finnishTime;
+//				ptrNewEvent->jobInfo.longestTask = ptrCurrentEvent->jobInfo.longestTask;
+//				ptrNewEvent->jobInfo.deadline = ptrCurrentEvent->jobInfo.deadline;
+//				ptrNewEvent->jobInfo.nextJob = NULL;
+				ptrNewEvent->nextEvent = NULL;
+
+				InsertEvent(ptrEventList, ptrNewEvent);
+
+			} else printf("ERROR (job arrival): merdou o malloc!!!\n");
+
 		} else printf("ERROR (job arrival): there is no job list!!!\n");
-
-		// creation of the grid machines
-
-
 
 	} else printf("ERROR (job arrival): wrong eventID!!!\n");
 

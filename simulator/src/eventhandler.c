@@ -20,7 +20,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 2:
 			// MACHINE DEPARTURE
-			MachineDeparture(ptrCurrentEvent, *ptrPtrEventList, ptrPtrMachineList);
+			MachineDeparture(ptrCurrentEvent, *ptrPtrEventList, ptrPtrMachineList, *ptrPtrTaskAccountInfoList);
 			break;
 		case 3:
 			// GRID DONATING
@@ -48,12 +48,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 9:
 			// JOB ARRIVAL
-//			printf("optflag %d\n", optFlag);
-			if (optFlag == 0) {
-				JobArrival(ptrCurrentEvent, *ptrPtrEventList, ptrJobList, ptrTaskList, ptrBalanceAccountInfo);
-			} else {
-				JobArrivalOpt(ptrCurrentEvent, *ptrPtrEventList, ptrJobList, ptrTaskList, ptrBalanceAccountInfo);
-			}
+			JobArrival(ptrCurrentEvent, *ptrPtrEventList, ptrJobList, ptrTaskList, *ptrPtrMachineList, ptrBalanceAccountInfo);
 			break;
 		case 10:
 			// JOB STARTED
@@ -64,8 +59,13 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			JobFinnished(ptrCurrentEvent, ptrJobAccountInfo, ptrJobList);
 			break;
 		case 12:
-			// PLANNING
-			AllocationPlanning();
+			// ALLOCATION PLANNING
+//			printf("optflag %d\n", optFlag);
+//			if (optFlag == 0) {
+				AllocationPlanning(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrBalanceAccountInfo);
+//			} else {
+//				AllocationPlanningOpt(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrBalanceAccountInfo);
+//			}
 			break;
 		case 13:
 			printf("eventID %d (Simulation Finnished) time %d", ptrCurrentEvent->eventID, ptrCurrentEvent->time);

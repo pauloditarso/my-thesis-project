@@ -1,3 +1,7 @@
+* tratar dos eventos de grid preempted e nada eh alocado para a maquina local
+	- deve voltar a doar para o grid!!
+	- PRIORIDADE MAXIMA!!!
+
 * implementar as maquinas da grade de acordo com o que foi doado antes da chegada de cada job
 	- PRIORIDADE MAXIMA!!!!
 

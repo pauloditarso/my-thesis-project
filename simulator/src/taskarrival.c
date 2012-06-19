@@ -53,34 +53,34 @@ void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList,
 			} // end else
 
 
-			machine *ptrAuxMachine;
-			ptrAuxMachine = ptrMachineList;
-
-			while(ptrAuxMachine) {
-
-				if (ptrAuxMachine->status == IDLE || ptrAuxMachine->status == DONATING) {
-
-					// insert a new event into the event list
-					event *ptrNewEvent, *ptrTargetEvent;
-					ptrTargetEvent = ptrCurrentEvent;
-
-					if( (ptrNewEvent = malloc(sizeof(event))) ) {
-						ptrNewEvent->eventNumber = 0;
-						ptrNewEvent->eventID = TASKSCHEDULE;
-						ptrNewEvent->time = (ptrCurrentEvent->time + 1);
-						ptrNewEvent->flag = 0;
-						ptrNewEvent->nextEvent = NULL;
-
-						// InsertAfterEvent(ptrEventList, ptrNewEvent, ptrTargetEvent);
-						InsertEvent(ptrEventList, ptrNewEvent);
-					}
-					else printf("ERROR (task arrival): merdou o malloc!!!\n");
-
-					break;
-				}
-
-				ptrAuxMachine = ptrAuxMachine->nextMachine;
-			} // end while
+//			machine *ptrAuxMachine;
+//			ptrAuxMachine = ptrMachineList;
+//
+//			while(ptrAuxMachine) {
+//
+//				if (ptrAuxMachine->status == IDLE || ptrAuxMachine->status == DONATING) {
+//
+//					// insert a new event into the event list
+//					event *ptrNewEvent, *ptrTargetEvent;
+//					ptrTargetEvent = ptrCurrentEvent;
+//
+//					if( (ptrNewEvent = malloc(sizeof(event))) ) {
+//						ptrNewEvent->eventNumber = 0;
+//						ptrNewEvent->eventID = TASKSCHEDULE;
+//						ptrNewEvent->time = (ptrCurrentEvent->time + 1);
+//						ptrNewEvent->flag = 0;
+//						ptrNewEvent->nextEvent = NULL;
+//
+//						// InsertAfterEvent(ptrEventList, ptrNewEvent, ptrTargetEvent);
+//						InsertEvent(ptrEventList, ptrNewEvent);
+//					}
+//					else printf("ERROR (task arrival): merdou o malloc!!!\n");
+//
+//					break;
+//				}
+//
+//				ptrAuxMachine = ptrAuxMachine->nextMachine;
+//			} // end while
 
 			printf("eventID %d (Task Arrival) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			printf("taskID %d jobID %d AT %d jobSize %d runtime %d status %d utility %f\n",
