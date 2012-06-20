@@ -223,6 +223,38 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 
 			} // end of while(ptrAuxTask)
 
+			// if there is any unallocated in-house machine, creates a new donation event
+			machine *ptrAuxMachine;
+			ptrAuxMachine = ptrMachineList;
+			while(ptrAuxMachine) {
+
+				if ( ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == IDLE ) {
+
+					event *ptrNewDonation;
+
+					if( (ptrNewDonation = malloc(sizeof(event))) ) {
+						ptrNewDonation->eventNumber = 0;
+						ptrNewDonation->eventID = GRIDDONATING;
+						ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after this event
+						ptrNewDonation->machineInfo.machineID = ptrAuxMachine->machineID;
+						ptrNewDonation->machineInfo.source = ptrAuxMachine->source;
+						ptrNewDonation->machineInfo.status = DONATING;
+						ptrNewDonation->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
+						ptrNewDonation->machineInfo.departureTime = ptrAuxMachine->departureTime;
+						ptrNewDonation->machineInfo.usagePrice = ptrAuxMachine->usagePrice;
+						ptrNewDonation->machineInfo.reservationPrice = ptrAuxMachine->reservationPrice;
+						ptrNewDonation->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
+						ptrNewDonation->nextEvent = NULL;
+
+						InsertEvent(ptrEventList, ptrNewDonation);
+
+					} else printf("ERROR (task finnished): merdou o malloc!!!\n");
+
+				}
+
+				ptrAuxMachine = ptrAuxMachine->nextMachine;
+			}
+
 			printf("eventID %d (Allocation Planning) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			printf("Allocation %d\n", allocated);
 
