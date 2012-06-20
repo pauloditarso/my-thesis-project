@@ -16,7 +16,8 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 	FILE *workloadTasks;
 	FILE *workloadJobs;
 
-	localMachines = fopen("./src/local-machines.txt", "r");
+//	localMachines = fopen("./src/local-machines.txt", "r");
+	localMachines = fopen(localMachinesTrace, "r");
 	if (!feof(localMachines)) {
 //		printf("blz!!!\n");
 	}
@@ -34,7 +35,8 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 //		exit(1);
 //	}
 
-	workloadTasks = fopen("./src/workload-tasks.txt", "r");
+//	workloadTasks = fopen("./src/workload-tasks.txt", "r");
+	workloadTasks = fopen(workloadTasksTrace, "r");
 	if (!feof(workloadTasks)) {
 //		printf("blz!!!\n");
 	}
@@ -43,7 +45,8 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 		exit(1);
 	}
 
-	workloadJobs = fopen("./src/workload-jobs.txt", "r");
+//	workloadJobs = fopen("./src/workload-jobs.txt", "r");
+	workloadJobs = fopen(workloadJobsTrace, "r");
 	if (!feof(workloadJobs)) {
 //		printf("blz!!!\n");
 	}

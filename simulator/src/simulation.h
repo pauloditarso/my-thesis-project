@@ -18,6 +18,9 @@
 unsigned short int optFlag;
 unsigned int simulationTime;
 float gridQoSFactor;
+char *localMachinesTrace;
+char *workloadTasksTrace;
+char *workloadJobsTrace;
 unsigned int gridMachinesID;
 
 

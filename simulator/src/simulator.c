@@ -25,6 +25,12 @@ int main(int argc, char *argv[]) {
 	gridQoSFactor = (atof(argv[2]));
 	simulationTime = (atoi(argv[3]) * 3600);		// simulationTime is a global variable (seconds) based on the input parameter (hours)
 	unsigned short int numberMachinesP3 = atoi(argv[4]);
+	localMachinesTrace = argv[5];
+	workloadTasksTrace = argv[6];
+	workloadJobsTrace = argv[7];
+//	printf("%s\n", localMachinesTrace);
+//	printf("%s\n", workloadTasksTrace);
+//	printf("%s\n", workloadJobsTrace);
 	gridMachinesID = 0;
 
 	// starting a new event list
