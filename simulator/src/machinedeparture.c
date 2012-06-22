@@ -24,8 +24,7 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 //				printf("machineID %d source %d DT %d\n", ptrAux->machineID, ptrAux->source, ptrAux->departureTime);
 
 				if ( ptrCurrentEvent->machineInfo.machineID == ptrAux->machineID &&
-						ptrCurrentEvent->machineInfo.source == ptrAux->source  &&
-						ptrCurrentEvent->machineInfo.departureTime == ptrAux->departureTime ) {
+						ptrCurrentEvent->machineInfo.source == ptrAux->source) {  //&& ptrCurrentEvent->machineInfo.departureTime == ptrAux->departureTime ) {
 
 					found = 1;
 					break;

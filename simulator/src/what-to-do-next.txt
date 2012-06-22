@@ -1,32 +1,28 @@
-* tratar dos eventos de grid preempted e nada eh alocado para a maquina local
-	- deve voltar a doar para o grid!!
-	- PRIORIDADE MAXIMA!!!
-
-* implementar as maquinas da grade de acordo com o que foi doado antes da chegada de cada job
-	- PRIORIDADE MAXIMA!!!!
+* anetcipar a saida das maquinas da grade depois que a task for finalizada
+	- (FEITO) TESTAR!!!!
 
 * implementar a fase de planning (com o estabelecimento dos contratos);
 	(isso implica na entrada das maquinas da cloud)
 	(lembrar da solucao de soh comprar maquinas na cloud para a hora de precisa, ou seja, a ultima)
-	(fazer um pre-processamento da quantidade necessária para contratação na cloud)
+	(fazer um pre-processamento da quantidade necesseria para contratacao na cloud)
 	
 	- receber de entrada da simulacao (???):
 		* workloads de jobs e tasks;
 			- talvez sejam gerados internamente de forma "aleatoria";
 		* quantidade reservada de maquinas na cloud (em cada provedor, inclusive o spot-market);
-			- depois devo verificar como será o fator de variabilidade nos precos;
+			- depois devo verificar como serah o fator de variabilidade nos precos;
 		* fator de "consumo" da grade (pdpc);
 		* quantidade de dias (ou horas) de simulacao;
 		* fator de variacao na demanda;
 		* rodada da simulacao ([minima-maxima]);
 		* fator de execucao do workload in-house (lambda);
 		
-	- opções:
+	- opcoes:
 		* trazer a complexidade do planning para JobArrival() e deixar TaskSchedule() 
-		  para o efetivo escalonamento da task em tal horário, tal máquina; ou deixar a 
+		  para o efetivo escalonamento da task em tal horario, tal maquina; ou deixar a 
 		  complexidade em TaskSchedule();
-		* abrir um novo projeto; ou criar novas funções no mesmo projeto;
-		(prefiro a complexidade em JobArrival() e novas funções!!!)
+		* abrir um novo projeto; ou criar novas funcoes no mesmo projeto;
+		(prefiro a complexidade em JobArrival() e novas funcoes!!!)
 		   
 	- fazer um FOR para os pontos desejados de terminos (a cada hora, ex);
 	- criar um evento CheckPoint para cada ponto deste e tomar acoes em cada check point
@@ -43,11 +39,11 @@
 
 * implementar as funcoes de utility;
 	como???
-	- primeiro, fazer o registro (na accountList) de todas as execuções de tasks, inclusive as que falharam;
-	(talvez não seja importante no primeiro momento, pois assume-se que apenas as máquinas na grade falham)
-	(mas as máquinas na cloud podem falhar também, caso contrato acabe, por exemplo)
+	- primeiro, fazer o registro (na accountList) de todas as execucoes de tasks, inclusive as que falharam;
+	(talvez nao seja importante no primeiro momento, pois assume-se que apenas as maquinas na grade falham)
+	(mas as maquinas na cloud podem falhar tambem, caso contrato acabe, por exemplo)
 	- fazer um registro similar ao accountList para os Jobs;
-	(a partir deste registro e da função de utility a gente contabiliza o utilidade produzida)
+	(a partir deste registro e da funcao de utility a gente contabiliza o utilidade produzida)
 	
 * metodologia de avaliacao do ambiente proposto
 	- fazer a avaliacao numa ordem diferente do artigo long-term management

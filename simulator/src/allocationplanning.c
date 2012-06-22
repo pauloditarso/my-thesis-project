@@ -103,6 +103,8 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 						found = 1;
 						allocated = 1;
 						ptrAuxTask->status = STARTED; // LEMBAR QUE ESTOU AQUI A UM SEGUNDO DE COMECAR A EXECUCAO EFETIVAMENTE
+						unsigned int avgRunTime = (int)Randn(TASK_AVG_TIME, TASK_SDV_TIME);
+//						printf("DT %d\n", departureTime); // debug mode
 
 						// insert a machine arrival event into the event list
 						event *ptrNewGridMachine;
@@ -114,8 +116,7 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 							ptrNewGridMachine->machineInfo.source = GRID;
 							ptrNewGridMachine->machineInfo.status = RUNNING;
 							ptrNewGridMachine->machineInfo.arrivalTime = ptrCurrentEvent->time;
-							ptrNewGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + 757);
-//							ptrNewGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + TASK_AVG_TIME); // DETERMINISTICO, MEIA HORA DEPOIS DE CHEGAR!!! TRANSFORMAR EM ALEATORIO!!!
+							ptrNewGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + avgRunTime);
 							ptrNewGridMachine->machineInfo.usagePrice = 0.0;
 							ptrNewGridMachine->machineInfo.reservationPrice = 0.0;
 							ptrNewGridMachine->machineInfo.nextMachine = NULL;
@@ -131,14 +132,12 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 						if( (ptrOutGridMachine = malloc(sizeof(event))) ) {
 							ptrOutGridMachine->eventNumber = 0;
 							ptrOutGridMachine->eventID = MACHDEPARTURE;
-//							ptrOutGridMachine->time = (ptrCurrentEvent->time + TASK_AVG_TIME); // DETERMINISTICO, MEIA HORA DEPOIS DE CHEGAR!!! TRANSFORMAR EM ALEATORIO!!!
-							ptrOutGridMachine->time = (ptrCurrentEvent->time + 757);
+							ptrOutGridMachine->time = (ptrCurrentEvent->time + avgRunTime);
 							ptrOutGridMachine->machineInfo.machineID = gridMachinesID;
 							ptrOutGridMachine->machineInfo.source = GRID;
 							ptrOutGridMachine->machineInfo.status = IDLE;
 							ptrOutGridMachine->machineInfo.arrivalTime = ptrCurrentEvent->time;
-							ptrOutGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + 757);
-//							ptrOutGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + TASK_AVG_TIME);
+							ptrOutGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + avgRunTime);
 							ptrOutGridMachine->machineInfo.usagePrice = 0.0;
 							ptrOutGridMachine->machineInfo.reservationPrice = 0.0;
 							ptrOutGridMachine->machineInfo.nextMachine = NULL;
