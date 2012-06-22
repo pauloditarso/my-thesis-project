@@ -44,7 +44,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 8:
 			// TASK FINNISHED
-			TaskFinnished(ptrCurrentEvent, *ptrPtrEventList, ptrTaskList, *ptrPtrTaskAccountInfoList, *ptrPtrMachineList, ptrBalanceAccountInfo);
+			TaskFinnished(ptrCurrentEvent, ptrPtrEventList, ptrTaskList, *ptrPtrTaskAccountInfoList, *ptrPtrMachineList, ptrBalanceAccountInfo);
 			break;
 		case 9:
 			// JOB ARRIVAL

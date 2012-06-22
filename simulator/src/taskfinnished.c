@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList,
+void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList,
 		balanceAccountInfo *ptrBalanceAccountInfo) {
 
 	if (ptrCurrentEvent->eventID == TASKFINNISHED) {
@@ -63,8 +63,51 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 									ptrAuxMachine->status = IDLE;
 
 									if (ptrAuxMachine->source == GRID) {
-										// chamar machine departure para este tempo ou para 1seg a frente
+
 										// remover o evento futuro de partida desta maquina na lista de eventos
+										event *ptrOldEvent;
+										ptrOldEvent = (*ptrPtrEventList);
+
+										while(ptrOldEvent) {
+											if ( ptrOldEvent->time >= ptrCurrentEvent->time && ptrOldEvent->eventID == MACHDEPARTURE &&
+													ptrOldEvent->machineInfo.machineID == ptrAuxMachine->machineID &&
+													ptrOldEvent->machineInfo.source == ptrAuxMachine->source ) {
+												break;
+											}
+											ptrOldEvent = ptrOldEvent->nextEvent;
+										}
+
+										if (ptrOldEvent) {
+											RemoveEvent(ptrPtrEventList, ptrOldEvent);
+										}
+										else printf("ERROR (task finished): event not found!!!\n");
+
+										// chamar machine departure para este tempo ou para 1seg a frente
+										event *ptrOutGridMachine;
+										if( (ptrOutGridMachine = malloc(sizeof(event))) ) {
+											ptrOutGridMachine->eventNumber = 0;
+											ptrOutGridMachine->eventID = MACHDEPARTURE;
+											ptrOutGridMachine->time = ptrCurrentEvent->time;
+											ptrOutGridMachine->machineInfo.machineID = ptrAuxMachine->machineID;
+											ptrOutGridMachine->machineInfo.source = ptrAuxMachine->source;
+											ptrOutGridMachine->machineInfo.status = ptrAuxMachine->status;
+											ptrOutGridMachine->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
+											ptrOutGridMachine->machineInfo.departureTime = ptrCurrentEvent->time;
+											ptrOutGridMachine->machineInfo.usagePrice = 0.0;
+											ptrOutGridMachine->machineInfo.reservationPrice = 0.0;
+											ptrOutGridMachine->machineInfo.nextMachine = NULL;
+											ptrOutGridMachine->nextEvent = NULL;
+
+											InsertEvent(*ptrPtrEventList, ptrOutGridMachine);
+										}
+										else {
+											printf("ERROR (task finished): merdou o malloc!!!\n");
+										}
+
+//										printf("machineID %d source %d status %d AT %d DT %d UP %f RP %f\n", ptrOutGridMachine->machineInfo.machineID, ptrOutGridMachine->machineInfo.source,
+//												ptrOutGridMachine->machineInfo.status, ptrOutGridMachine->machineInfo.arrivalTime, ptrOutGridMachine->machineInfo.departureTime, ptrOutGridMachine->machineInfo.usagePrice,
+//												ptrOutGridMachine->machineInfo.reservationPrice);
+
 									}
 
 									break;
@@ -97,7 +140,7 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 						ptrNewEvent->jobInfo.jobID = ptrAuxTask->jobID;
 						ptrNewEvent->nextEvent = NULL;
 
-						InsertAfterEvent(ptrEventList, ptrNewEvent, ptrTargetEvent);
+						InsertAfterEvent(*ptrPtrEventList, ptrNewEvent, ptrTargetEvent);
 					}
 					else {
 						printf("ERROR (task schedule): merdou o malloc!!!\n");
@@ -150,7 +193,7 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 					ptrNewDonation->nextEvent = NULL;
 
 //					InsertAfterEvent(ptrEventList, ptrNewDonation, ptrTargetEvent);
-					InsertEvent(ptrEventList, ptrNewDonation);
+					InsertEvent(*ptrPtrEventList, ptrNewDonation);
 				}
 				else printf("ERROR (task finnished): merdou o malloc!!!\n");
 			}
@@ -160,7 +203,7 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 		if (isThereQueuedTask == 1) {
 
 			event *ptrAuxEventList;
-			ptrAuxEventList = ptrEventList;
+			ptrAuxEventList = (*ptrPtrEventList);
 			unsigned short int thereIsAPlanning = 0;
 
 			while(ptrAuxEventList) {
@@ -199,7 +242,7 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 							ptrNewGridPreemption->machineInfo.nextMachine = ptrAuxMach->nextMachine;
 							ptrNewGridPreemption->nextEvent = NULL;
 
-							InsertEvent(ptrEventList, ptrNewGridPreemption);
+							InsertEvent(*ptrPtrEventList, ptrNewGridPreemption);
 						}
 						else printf("ERROR (job arrival): merdou o malloc!!!\n");
 
@@ -225,7 +268,7 @@ void TaskFinnished(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskLis
 //					ptrNewEvent->taskInfo.nextTask = NULL;
 					ptrNewEvent->nextEvent = NULL;
 
-					InsertEvent(ptrEventList, ptrNewEvent);
+					InsertEvent(*ptrPtrEventList, ptrNewEvent);
 
 				} else printf("ERROR (task finnished): merdou o malloc!!!\n");
 

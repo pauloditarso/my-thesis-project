@@ -9,7 +9,7 @@
 
 void RemoveEvent(event **ptrPtrEventList, event *ptrOldEvent) {
 
-	if (ptrOldEvent->eventID == TASKFINNISHED) {
+	if ( ptrOldEvent->eventID == TASKFINNISHED || ptrOldEvent->eventID == MACHDEPARTURE) {
 
 		event *ptrAux, *ptrActualEvent, *ptrLastEvent;
 		ptrAux = ptrActualEvent = ptrLastEvent = (*ptrPtrEventList);
@@ -17,10 +17,11 @@ void RemoveEvent(event **ptrPtrEventList, event *ptrOldEvent) {
 
 		while (ptrAux) {
 
-			if (ptrAux->eventID == ptrOldEvent->eventID && ptrAux->time == ptrOldEvent->time &&
-					ptrAux->taskInfo.taskID == ptrOldEvent->taskInfo.taskID &&
-					ptrAux->taskInfo.jobID == ptrOldEvent->taskInfo.jobID) {
+//			if (ptrAux->eventID == ptrOldEvent->eventID && ptrAux->time == ptrOldEvent->time &&
+//					ptrAux->taskInfo.taskID == ptrOldEvent->taskInfo.taskID &&
+//					ptrAux->taskInfo.jobID == ptrOldEvent->taskInfo.jobID) {
 
+			if (ptrAux->eventNumber == ptrOldEvent->eventNumber) {
 				found = 1;
 				break;
 			}

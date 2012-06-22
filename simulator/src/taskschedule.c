@@ -36,34 +36,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 						if (ptrAuxMachine->machineID == ptrCurrentEvent->scheduleInfo.machineID && ptrAuxMachine->source == ptrCurrentEvent->scheduleInfo.source) {
 
-							// insert a new grid preemption into the event list
-//							if (ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == DONATING) {
-//
-//								event *ptrNewGridPreemption, *ptrTargetEvent;
-//								ptrTargetEvent = ptrCurrentEvent;
-//
-//								if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
-//									ptrNewGridPreemption->eventNumber = 0;
-//									ptrNewGridPreemption->eventID = GRIDPREEMPTED;
-//									ptrNewGridPreemption->time = ptrCurrentEvent->time;
-//									ptrNewGridPreemption->machineInfo.machineID = ptrAuxMachine->machineID;
-//									ptrNewGridPreemption->machineInfo.source = ptrAuxMachine->source;
-//									ptrNewGridPreemption->machineInfo.status = RUNNING;
-//									ptrNewGridPreemption->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
-//									ptrNewGridPreemption->machineInfo.departureTime = ptrAuxMachine->departureTime;
-//									ptrNewGridPreemption->machineInfo.reservationPrice = ptrAuxMachine->reservationPrice;
-//									ptrNewGridPreemption->machineInfo.usagePrice = ptrAuxMachine->usagePrice;
-//									ptrNewGridPreemption->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
-//									ptrNewGridPreemption->nextEvent = NULL;
-//
-//									InsertAfterEvent(ptrEventList, ptrNewGridPreemption, ptrTargetEvent);
-//								}
-//								else printf("ERROR (task schedule): merdou o malloc!!!\n");
-//
-//							}
-
-//							found = 1;
-							ptrAuxMachine->status = RUNNING;  // SOH PRA CONFIRMAS, POIS JAH ESTAVA RUNNING A UM SEGUNDO ATRAS (VIDE AllocationPlanning())
+							ptrAuxMachine->status = RUNNING;  // SOH PRA CONFIRMAR, POIS JAH ESTAVA RUNNING A UM SEGUNDO ATRAS (VIDE AllocationPlanning())
 							ptrAuxTask->status = STARTED;
 
 							InsertTaskAccountList(ptrCurrentEvent, ptrAuxMachine, ptrAuxTask, ptrTaskAccountInfoList);
@@ -135,10 +108,6 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 				ptrAuxTask = ptrAuxTask->nextTask;
 			}
-
-//			if (found == 0) {
-//				printf("eventID %d (Task Scheduled) time %d (NOTHING_TO_DO!!!)\n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-//			}
 
 		} else printf("ERROR (arrival): there is no machine or task list!!!\n");
 
