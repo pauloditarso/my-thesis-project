@@ -12,14 +12,16 @@
 #include <stdlib.h>
 #include <math.h>
 
-//#define TIME 108000
+# define DAY_TIME 108000 // maybe there is a better name
 # define TASK_AVG_TIME 1800
 # define TASK_SDV_TIME 300
+# define JOB_AVG_LENGTH 36000
 
 unsigned short int optFlag;
 unsigned int simulationTime;
 float gridQoSFactor;
 char *localMachinesTrace;
+unsigned int avgRunTime, jobSize;
 char *workloadTasksTrace;
 char *workloadJobsTrace;
 unsigned int gridMachinesID;
