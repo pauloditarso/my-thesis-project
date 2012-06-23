@@ -23,9 +23,10 @@ int main(int argc, char *argv[]) {
 	unsigned int count = 0;
 	optFlag = (atoi(argv[1]));
 	gridQoSFactor = (atof(argv[2]));
-	simulationTime = (atoi(argv[3]) * 3600);		// simulationTime is a global variable (seconds) based on the input parameter (hours)
+	simulationTime = (atoi(argv[3]) * 3600);		// simulationTime is a global variable (seconds) based on the input parameter (in hours)
 	unsigned short int numberMachinesP3 = atoi(argv[4]);
 	localMachinesTrace = argv[5];
+//	avgRunTime = (atoi(argv[1])); jobSize = (AVG_JOB_LENGTH/avgRunTime);
 	workloadTasksTrace = argv[6];
 	workloadJobsTrace = argv[7];
 //	printf("%s\n", localMachinesTrace);

@@ -1,5 +1,7 @@
 * anetcipar a saida das maquinas da grade depois que a task for finalizada
 	- (FEITO) TESTAR!!!!
+* verificar a relacao numero de tasks vs runtime medio vs tempo medio do job;
+* talvez deixar aleatorio os tempos de chegadas de jobs (hj tah deterministico ao meio dia de cada dia, por exemplo);
 
 * implementar a fase de planning (com o estabelecimento dos contratos);
 	(isso implica na entrada das maquinas da cloud)
