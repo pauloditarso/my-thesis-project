@@ -57,7 +57,7 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 						if( (ptrNewDonation = malloc(sizeof(event))) ) {
 							ptrNewDonation->eventNumber = 0;
 							ptrNewDonation->eventID = GRIDDONATING;
-							ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after machine's arrival
+							ptrNewDonation->time = (ptrCurrentEvent->time); // one second after machine's arrival
 							ptrNewDonation->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
 							ptrNewDonation->machineInfo.source = ptrCurrentEvent->machineInfo.source;
 							ptrNewDonation->machineInfo.status = ptrCurrentEvent->machineInfo.status;
@@ -200,7 +200,7 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 						if( (ptrNewDonation = malloc(sizeof(event))) ) {
 							ptrNewDonation->eventNumber = 0;
 							ptrNewDonation->eventID = GRIDDONATING;
-							ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after machine's arrival
+							ptrNewDonation->time = (ptrCurrentEvent->time); // one second after machine's arrival
 							ptrNewDonation->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
 							ptrNewDonation->machineInfo.source = ptrCurrentEvent->machineInfo.source;
 							ptrNewDonation->machineInfo.status = ptrCurrentEvent->machineInfo.status;

@@ -77,7 +77,7 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 
 			if (ptrCurrentEvent->time < simulationTime) {
 
-				// if there is donating machines, it creates grid preempted events
+				// if there are donating machines, it creates grid preempted events
 				machine *ptrAuxMachine;
 				ptrAuxMachine = ptrMachineList;
 				while(ptrAuxMachine) {

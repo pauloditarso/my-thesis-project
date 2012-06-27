@@ -344,18 +344,18 @@ int main(int argc, char *argv[]) {
 	unsigned int credit = 0;
 	while(ptrAuxGridInfo) {
 		credit += (ptrAuxGridInfo->finnishTime - ptrAuxGridInfo->startTime);
-//		printf("gridAccountID %d machineID %d source %d ST %d FT %d\n", ptrAuxGridInfo->gridAccountID,
-//				ptrAuxGridInfo->machineID, ptrAuxGridInfo->source, ptrAuxGridInfo->startTime,
-//				ptrAuxGridInfo->finnishTime);
+		printf("gridAccountID %d machineID %d source %d ST %d FT %d\n", ptrAuxGridInfo->gridAccountID,
+				ptrAuxGridInfo->machineID, ptrAuxGridInfo->source, ptrAuxGridInfo->startTime,
+				ptrAuxGridInfo->finnishTime);
 		ptrAuxGridInfo = ptrAuxGridInfo->nextGridAccountInfo;
 	}
 //	printf("a lista tem %d balances, e o total de creditos doados e %d\n", count, credit);
-//	printf("\n");
+	printf("\n");
 
 	balanceAccountInfo *ptrAuxBalanceAccountInfo;
 	ptrAuxBalanceAccountInfo = balanceAccountInfoList;
 	while(ptrAuxBalanceAccountInfo->nextBalanceAccountInfo != NULL) {
-//		printf("balanceAccountID %d time %d value %d\n", ptrAuxBalanceAccountInfo->balanceAccountID, ptrAuxBalanceAccountInfo->time, ptrAuxBalanceAccountInfo->value);
+		printf("balanceAccountID %d time %d value %d\n", ptrAuxBalanceAccountInfo->balanceAccountID, ptrAuxBalanceAccountInfo->time, ptrAuxBalanceAccountInfo->value);
 		ptrAuxBalanceAccountInfo = ptrAuxBalanceAccountInfo->nextBalanceAccountInfo;
 	}
 //	printf("a lista de balances tem %d registros\n", count);
@@ -364,6 +364,7 @@ int main(int argc, char *argv[]) {
 	if ( credit != (ptrAuxBalanceAccountInfo->value + consumed) ) {
 //		printf("\n");
 		printf("(INVARIANTES) BALANCE DO GRID ERRADO!!!\n");
+		printf("credit %d (balance-consumed) %d\n", credit, (ptrAuxBalanceAccountInfo->value + consumed));
 	}
 //	printf("doado %d consumido %d balance %d\n", credit, consumed, ptrAuxBalanceAccountInfo->value);
 	// ##### FIM INVARIANTES PARA O CONSUMO DA GRADE E PARA BALANCO DE CREDITOS #####

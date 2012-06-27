@@ -181,7 +181,7 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 				if( (ptrNewDonation = malloc(sizeof(event))) ) {
 					ptrNewDonation->eventNumber = 0;
 					ptrNewDonation->eventID = GRIDDONATING;
-					ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after the machine's arrival
+					ptrNewDonation->time = (ptrCurrentEvent->time); // one second after the machine's arrival
 					ptrNewDonation->machineInfo.machineID = ptrAuxMachine->machineID;
 					ptrNewDonation->machineInfo.source = ptrAuxMachine->source;
 					ptrNewDonation->machineInfo.status = DONATING;
@@ -234,7 +234,7 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 							ptrNewGridPreemption->time = ptrCurrentEvent->time;
 							ptrNewGridPreemption->machineInfo.machineID = ptrAuxMach->machineID;
 							ptrNewGridPreemption->machineInfo.source = ptrAuxMach->source;
-							ptrNewGridPreemption->machineInfo.status = QUEUED;
+							ptrNewGridPreemption->machineInfo.status = IDLE;
 							ptrNewGridPreemption->machineInfo.arrivalTime = ptrAuxMach->arrivalTime;
 							ptrNewGridPreemption->machineInfo.departureTime = ptrAuxMach->departureTime;
 							ptrNewGridPreemption->machineInfo.reservationPrice = ptrAuxMach->reservationPrice;

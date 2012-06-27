@@ -36,6 +36,7 @@ typedef struct task {
 
 typedef struct job {
 	unsigned int jobID, jobSize, arrivalTime, finnishTime, longestTask, deadline;
+//	enum {JOBQUEUED, JOBSTARTED, JOBFINNISHED} status;
 	struct job *nextJob;
 } job;
 

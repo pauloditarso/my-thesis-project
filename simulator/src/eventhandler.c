@@ -68,7 +68,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 //			}
 			break;
 		case 13:
-			printf("eventID %d (Simulation Finnished) time %d", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+			printf("eventID %d (Simulation Finnished) time %d\n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			break;
 		default:
 			printf("unkwonk event!!!\n");
