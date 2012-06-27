@@ -151,7 +151,7 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 
 		} else printf("(task finnished) empty list!!!\n");
 
-		// code to decide if to insert a schedule or a donation event
+		// code to decide if it inserts a schedule or a donation event
 
 		ptrAuxTask = ptrTaskList;
 		unsigned short int isThereQueuedTask = 0;
@@ -175,8 +175,8 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 			if ( ptrAuxMachine != NULL && ptrAuxMachine->source == LOCAL ) {  // cloud machines may be inserted as well
 
 				// insert a new donation into the event list, if there is no waiting tasks
-				event *ptrNewDonation;//, *ptrTargetEvent;
-//				ptrTargetEvent = ptrCurrentEvent;
+				event *ptrNewDonation, *ptrTargetEvent;
+				ptrTargetEvent = ptrCurrentEvent;
 
 				if( (ptrNewDonation = malloc(sizeof(event))) ) {
 					ptrNewDonation->eventNumber = 0;
@@ -192,8 +192,8 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 					ptrNewDonation->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
 					ptrNewDonation->nextEvent = NULL;
 
-//					InsertAfterEvent(ptrEventList, ptrNewDonation, ptrTargetEvent);
-					InsertEvent(*ptrPtrEventList, ptrNewDonation);
+					InsertAfterEvent(*ptrPtrEventList, ptrNewDonation, ptrTargetEvent);
+//					InsertEvent(*ptrPtrEventList, ptrNewDonation);
 				}
 				else printf("ERROR (task finnished): merdou o malloc!!!\n");
 			}

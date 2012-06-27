@@ -197,7 +197,7 @@ void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3
 	avgRunTime = 1800; jobSize = (JOB_AVG_LENGTH/avgRunTime);
 	unsigned int jobArrivalTime = 43200;
 	unsigned int numberOfJobs = (int)floor(simulationTime/DAY_TIME);
-	printf("numberOfJobs %d\n", numberOfJobs);
+//	printf("numberOfJobs %d\n", numberOfJobs);
 
 	for (i = 0; i < numberOfJobs; i++) {
 
