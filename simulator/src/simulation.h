@@ -22,8 +22,9 @@ unsigned int simulationTime;
 float gridQoSFactor;
 char *localMachinesTrace;
 unsigned int avgRunTime, jobSize;
-char *workloadTasksTrace;
-char *workloadJobsTrace;
+//char *workloadTasksTrace;
+//char *workloadJobsTrace;
+unsigned short int simSeed;
 unsigned int gridMachinesID;
 
 
