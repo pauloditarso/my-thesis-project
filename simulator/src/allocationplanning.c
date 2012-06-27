@@ -234,7 +234,7 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 					if( (ptrNewDonation = malloc(sizeof(event))) ) {
 						ptrNewDonation->eventNumber = 0;
 						ptrNewDonation->eventID = GRIDDONATING;
-						ptrNewDonation->time = (ptrCurrentEvent->time+1); // one second after this event
+						ptrNewDonation->time = (ptrCurrentEvent->time); // one second after this event
 						ptrNewDonation->machineInfo.machineID = ptrAuxMachine->machineID;
 						ptrNewDonation->machineInfo.source = ptrAuxMachine->source;
 						ptrNewDonation->machineInfo.status = DONATING;

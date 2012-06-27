@@ -27,6 +27,11 @@ void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMach
 
 				IncrementBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time, (ptrAuxGrid->finnishTime - ptrAuxGrid->startTime));
 
+				// debug mode
+//				if (ptrCurrentEvent->time == 25016143 || ptrAuxGrid->gridAccountID == 2944) {
+//					printf("###################################################\n");
+//					printf("FT %d ST %d Vl %d\n", ptrAuxGrid->finnishTime, ptrAuxGrid->startTime, (ptrAuxGrid->finnishTime - ptrAuxGrid->startTime));
+//				}
 				printf("eventID %d (Grid Preempted) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 				printf("machineID %d source %d\n", ptrAuxGrid->machineID, ptrAuxGrid->source);
 
