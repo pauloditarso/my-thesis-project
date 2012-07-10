@@ -20,24 +20,24 @@
 unsigned short int optFlag;
 unsigned int simulationTime;
 float gridQoSFactor;
-char *localMachinesTrace;
 unsigned int avgRunTime, jobSize;
+unsigned short int simSeed, numberMachinesP1, numberMachinesP3;
+unsigned int gridMachinesID;
+enum {CONSTANT, LINEAR, STEP} utilityFunction;
+//char *localMachinesTrace;
 //char *workloadTasksTrace;
 //char *workloadJobsTrace;
-unsigned short int simSeed;
-unsigned int gridMachinesID;
-
 
 typedef struct task {
 	unsigned int taskID, arrivalTime, jobID, jobSize, runtime;
 	enum {QUEUED, STARTED, FINNISHED} status;
-	float utilityFunction;
 	struct task *nextTask;
 } task;
 
 typedef struct job {
-	unsigned int jobID, jobSize, arrivalTime, finnishTime, longestTask, deadline;
+	unsigned int jobID, jobSize, arrivalTime, finnishTime, longestTask, deadline, maxUtility;
 //	enum {JOBQUEUED, JOBSTARTED, JOBFINNISHED} status;
+	int utility;
 	struct job *nextJob;
 } job;
 
@@ -118,7 +118,7 @@ void InsertAfterEvent(event *ptrEventList, event *ptrNewEvent, event *ptrTargetE
 
 void RemoveEvent(event **ptrPtrEventList, event *ptrOldEvent);
 
-void FillEmptyEventList(event *ptrEventList, unsigned short int numberMachinesP3);
+void FillEmptyEventList(event *ptrEventList);
 
 void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList);
 

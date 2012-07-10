@@ -20,7 +20,6 @@ void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList,
 				ptrTaskList->jobSize = ptrCurrentEvent->taskInfo.jobSize;
 				ptrTaskList->runtime = ptrCurrentEvent->taskInfo.runtime;
 				ptrTaskList->status = ptrCurrentEvent->taskInfo.status;
-				ptrTaskList->utilityFunction = ptrCurrentEvent->taskInfo.utilityFunction;
 				ptrTaskList->nextTask = NULL;
 			}
 			else {
@@ -37,7 +36,6 @@ void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList,
 				ptrNewTask->jobSize = ptrCurrentEvent->taskInfo.jobSize;
 				ptrNewTask->runtime = ptrCurrentEvent->taskInfo.runtime;
 				ptrNewTask->status = ptrCurrentEvent->taskInfo.status;
-				ptrNewTask->utilityFunction = ptrCurrentEvent->taskInfo.utilityFunction;
 				ptrNewTask->nextTask = NULL;
 
 				task *ptrAux;
@@ -54,11 +52,10 @@ void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList,
 
 
 			printf("eventID %d (Task Arrival) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-			printf("taskID %d jobID %d jobSize %d AT %d RT %d status %d utility %f\n",
+			printf("taskID %d jobID %d jobSize %d AT %d RT %d status %d\n",
 					ptrCurrentEvent->taskInfo.taskID, ptrCurrentEvent->taskInfo.jobID,
 					ptrCurrentEvent->taskInfo.jobSize, ptrCurrentEvent->taskInfo.arrivalTime,
-					ptrCurrentEvent->taskInfo.runtime, ptrCurrentEvent->taskInfo.status,
-					ptrCurrentEvent->taskInfo.utilityFunction);
+					ptrCurrentEvent->taskInfo.runtime, ptrCurrentEvent->taskInfo.status);
 
 		} else printf("ERROR (task arrival): there is no task list!!!\n");
 
