@@ -1,7 +1,22 @@
-* anetcipar a saida das maquinas da grade depois que a task for finalizada
-	- (FEITO) TESTAR!!!!
+* verificar (e tentar unificar) os modelos desenvolvidos para os trabalhos de short- e long-term management;
+	(tentar utilizar um unico modelo, alterando apenas as funcoes de utilidade);
+	(definir como serah a instanciacao dos parametros, verificando os trabalhos anteriores);
+
 * verificar a relacao numero de tasks vs runtime medio vs tempo medio do job;
+	(PRECISO CONVERSAR HJ COM MARCUS!!!)
+	
 * talvez deixar aleatorio os tempos de chegadas de jobs (hj tah deterministico ao meio dia de cada dia, por exemplo);
+
+* implementar as funcoes de utility;
+	como???
+	- primeiro, fazer o registro (na accountList) de todas as execucoes de tasks, inclusive as que falharam;
+	(talvez nao seja importante no primeiro momento, pois assume-se que apenas as maquinas na grade falham)
+	(mas as maquinas na cloud podem falhar tambem, caso contrato acabe, por exemplo)
+	- fazer um registro similar ao accountList para os Jobs;
+	(a partir deste registro e da funcao de utility a gente contabiliza o utilidade produzida)
+
+* implementar mais INVARIANTES em decorrencia da fase de planning!!!!
+(NAO VOU TRATAR O CASO DA EXECUCAO SIMULTANEA DE VARIOS JOBS, OU SEJA, UM JOB POR VEZ!!!)
 
 * implementar a fase de planning (com o estabelecimento dos contratos);
 	(isso implica na entrada das maquinas da cloud)
@@ -35,17 +50,6 @@
 		* caso sim, calcular o profit
 	- tirar (ou nao) a complexidade de TASKSCHEDULE e colocar em TASKARRIVAL (OU JOBARRIVAL)???
 	- lembrar que um ou mais jobs podem ser executados simultaneamente (vide logo abaixo)
-
-* implementar mais INVARIANTES em decorrencia da fase de planning!!!!
-(NAO VOU TRATAR O CASO DA EXECUCAO SIMULTANEA DE VARIOS JOBS, OU SEJA, UM JOB POR VEZ!!!)
-
-* implementar as funcoes de utility;
-	como???
-	- primeiro, fazer o registro (na accountList) de todas as execucoes de tasks, inclusive as que falharam;
-	(talvez nao seja importante no primeiro momento, pois assume-se que apenas as maquinas na grade falham)
-	(mas as maquinas na cloud podem falhar tambem, caso contrato acabe, por exemplo)
-	- fazer um registro similar ao accountList para os Jobs;
-	(a partir deste registro e da funcao de utility a gente contabiliza o utilidade produzida)
 	
 * metodologia de avaliacao do ambiente proposto
 	- fazer a avaliacao numa ordem diferente do artigo long-term management

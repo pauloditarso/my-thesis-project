@@ -35,11 +35,10 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 				ptrAuxTask->status = ptrCurrentEvent->taskInfo.status; // it must be FINNISHED
 
 				printf("eventID %d (Task Finnished) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-				printf("taskID %d jobID %d AT %d jobSize %d runtime %d status %d utility %f\n",
+				printf("taskID %d jobID %d AT %d jobSize %d runtime %d status %d\n",
 						ptrCurrentEvent->taskInfo.taskID, ptrCurrentEvent->taskInfo.jobID,
 						ptrCurrentEvent->taskInfo.arrivalTime, ptrCurrentEvent->taskInfo.jobSize,
-						ptrCurrentEvent->taskInfo.runtime, ptrCurrentEvent->taskInfo.status,
-						ptrCurrentEvent->taskInfo.utilityFunction);
+						ptrCurrentEvent->taskInfo.runtime, ptrCurrentEvent->taskInfo.status);
 
 
 				unsigned short int count = 0;

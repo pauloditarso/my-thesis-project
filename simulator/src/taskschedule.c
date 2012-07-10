@@ -54,7 +54,6 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 								ptrNewEvent->taskInfo.arrivalTime = ptrAuxTask->arrivalTime;
 								ptrNewEvent->taskInfo.runtime = ptrAuxTask->runtime;
 								ptrNewEvent->taskInfo.status = FINNISHED;
-								ptrNewEvent->taskInfo.utilityFunction = 0.0;
 								ptrNewEvent->taskInfo.nextTask = NULL;
 								ptrNewEvent->nextEvent = NULL;
 
