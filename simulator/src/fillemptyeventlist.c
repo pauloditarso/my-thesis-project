@@ -12,6 +12,7 @@ void FillEmptyEventList(event *ptrEventList) {
 	event *auxPtrEvent1, *auxPtrEvent2;
 	unsigned short int i, j;
 
+	// filling event list with local machines
 	for (i = 1; i <= numberMachinesP1; i++) {
 
 		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
@@ -53,7 +54,7 @@ void FillEmptyEventList(event *ptrEventList) {
 		else {
 			printf("ERROR (fill): merdou o malloc!!!\n");
 		}
-	}
+	} // end for (filling event list with local machines)
 
 	// filling event list with cloud machines
 	for (i = 1; i <= numberMachinesP3; i++) {
@@ -102,8 +103,8 @@ void FillEmptyEventList(event *ptrEventList) {
 
 
 	// task and job arrival events
-	avgRunTime = 1800; jobSize = (JOB_AVG_LENGTH/avgRunTime);
-	unsigned int jobArrivalTime = 43200;
+	avgRunTime = 30; jobSize = (JOB_AVG_LENGTH/avgRunTime);
+	unsigned int jobArrivalTime = 720;
 	unsigned int numberOfJobs = (int)floor(simulationTime/DAY_TIME);
 	unsigned int deadline, longestTask;
 
@@ -159,7 +160,7 @@ void FillEmptyEventList(event *ptrEventList) {
 			printf("ERROR (fill): merdou o malloc!!!\n");
 		}
 
-		jobArrivalTime += 86400;
+		jobArrivalTime += 1440;
 
 	}
 
