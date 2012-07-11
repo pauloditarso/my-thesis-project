@@ -26,6 +26,7 @@ void IncrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned int ti
 		if ( (ptrNewBalance = malloc(sizeof(balanceAccountInfo))) ) {
 			ptrNewBalance->balanceAccountID = (count + 1);
 			ptrNewBalance->time = time;
+			ptrNewBalance->consumed = 0;
 			ptrNewBalance->value = (value + ptrAux->value);
 			ptrNewBalance->nextBalanceAccountInfo = NULL;
 

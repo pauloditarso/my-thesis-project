@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 
 		optFlag = (atoi(argv[1]));
 		gridQoSFactor = (atof(argv[2]));
-		simulationTime = (atoi(argv[3]) * 3600); // simulationTime is a global variable (seconds) based on the input parameter (in hours)
+		simulationTime = (atoi(argv[3]) * 60); // simulationTime is a global variable (minutes) based on the input parameter (in hours)
 		numberMachinesP1 = (atoi(argv[4]));
 		numberMachinesP3 = atoi(argv[5]);
 		simSeed = (atoi(argv[6]));
@@ -206,38 +206,38 @@ int main(int argc, char *argv[]) {
 
 		// CIRAR UM TESTE DEPOIS PARA SABER SE TODAS AS TASKS FORAM EXECUTADAS OU NAO
 
-		//	jobAccountInfo *ptrAuxJobAccountInfo;
-		//	ptrAuxJobAccountInfo = jobAccountInfoList;
-		//	count = 0;
-		//	while(ptrAuxJobAccountInfo) {
-		//		count++;
-		//		printf("jobAccountID %d jobID %d ST %d FT %d\n", ptrAuxJobAccountInfo->jobAccountID, ptrAuxJobAccountInfo->jobID, ptrAuxJobAccountInfo->startTime, ptrAuxJobAccountInfo->finnishTime);
-		//		ptrAuxJobAccountInfo = ptrAuxJobAccountInfo->nextJobAccountInfo;
-		//	}
+		jobAccountInfo *ptrAuxJobAccountInfo;
+		ptrAuxJobAccountInfo = jobAccountInfoList;
+		count = 0;
+		while(ptrAuxJobAccountInfo) {
+			count++;
+			printf("jobAccountID %d jobID %d ST %d FT %d\n", ptrAuxJobAccountInfo->jobAccountID, ptrAuxJobAccountInfo->jobID, ptrAuxJobAccountInfo->startTime, ptrAuxJobAccountInfo->finnishTime);
+			ptrAuxJobAccountInfo = ptrAuxJobAccountInfo->nextJobAccountInfo;
+		}
+		//	printf("a lista de jobs tem %d registros\n", count);
+		//	printf("\n");
+
+		job *ptrAuxJob;
+		ptrAuxJob = jobList;
+		count = 0;
+		while(ptrAuxJob) {
+			count++;
+			printf("jobID %d jobSize %d AR %d FT %d LT %d DL %d MU %d utility %d\n", ptrAuxJob->jobID, ptrAuxJob->jobSize, ptrAuxJob->arrivalTime, ptrAuxJob->finnishTime, ptrAuxJob->longestTask,
+					ptrAuxJob->deadline, ptrAuxJob->maxUtility, ptrAuxJob->utility);
+			ptrAuxJob = ptrAuxJob->nextJob;
+		}
 		//	printf("a lista de jobs tem %d registros\n", count);
 		//	printf("\n");
 		//
-		//	job *ptrAuxJob;
-		//	ptrAuxJob = jobList;
-		//	count = 0;
-		//	while(ptrAuxJob) {
-		//		count++;
-		//		printf("jobID %d AR %d FT %d LT %d DL %d\n", ptrAuxJob->jobID, ptrAuxJob->arrivalTime, ptrAuxJob->finnishTime, ptrAuxJob->longestTask,
-		//				ptrAuxJob->deadline);
-		//		ptrAuxJob = ptrAuxJob->nextJob;
-		//	}
-		//	printf("a lista de jobs tem %d registros\n", count);
-		//	printf("\n");
-		//
-		//	task *ptrAuxTask;
-		//	ptrAuxTask = taskList;
-		//	count = 0;
-		//	while(ptrAuxTask) {
-		//		count++;
-		//		printf("taskID %d jobID %d jobSize %d AR %d RT %d status %d UF %f\n", ptrAuxTask->taskID, ptrAuxTask->jobID, ptrAuxTask->jobSize,
-		//				ptrAuxTask->arrivalTime, ptrAuxTask->runtime, ptrAuxTask->status, ptrAuxTask->utilityFunction);
-		//		ptrAuxTask = ptrAuxTask->nextTask;
-		//	}
+		task *ptrAuxTask;
+		ptrAuxTask = taskList;
+		count = 0;
+		while(ptrAuxTask) {
+			count++;
+			printf("taskID %d jobID %d jobSize %d AR %d RT %d status %d\n", ptrAuxTask->taskID, ptrAuxTask->jobID, ptrAuxTask->jobSize,
+					ptrAuxTask->arrivalTime, ptrAuxTask->runtime, ptrAuxTask->status);
+			ptrAuxTask = ptrAuxTask->nextTask;
+		}
 		//	printf("a lista de tasks tem %d registros\n", count);
 		//	printf("\n");
 
@@ -312,11 +312,11 @@ int main(int argc, char *argv[]) {
 		// ##### INVARIANTES PARA A LISTA DE EXECUCAO DAS TASKS #####
 		taskAccountInfo *ptrAuxTaskAccountInfo;
 		ptrAuxTaskAccountInfo = taskAccountInfoList;
-		unsigned int consumed = 0;
+		unsigned int totalExecutionTime = 0;
 		while(ptrAuxTaskAccountInfo) {
 
 			if (ptrAuxTaskAccountInfo->source == 1) {
-				consumed += (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime);
+				totalExecutionTime += (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime);
 			}
 			if ( ptrAuxTaskAccountInfo->runtime < (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime) ) {
 				//			printf("\n");
@@ -328,10 +328,10 @@ int main(int argc, char *argv[]) {
 				printf("(INVARIANTES) FINNISHTIME MENOR DO QUE STARTTIME!!!\n");
 			}
 
-			//		printf("taskAccountID %d machineID %d source %d taskID %d jobID %d RT %d ET %d ST %d FT %d\n", ptrAuxTaskAccountInfo->taskAccountID,
-			//				ptrAuxTaskAccountInfo->machineID, ptrAuxTaskAccountInfo->source, ptrAuxTaskAccountInfo->taskID, ptrAuxTaskAccountInfo->jobID,
-			//				ptrAuxTaskAccountInfo->runtime, (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime),
-			//				ptrAuxTaskAccountInfo->startTime, ptrAuxTaskAccountInfo->finnishTime);
+					printf("taskAccountID %d machineID %d source %d taskID %d jobID %d RT %d ET %d ST %d FT %d\n", ptrAuxTaskAccountInfo->taskAccountID,
+							ptrAuxTaskAccountInfo->machineID, ptrAuxTaskAccountInfo->source, ptrAuxTaskAccountInfo->taskID, ptrAuxTaskAccountInfo->jobID,
+							ptrAuxTaskAccountInfo->runtime, (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime),
+							ptrAuxTaskAccountInfo->startTime, ptrAuxTaskAccountInfo->finnishTime);
 
 			ptrAuxTaskAccountInfo = ptrAuxTaskAccountInfo->nextTaskAccountInfo;
 		}
@@ -345,9 +345,9 @@ int main(int argc, char *argv[]) {
 		unsigned int credit = 0;
 		while(ptrAuxGridInfo) {
 			credit += (ptrAuxGridInfo->finnishTime - ptrAuxGridInfo->startTime);
-			//		printf("gridAccountID %d machineID %d source %d ST %d FT %d\n", ptrAuxGridInfo->gridAccountID,
-			//				ptrAuxGridInfo->machineID, ptrAuxGridInfo->source, ptrAuxGridInfo->startTime,
-			//				ptrAuxGridInfo->finnishTime);
+					printf("gridAccountID %d machineID %d source %d ST %d FT %d\n", ptrAuxGridInfo->gridAccountID,
+							ptrAuxGridInfo->machineID, ptrAuxGridInfo->source, ptrAuxGridInfo->startTime,
+							ptrAuxGridInfo->finnishTime);
 			ptrAuxGridInfo = ptrAuxGridInfo->nextGridAccountInfo;
 		}
 		//	printf("a lista tem %d balances, e o total de creditos doados e %d\n", count, credit);
@@ -355,17 +355,33 @@ int main(int argc, char *argv[]) {
 
 		balanceAccountInfo *ptrAuxBalanceAccountInfo;
 		ptrAuxBalanceAccountInfo = balanceAccountInfoList;
+		unsigned int consumed = 0, lastValue = 0;
 		while(ptrAuxBalanceAccountInfo->nextBalanceAccountInfo != NULL) {
-			//		printf("balanceAccountID %d time %d value %d\n", ptrAuxBalanceAccountInfo->balanceAccountID, ptrAuxBalanceAccountInfo->time, ptrAuxBalanceAccountInfo->value);
+
+			if (ptrAuxBalanceAccountInfo->consumed > lastValue) {
+				consumed += lastValue;
+			}
+			else {
+				consumed += ptrAuxBalanceAccountInfo->consumed;
+			}
+			lastValue = ptrAuxBalanceAccountInfo->value;
+
+			printf("balanceAccountID %d time %d consumed %d value %d\n", ptrAuxBalanceAccountInfo->balanceAccountID,
+					ptrAuxBalanceAccountInfo->time, ptrAuxBalanceAccountInfo->consumed, ptrAuxBalanceAccountInfo->value);
+
 			ptrAuxBalanceAccountInfo = ptrAuxBalanceAccountInfo->nextBalanceAccountInfo;
+
 		}
+		consumed += ptrAuxBalanceAccountInfo->consumed;
+		printf("balanceAccountID %d time %d consumed %d value %d\n", ptrAuxBalanceAccountInfo->balanceAccountID, ptrAuxBalanceAccountInfo->time,
+				ptrAuxBalanceAccountInfo->consumed, ptrAuxBalanceAccountInfo->value);
 		//	printf("a lista de balances tem %d registros\n", count);
 		//	printf("\n");
 
 		if ( credit != (ptrAuxBalanceAccountInfo->value + consumed) ) {
 			//		printf("\n");
 			printf("(INVARIANTES) BALANCE DO GRID ERRADO!!!\n");
-			printf("credit %d (balance-consumed) %d\n", credit, (ptrAuxBalanceAccountInfo->value + consumed));
+			printf("credit %d (balance+consumed) %d consumed %d totalET %d\n", credit, (ptrAuxBalanceAccountInfo->value + consumed), consumed, totalExecutionTime);
 		}
 		//	printf("doado %d consumido %d balance %d\n", credit, consumed, ptrAuxBalanceAccountInfo->value);
 		// ##### FIM INVARIANTES PARA O CONSUMO DA GRADE E PARA BALANCO DE CREDITOS #####

@@ -26,6 +26,7 @@ void DecrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned int ti
 		if ( (ptrNewBalance = malloc(sizeof(balanceAccountInfo))) ) {
 			ptrNewBalance->balanceAccountID = (count + 1);
 			ptrNewBalance->time = time;
+			ptrNewBalance->consumed = value;
 			ptrNewBalance->value = (ptrAux->value >= value) ? (ptrAux->value - value) : 0; // to treat the case of a runtime greater than the balance value
 			ptrNewBalance->nextBalanceAccountInfo = NULL;
 

@@ -12,10 +12,10 @@
 #include <stdlib.h>
 #include <math.h>
 
-# define DAY_TIME 108000 // maybe there is a better name
-# define TASK_AVG_TIME 1800
-# define TASK_SDV_TIME 300
-# define JOB_AVG_LENGTH 36000
+# define DAY_TIME 1440 // maybe there is a better name
+# define TASK_AVG_TIME 30
+# define TASK_SDV_TIME 5
+# define JOB_AVG_LENGTH 600
 
 unsigned short int optFlag;
 unsigned int simulationTime;
@@ -100,6 +100,7 @@ typedef struct gridAccountInfo {
 typedef struct balanceAccountInfo {
 	unsigned int balanceAccountID;
 	unsigned int time;
+	unsigned int consumed;
 	unsigned int value;
 	struct balanceAccountInfo *nextBalanceAccountInfo;
 } balanceAccountInfo;
