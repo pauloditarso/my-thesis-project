@@ -13,14 +13,16 @@
 #include <math.h>
 
 # define DAY_TIME 1440 // maybe there is a better name
-# define TASK_AVG_TIME 30
-# define TASK_SDV_TIME 5
-# define JOB_AVG_LENGTH 600
+# define TASK_AVG_TIME 30 // 30 minutes
+# define TASK_SDV_TIME 3  // 3 minutes
+# define GRID_AVG_TIME 30
+# define GRID_SDV_TIME 3
+# define JOB_AVG_LENGTH 600 // 10 hours
+# define JOB_SDV_LENGTH 120 // 2 hours
 
 unsigned short int optFlag;
 unsigned int simulationTime;
 float gridQoSFactor;
-unsigned int avgRunTime, jobSize;
 unsigned short int simSeed, numberMachinesP1, numberMachinesP3;
 unsigned int gridMachinesID;
 enum {CONSTANT, LINEAR, STEP} utilityFunction;

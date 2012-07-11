@@ -1,11 +1,11 @@
+* verificar a relacao numero de tasks vs runtime medio vs tempo medio do job;
+	(PRECISO CONVERSAR HJ COM MARCUS!!!)
+
+* implementar os tipos de provedores e os precos incorridos por eles;
+
 * verificar (e tentar unificar) os modelos desenvolvidos para os trabalhos de short- e long-term management;
 	(tentar utilizar um unico modelo, alterando apenas as funcoes de utilidade);
 	(definir como serah a instanciacao dos parametros, verificando os trabalhos anteriores);
-
-* verificar a relacao numero de tasks vs runtime medio vs tempo medio do job;
-	(PRECISO CONVERSAR HJ COM MARCUS!!!)
-	
-* talvez deixar aleatorio os tempos de chegadas de jobs (hj tah deterministico ao meio dia de cada dia, por exemplo);
 
 * implementar as funcoes de utility;
 	como???
