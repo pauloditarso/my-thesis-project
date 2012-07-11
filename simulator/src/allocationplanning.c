@@ -103,7 +103,7 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 						found = 1;
 						allocated = 1;
 						ptrAuxTask->status = STARTED; // LEMBAR QUE ESTOU AQUI A UM SEGUNDO DE COMECAR A EXECUCAO EFETIVAMENTE
-						unsigned int avgRunTime = (int)Randn(TASK_AVG_TIME, TASK_SDV_TIME);
+						unsigned int avgUpTime = (int)Randn(GRID_AVG_TIME, GRID_SDV_TIME);
 //						printf("DT %d\n", departureTime); // debug mode
 
 						// insert a machine arrival event into the event list
@@ -116,7 +116,7 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 							ptrNewGridMachine->machineInfo.source = GRID;
 							ptrNewGridMachine->machineInfo.status = RUNNING;
 							ptrNewGridMachine->machineInfo.arrivalTime = ptrCurrentEvent->time;
-							ptrNewGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + avgRunTime);
+							ptrNewGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + avgUpTime);
 							ptrNewGridMachine->machineInfo.usagePrice = 0.0;
 							ptrNewGridMachine->machineInfo.reservationPrice = 0.0;
 							ptrNewGridMachine->machineInfo.nextMachine = NULL;
@@ -132,12 +132,12 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 						if( (ptrOutGridMachine = malloc(sizeof(event))) ) {
 							ptrOutGridMachine->eventNumber = 0;
 							ptrOutGridMachine->eventID = MACHDEPARTURE;
-							ptrOutGridMachine->time = (ptrCurrentEvent->time + avgRunTime);
+							ptrOutGridMachine->time = (ptrCurrentEvent->time + avgUpTime);
 							ptrOutGridMachine->machineInfo.machineID = gridMachinesID;
 							ptrOutGridMachine->machineInfo.source = GRID;
 							ptrOutGridMachine->machineInfo.status = IDLE;
 							ptrOutGridMachine->machineInfo.arrivalTime = ptrCurrentEvent->time;
-							ptrOutGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + avgRunTime);
+							ptrOutGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + avgUpTime);
 							ptrOutGridMachine->machineInfo.usagePrice = 0.0;
 							ptrOutGridMachine->machineInfo.reservationPrice = 0.0;
 							ptrOutGridMachine->machineInfo.nextMachine = NULL;

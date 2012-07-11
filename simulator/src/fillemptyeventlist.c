@@ -103,15 +103,16 @@ void FillEmptyEventList(event *ptrEventList) {
 
 
 	// task and job arrival events
-	avgRunTime = 30; jobSize = (JOB_AVG_LENGTH/avgRunTime);
-	unsigned int jobArrivalTime = 720;
+	unsigned int jobArrivalTime = (int)Randn(720, 60); // mean 12 hours; sd 1 hour;
 	unsigned int numberOfJobs = (int)floor(simulationTime/DAY_TIME);
-	unsigned int deadline, longestTask;
+	unsigned int deadline, longestTask, jobLength, jobSize;
 
 	for (i = 0; i < numberOfJobs; i++) {
 
 		deadline = 0;
 		longestTask = 0;
+		jobLength = (int)Randn(JOB_AVG_LENGTH, JOB_SDV_LENGTH);
+		jobSize = (int)(jobLength/TASK_AVG_TIME);
 
 		for (j = 0; j < jobSize; j++) {
 
@@ -124,7 +125,7 @@ void FillEmptyEventList(event *ptrEventList) {
 				auxPtrEvent1->taskInfo.arrivalTime = jobArrivalTime;
 				auxPtrEvent1->taskInfo.jobID = (i + 1);
 				auxPtrEvent1->taskInfo.jobSize = jobSize;
-				auxPtrEvent1->taskInfo.runtime = (int)Randn(avgRunTime, (avgRunTime * 0.1));
+				auxPtrEvent1->taskInfo.runtime = (int)Randn(TASK_AVG_TIME, TASK_SDV_TIME);
 				auxPtrEvent1->taskInfo.status = QUEUED;
 				auxPtrEvent1->taskInfo.nextTask = NULL;
 				auxPtrEvent1->nextEvent = NULL;
@@ -160,7 +161,7 @@ void FillEmptyEventList(event *ptrEventList) {
 			printf("ERROR (fill): merdou o malloc!!!\n");
 		}
 
-		jobArrivalTime += 1440;
+		jobArrivalTime += (int)Randn(DAY_TIME, 60);
 
 	}
 
