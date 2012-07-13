@@ -23,15 +23,16 @@ int main(int argc, char *argv[]) {
 	unsigned int count = 0;
 	gridMachinesID = 0;
 
-	if (argc == 8) {
+	if (argc == 9) {
 
 		optFlag = (atoi(argv[1]));
 		gridQoSFactor = (atof(argv[2]));
 		simulationTime = (atoi(argv[3]) * 60); // simulationTime is a global variable (minutes) based on the input parameter (in hours)
-		numberMachinesP1 = (atoi(argv[4]));
-		numberMachinesP3 = atoi(argv[5]);
-		simSeed = (atoi(argv[6]));
-		utilityFunction = (atoi(argv[7]));
+		numberOfLocalMachines = (atoi(argv[4]));
+		numberOfReservedMachines = atoi(argv[5]);
+		numberOfOnDemandMachines = atoi(argv[6]);
+		simSeed = (atoi(argv[7]));
+		utilityFunction = (atoi(argv[8]));
 
 		srand(simSeed);
 
@@ -386,7 +387,7 @@ int main(int argc, char *argv[]) {
 		//	printf("doado %d consumido %d balance %d\n", credit, consumed, ptrAuxBalanceAccountInfo->value);
 		// ##### FIM INVARIANTES PARA O CONSUMO DA GRADE E PARA BALANCO DE CREDITOS #####
 
-	} else printf("ERROR (Main Simulator): input error!!!\n");
+	} else printf("ERROR (Main Simulator): invalid number of input parameters!!!\n");
 
 	return EXIT_SUCCESS;
 }
