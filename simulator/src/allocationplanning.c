@@ -180,7 +180,8 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 
 						while(ptrAuxCloudMachine) {
 
-							if (ptrAuxCloudMachine->source == CLOUD && ptrAuxCloudMachine->status == IDLE) {
+							// TALVEZ TENHA QUE ADICIONAR UM NOVO IF PARA AS MAQUINAS ON-DEMAND
+							if ( (ptrAuxCloudMachine->source == RESERVED || ptrAuxCloudMachine->source == ONDEMAND)	&& ptrAuxCloudMachine->status == IDLE) {
 
 								found = 1;
 								allocated = 1;

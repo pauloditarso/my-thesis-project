@@ -23,7 +23,7 @@
 unsigned short int optFlag;
 unsigned int simulationTime;
 float gridQoSFactor;
-unsigned short int simSeed, numberMachinesP1, numberMachinesP3;
+unsigned short int simSeed, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines; // TAZER balance E numberOfGridMachines???
 unsigned int gridMachinesID;
 enum {CONSTANT, LINEAR, STEP} utilityFunction;
 //char *localMachinesTrace;
@@ -45,7 +45,7 @@ typedef struct job {
 
 typedef struct machine {
 	unsigned int machineID;
-	enum {LOCAL, GRID, CLOUD} source;
+	enum {LOCAL, GRID, RESERVED, ONDEMAND, SPOT} source;
 //	unsigned short int capacity; // future implementation
 	enum {IDLE, RUNNING, DONATING} status;
 	unsigned int arrivalTime, departureTime;
@@ -56,7 +56,7 @@ typedef struct machine {
 typedef struct schedule {
 	unsigned int taskID, jobID;
 	unsigned int machineID;
-	enum {MACHLOCAL, MACHGRID, MACHCLOUD} source;
+	enum {MACHLOCAL, MACHGRID, MACHRESERVED, MACHONDEMAND, MACHSPOT} source;
 } schedule;
 
 typedef struct event {
@@ -77,7 +77,7 @@ typedef struct event {
 typedef struct taskAccountInfo {
 	unsigned int taskAccountID;
 	unsigned int machineID;
-	enum {LOCALMACH, GRIDMACH, CLOUDMACH} source;
+	enum {LOCALMACH, GRIDMACH, RESERVEDMACH, ONDEMANDMACH, SPOTMACH} source;
 	unsigned int taskID, jobID;
 	unsigned int runtime, startTime, finnishTime;
 	enum {ACCOUNTUNFINNISHED, ACCOUNTFINNISHED} status;
@@ -94,7 +94,7 @@ typedef struct jobAccountInfo {
 typedef struct gridAccountInfo {
 	unsigned int gridAccountID;
 	unsigned int machineID;
-	enum {GRIDLOCAL, GRIDGRID, GRIDCLOUD} source;
+	enum {GRIDLOCAL, GRIDGRID, GRIDRESERVED, GRIDONDEMAND, GRIDSPOT} source;
 	unsigned int startTime, finnishTime;
 	struct gridAccountInfo *nextGridAccountInfo;
 } gridAccountInfo;
