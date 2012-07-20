@@ -138,7 +138,9 @@ int main(int argc, char *argv[]) {
 		ptrAuxList = eventList;
 		//	int count = 0;
 		while(ptrAuxList) {
-			//		count++;
+
+//			if(ptrAuxList->time > (simulationTime + 1)) break;
+
 			printf("event# %d ", ptrAuxList->eventNumber);
 
 			switch (ptrAuxList->eventID) {

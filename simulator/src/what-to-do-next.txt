@@ -1,4 +1,8 @@
-* CONSERTAR AS ENTRADAS NA taskAccountList!!!!
+* FALTA O COMMIT!!!!
+
+* TESTAR SE AS ENTRADAS COM A MESMA SEMENTE GERAM OS MESMOS NUMEROS ALEATORIOS, NO CODIGO EM MANDARIM!!!
+
+* implementar a fila ordenada de tasks!!!
 
 * implementar os tipos de provedores e os precos incorridos por eles;
    - entrada dos varios tipos de provedores cloud (spot entra mais tarde);

@@ -148,10 +148,10 @@ void FillEmptyEventList(event *ptrEventList) {
 
 	// task and job arrival events
 	unsigned int jobArrivalTime = (int)Randn(720, 60); // mean 12 hours; sd 1 hour;
-	unsigned int numberOfJobs = (int)floor(simulationTime/DAY_TIME); // maximum of one job a day
+	unsigned int maximumNumberOfJobs = (int)floor(simulationTime/DAY_TIME); // maximum of one job a day
 	unsigned int deadline, longestTask, jobLength, jobSize;
 
-	for (i = 0; i < numberOfJobs; i++) {
+	for (i = 0; i < maximumNumberOfJobs; i++) {
 
 		deadline = 0;
 		longestTask = 0;
@@ -206,7 +206,7 @@ void FillEmptyEventList(event *ptrEventList) {
 			printf("ERROR (fill): merdou o malloc!!!\n");
 		}
 
-		jobArrivalTime += (int)Randn(DAY_TIME, 60);
+		jobArrivalTime += (int)Randn(DAY_TIME, 60); if (jobArrivalTime >=524160) break; // no arrivals after moom of the 365th day
 
 	}
 

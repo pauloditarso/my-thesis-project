@@ -6,7 +6,7 @@ do
     ./simulator 0 0.72 8760 2 5 $i 0 > outA$i.txt
 #   ./simulator 0 0.72 8760 2 5 $i 0 > outB$i.txt
 #   RES=$(diff outA$i.txt outB$i.txt | wc -l)
-    RES=$(cat outA$i.txt | grep INVARIANTES | wc -l)
+    RES=$(cat outA$i.txt | grep "INVARIANTES\|ERROR" | wc -l)
     if [ "$RES" != 0 ]
     then
 #       echo "DIFERENTE!!!"
