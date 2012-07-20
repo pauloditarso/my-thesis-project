@@ -20,7 +20,8 @@ void InsertTaskAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task
 			ptrTaskAccountInfoList->runtime = ptrAuxTask->runtime;
 			ptrTaskAccountInfoList->startTime = ptrCurrentEvent->time;
 			ptrTaskAccountInfoList->finnishTime = 0; // it must be updated later
-			ptrTaskAccountInfoList->status = 0;
+			ptrTaskAccountInfoList->status = ACCOUNTUNFINNISHED;  // it must be updated later
+			ptrTaskAccountInfoList->cost = 0.00; // it must be updated later
 			ptrTaskAccountInfoList->nextTaskAccountInfo = NULL;
 
 //			printf("accountID %d machineID %d source %d taskID %d jobID %d ST %d FT %d\n", ptrTaskAccountInfoList->accountID,
@@ -50,7 +51,8 @@ void InsertTaskAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task
 				ptrNewTaskAccount->runtime = ptrAuxTask->runtime;
 				ptrNewTaskAccount->startTime = ptrCurrentEvent->time;
 				ptrNewTaskAccount->finnishTime = 0; // it must be updated later
-				ptrNewTaskAccount->status = 0;
+				ptrNewTaskAccount->status = ACCOUNTUNFINNISHED;  // it must be updated later
+				ptrNewTaskAccount->cost = 0.00; // it must be updated later
 				ptrNewTaskAccount->nextTaskAccountInfo = NULL;
 
 				ptrAuxTaskAccount->nextTaskAccountInfo = ptrNewTaskAccount;

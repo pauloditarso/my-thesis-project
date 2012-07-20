@@ -22,7 +22,7 @@
 
 unsigned short int optFlag;
 unsigned int simulationTime;
-float gridQoSFactor;
+float gridQoSFactor, reservationPricePerDay, reservationPrice;
 unsigned short int simSeed, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines; // TAZER balance E numberOfGridMachines???
 unsigned int gridMachinesID;
 enum {CONSTANT, LINEAR, STEP} utilityFunction;
@@ -40,6 +40,7 @@ typedef struct job {
 	unsigned int jobID, jobSize, arrivalTime, finnishTime, longestTask, deadline, maxUtility;
 //	enum {JOBQUEUED, JOBSTARTED, JOBFINNISHED} status;
 	int utility;
+	float cost;
 	struct job *nextJob;
 } job;
 
@@ -81,6 +82,7 @@ typedef struct taskAccountInfo {
 	unsigned int taskID, jobID;
 	unsigned int runtime, startTime, finnishTime;
 	enum {ACCOUNTUNFINNISHED, ACCOUNTFINNISHED} status;
+	float cost;
 	struct taskAccountInfo *nextTaskAccountInfo;
 } taskAccountInfo;
 

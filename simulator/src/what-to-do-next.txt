@@ -1,4 +1,13 @@
+* CONSERTAR AS ENTRADAS NA taskAccountList!!!!
+
 * implementar os tipos de provedores e os precos incorridos por eles;
+   - entrada dos varios tipos de provedores cloud (spot entra mais tarde);
+   - precos de acordo com uma instancia de referencia da amazon (High-CPU???);
+   - IMPLEMENTAR O CUSTO A PARTIR DA UTILIZACAO DAS MAQUINAS NA CLOUD!!!
+      * por falta de informacao, vou assumir que ao iniciar duas vezes a mesma instancia dentro de uma hora serah cobrada as duas inicializacoes;
+         (solucao mais facil de implementar: ceil(runtime/60min);
+      * ISSO PODE PREJUDICAR OS RESULTADOS EM COMPARACAO A UMA HEURISTICA ORACULA QUE SABE QND VAO TERMINAR AS TASKS;
+      * uma contra-partida (cujo desenvolvimento eh mais complicado) eh computar as execucoes e gaps entre elas e ver se cabe em porcoes (multiplos) de uma hora;
 
 * verificar a relacao numero de tasks vs runtime medio vs tempo medio do job;
 	(PRECISO CONVERSAR HJ COM MARCUS!!!)
@@ -6,7 +15,9 @@
 * verificar (e tentar unificar) os modelos desenvolvidos para os trabalhos de short- e long-term management;
 	(tentar utilizar um unico modelo, alterando apenas as funcoes de utilidade);
 	(definir como serah a instanciacao dos parametros, verificando os trabalhos anteriores);
-
+	INSTANCIA ESCOLHIDA EM PRIMEIRA ANALISE: (LINUX INSTANCES) HIGH-CPU EXTRA-LARGE (OnDemand) e HIGH-CPU EXTRA-LARGE HEAVY UTILIZATION (Reserved);
+	(talvez seja interessante variar isto tambem!!!!)
+	
 * implementar as funcoes de utility;
 	como???
 	- primeiro, fazer o registro (na accountList) de todas as execucoes de tasks, inclusive as que falharam;

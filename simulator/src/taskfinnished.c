@@ -28,11 +28,17 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 					break;
 				}
 				ptrAuxTask = ptrAuxTask->nextTask;
+
 			}
 
 			if (ptrAuxTask != NULL) {
 
-				ptrAuxTask->status = ptrCurrentEvent->taskInfo.status; // it must be FINNISHED
+				if (ptrCurrentEvent->taskInfo.status == FINNISHED) {
+					ptrAuxTask->status = ptrCurrentEvent->taskInfo.status; // it must be FINNISHED
+				}
+				else {
+					printf("ERROR (task finished): task status is not FINNISHED!!!\n");
+				}
 
 				printf("eventID %d (Task Finnished) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 				printf("taskID %d jobID %d AT %d jobSize %d runtime %d status %d\n",
@@ -41,93 +47,101 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 						ptrCurrentEvent->taskInfo.runtime, ptrCurrentEvent->taskInfo.status);
 
 
-				unsigned short int count = 0;
+				unsigned short int countAccountFinnished = 0;
+				float usagePrice = 0.00, totalUsagePrice = 0.00;
 				while(ptrAuxTaskAccount != NULL){
 
-					if (ptrAuxTaskAccount->jobID == ptrAuxTask->jobID) {
+					if (ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->taskID == ptrAuxTask->taskID && ptrAuxTaskAccount->finnishTime == 0 ) {
 
-						if ( ptrAuxTaskAccount->taskID == ptrAuxTask->taskID &&	ptrAuxTaskAccount->finnishTime == 0 ) {
+						ptrAuxTaskAccount->finnishTime = ptrCurrentEvent->time;
+						ptrAuxTaskAccount->status = ACCOUNTFINNISHED;
 
-							ptrAuxTaskAccount->finnishTime = ptrCurrentEvent->time;
-							ptrAuxTaskAccount->status = ACCOUNTFINNISHED;
+						while(ptrAuxMachine) {
 
-							if (ptrAuxTaskAccount->source == GRID) {
-								DecrementBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time, (ptrAuxTaskAccount->finnishTime - ptrAuxTaskAccount->startTime));
-							}
+							if (ptrAuxMachine->machineID == ptrAuxTaskAccount->machineID && ptrAuxMachine->source == ptrAuxTaskAccount->source) {
 
-							while(ptrAuxMachine) {
+								ptrAuxMachine->status = IDLE;
 
-								if(ptrAuxMachine->machineID == ptrAuxTaskAccount->machineID && ptrAuxMachine->source == ptrAuxTaskAccount->source) {
+								if (ptrAuxMachine->source == GRID) {
 
-									ptrAuxMachine->status = IDLE;
+									// remover o evento futuro de partida desta maquina na lista de eventos
+									event *ptrOldEvent;
+									ptrOldEvent = (*ptrPtrEventList);
 
-									if (ptrAuxMachine->source == GRID) {
-
-										// remover o evento futuro de partida desta maquina na lista de eventos
-										event *ptrOldEvent;
-										ptrOldEvent = (*ptrPtrEventList);
-
-										while(ptrOldEvent) {
-											if ( ptrOldEvent->time >= ptrCurrentEvent->time && ptrOldEvent->eventID == MACHDEPARTURE &&
-													ptrOldEvent->machineInfo.machineID == ptrAuxMachine->machineID &&
-													ptrOldEvent->machineInfo.source == ptrAuxMachine->source ) {
-												break;
-											}
-											ptrOldEvent = ptrOldEvent->nextEvent;
+									while(ptrOldEvent) {
+										if ( ptrOldEvent->time >= ptrCurrentEvent->time && ptrOldEvent->eventID == MACHDEPARTURE &&
+												ptrOldEvent->machineInfo.machineID == ptrAuxMachine->machineID &&
+												ptrOldEvent->machineInfo.source == ptrAuxMachine->source ) {
+											break;
 										}
-
-										if (ptrOldEvent) {
-											RemoveEvent(ptrPtrEventList, ptrOldEvent);
-										}
-										else printf("ERROR (task finished): event not found!!!\n");
-
-										// chamar machine departure para este tempo ou para 1seg a frente
-										event *ptrOutGridMachine;
-										if( (ptrOutGridMachine = malloc(sizeof(event))) ) {
-											ptrOutGridMachine->eventNumber = 0;
-											ptrOutGridMachine->eventID = MACHDEPARTURE;
-											ptrOutGridMachine->time = ptrCurrentEvent->time;
-											ptrOutGridMachine->machineInfo.machineID = ptrAuxMachine->machineID;
-											ptrOutGridMachine->machineInfo.source = ptrAuxMachine->source;
-											ptrOutGridMachine->machineInfo.status = ptrAuxMachine->status;
-											ptrOutGridMachine->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
-											ptrOutGridMachine->machineInfo.departureTime = ptrCurrentEvent->time;
-											ptrOutGridMachine->machineInfo.usagePrice = 0.0;
-											ptrOutGridMachine->machineInfo.reservationPrice = 0.0;
-											ptrOutGridMachine->machineInfo.nextMachine = NULL;
-											ptrOutGridMachine->nextEvent = NULL;
-
-											InsertEvent(*ptrPtrEventList, ptrOutGridMachine);
-										}
-										else {
-											printf("ERROR (task finished): merdou o malloc!!!\n");
-										}
-
-//										printf("machineID %d source %d status %d AT %d DT %d UP %f RP %f\n", ptrOutGridMachine->machineInfo.machineID, ptrOutGridMachine->machineInfo.source,
-//												ptrOutGridMachine->machineInfo.status, ptrOutGridMachine->machineInfo.arrivalTime, ptrOutGridMachine->machineInfo.departureTime, ptrOutGridMachine->machineInfo.usagePrice,
-//												ptrOutGridMachine->machineInfo.reservationPrice);
-
+										ptrOldEvent = ptrOldEvent->nextEvent;
 									}
 
-									break;
+									if (ptrOldEvent) {
+										RemoveEvent(ptrPtrEventList, ptrOldEvent);
+									}
+									else printf("ERROR (task finished): event not found!!!\n");
 
-								}
+									// chamar machine departure para este tempo ou para 1seg a frente
+									event *ptrOutGridMachine;
+									if( (ptrOutGridMachine = malloc(sizeof(event))) ) {
+										ptrOutGridMachine->eventNumber = 0;
+										ptrOutGridMachine->eventID = MACHDEPARTURE;
+										ptrOutGridMachine->time = ptrCurrentEvent->time;
+										ptrOutGridMachine->machineInfo.machineID = ptrAuxMachine->machineID;
+										ptrOutGridMachine->machineInfo.source = ptrAuxMachine->source;
+										ptrOutGridMachine->machineInfo.status = ptrAuxMachine->status;
+										ptrOutGridMachine->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
+										ptrOutGridMachine->machineInfo.departureTime = ptrCurrentEvent->time;
+										ptrOutGridMachine->machineInfo.usagePrice = 0.0;
+										ptrOutGridMachine->machineInfo.reservationPrice = 0.0;
+										ptrOutGridMachine->machineInfo.nextMachine = NULL;
+										ptrOutGridMachine->nextEvent = NULL;
 
-								ptrAuxMachine = ptrAuxMachine->nextMachine;
+										InsertEvent(*ptrPtrEventList, ptrOutGridMachine);
+									}
+									else {
+										printf("ERROR (task finished): merdou o malloc!!!\n");
+									}
+
+								} // end of if (ptrAuxMachine->source == GRID)
+
+								break;
+
+							} // end of if (ptrAuxMachine->machineID == ptrAuxTaskAccount->machineID && ptrAuxMachine->source == ptrAuxTaskAccount->source)
+
+							ptrAuxMachine = ptrAuxMachine->nextMachine;
+
+						} // end of while(ptrAuxMachine)
+
+						if (ptrAuxTaskAccount->source == GRID) {
+							DecrementBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time, (ptrAuxTaskAccount->finnishTime - ptrAuxTaskAccount->startTime));
+						}
+
+						if (ptrAuxMachine) {
+							usagePrice = ptrAuxMachine->usagePrice;
+						}
+						else {
+							if (ptrAuxTaskAccount->source != GRID) {
+								printf("ERROR (task finished): source nao eh igual a GRID!!!\n");
 							}
-
+							usagePrice = 0.00;
 						}
 
-						if (ptrAuxTaskAccount->status == ACCOUNTFINNISHED) {
-							count += 1;
-						}
+						ptrAuxTaskAccount->cost = ceil( (float)(ptrAuxTaskAccount->finnishTime - ptrAuxTaskAccount->startTime) / 60.0 ) * usagePrice;
+
+					} // end of if (ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->taskID == ptrAuxTask->taskID &&	ptrAuxTaskAccount->finnishTime == 0 )
+
+					if (ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->status == ACCOUNTFINNISHED) {
+						countAccountFinnished++;
+						totalUsagePrice += ptrAuxTaskAccount->cost;
 					}
 
 					ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
 
-				}
+				}  // end of while(ptrAuxTaskAccount != NULL) (varendo a taskAccountList)
 
-				if(count == ptrAuxTask->jobSize) {
+				if(countAccountFinnished == ptrAuxTask->jobSize) {
 
 					event *ptrNewEvent, *ptrTargetEvent;
 					ptrTargetEvent = ptrCurrentEvent;
@@ -137,6 +151,7 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 						ptrNewEvent->eventID = JOBFINNISHED;
 						ptrNewEvent->time = ptrCurrentEvent->time;
 						ptrNewEvent->jobInfo.jobID = ptrAuxTask->jobID;
+						ptrNewEvent->jobInfo.cost = totalUsagePrice;
 						ptrNewEvent->nextEvent = NULL;
 
 						InsertAfterEvent(*ptrPtrEventList, ptrNewEvent, ptrTargetEvent);

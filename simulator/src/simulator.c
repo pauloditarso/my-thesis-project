@@ -34,6 +34,8 @@ int main(int argc, char *argv[]) {
 		simSeed = (atoi(argv[7]));
 		utilityFunction = (atoi(argv[8]));
 
+		reservationPrice = 2984.00; reservationPricePerDay = (numberOfReservedMachines * reservationPrice)/365;
+
 		srand(simSeed);
 
 		// starting a new event list
@@ -58,7 +60,7 @@ int main(int argc, char *argv[]) {
 		//	while(ptrAuxAux) {
 		//		count1++;
 		//		if (ptrAuxAux->eventID == 1 || ptrAuxAux->eventID == 2) {
-		//			printf("eventID %d time %d machineID %d source %d status %d AT %d DT %d UP %f RP %f\n", ptrAuxAux->eventID, ptrAuxAux->time, ptrAuxAux->machineInfo.machineID,
+		//			printf("eventID %d time %d machineID %d source %d status %d AT %d DT %d UP %.2f RP %.2f\n", ptrAuxAux->eventID, ptrAuxAux->time, ptrAuxAux->machineInfo.machineID,
 		//					ptrAuxAux->machineInfo.source, ptrAuxAux->machineInfo.status, ptrAuxAux->machineInfo.arrivalTime, ptrAuxAux->machineInfo.departureTime,
 		//					ptrAuxAux->machineInfo.usagePrice, ptrAuxAux->machineInfo.reservationPrice);
 		//		}
@@ -223,8 +225,8 @@ int main(int argc, char *argv[]) {
 		count = 0;
 		while(ptrAuxJob) {
 			count++;
-			printf("jobID %d jobSize %d AR %d FT %d LT %d DL %d MU %d utility %d\n", ptrAuxJob->jobID, ptrAuxJob->jobSize, ptrAuxJob->arrivalTime, ptrAuxJob->finnishTime, ptrAuxJob->longestTask,
-					ptrAuxJob->deadline, ptrAuxJob->maxUtility, ptrAuxJob->utility);
+			printf("jobID %d jobSize %d AR %d FT %d LT %d DL %d MU %d Utility %d Cost %.2f Profit %.2f\n", ptrAuxJob->jobID, ptrAuxJob->jobSize, ptrAuxJob->arrivalTime, ptrAuxJob->finnishTime, ptrAuxJob->longestTask,
+					ptrAuxJob->deadline, ptrAuxJob->maxUtility, ptrAuxJob->utility, ptrAuxJob->cost, (ptrAuxJob->utility - ptrAuxJob->cost));
 			ptrAuxJob = ptrAuxJob->nextJob;
 		}
 		//	printf("a lista de jobs tem %d registros\n", count);
@@ -299,7 +301,7 @@ int main(int argc, char *argv[]) {
 			count = 0;
 			while(ptrAuxMachine) {
 				count++;
-				printf("machineID %d source %d status %d AT %d DT %d UP %f RP %f\n", ptrAuxMachine->machineID,
+				printf("machineID %d source %d status %d AT %d DT %d UP %.2f RP %.2f\n", ptrAuxMachine->machineID,
 						ptrAuxMachine->source, ptrAuxMachine->status, ptrAuxMachine->arrivalTime, ptrAuxMachine->departureTime,
 						ptrAuxMachine->usagePrice, ptrAuxMachine->reservationPrice);
 				ptrAuxMachine = ptrAuxMachine->nextMachine;
@@ -329,10 +331,10 @@ int main(int argc, char *argv[]) {
 				printf("(INVARIANTES) FINNISHTIME MENOR DO QUE STARTTIME!!!\n");
 			}
 
-					printf("taskAccountID %d machineID %d source %d taskID %d jobID %d RT %d ET %d ST %d FT %d\n", ptrAuxTaskAccountInfo->taskAccountID,
+					printf("taskAccountID %d machineID %d source %d taskID %d jobID %d RT %d ET %d ST %d FT %d Status %d Cost %.2f\n", ptrAuxTaskAccountInfo->taskAccountID,
 							ptrAuxTaskAccountInfo->machineID, ptrAuxTaskAccountInfo->source, ptrAuxTaskAccountInfo->taskID, ptrAuxTaskAccountInfo->jobID,
 							ptrAuxTaskAccountInfo->runtime, (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime),
-							ptrAuxTaskAccountInfo->startTime, ptrAuxTaskAccountInfo->finnishTime);
+							ptrAuxTaskAccountInfo->startTime, ptrAuxTaskAccountInfo->finnishTime, ptrAuxTaskAccountInfo->status, ptrAuxTaskAccountInfo->cost);
 
 			ptrAuxTaskAccountInfo = ptrAuxTaskAccountInfo->nextTaskAccountInfo;
 		}

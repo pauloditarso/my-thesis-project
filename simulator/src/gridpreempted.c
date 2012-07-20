@@ -52,7 +52,7 @@ void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMach
 
 
 //		printf("eventID %d (Grid Preempted) time %d \n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-		//	printf("machineID %d source %d status %d AT %d DT %d UP %f RP %f\n",
+		//	printf("machineID %d source %d status %d AT %d DT %d UP %.2f RP %.2f\n",
 		//			ptrCurrentEvent->machineInfo.machineID, ptrCurrentEvent->machineInfo.source,
 		//			ptrCurrentEvent->machineInfo.status, ptrCurrentEvent->machineInfo.arrivalTime,
 		//			ptrCurrentEvent->machineInfo.departureTime, ptrCurrentEvent->machineInfo.usagePrice,

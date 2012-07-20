@@ -29,6 +29,7 @@ void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, ta
 				ptrJobList->deadline = ptrCurrentEvent->jobInfo.deadline;
 				ptrJobList->maxUtility = ptrCurrentEvent->jobInfo.maxUtility;
 				ptrJobList->utility = ptrCurrentEvent->jobInfo.utility;
+				ptrJobList->cost = ptrCurrentEvent->jobInfo.cost;
 				ptrJobList->nextJob = NULL;
 			}
 			else {
@@ -47,6 +48,7 @@ void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, ta
 				ptrNewJob->deadline = ptrCurrentEvent->jobInfo.deadline;
 				ptrNewJob->maxUtility = ptrCurrentEvent->jobInfo.maxUtility;
 				ptrNewJob->utility = ptrCurrentEvent->jobInfo.utility;
+				ptrNewJob->cost = ptrCurrentEvent->jobInfo.cost;
 				ptrNewJob->nextJob = NULL;
 
 				job *ptrAux;
@@ -63,9 +65,10 @@ void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, ta
 
 			//	printf("o balance na grade agora e %d\n", GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time));
 			printf("eventID %d (Job Arrival) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-			printf("jobID %d jobSize %d AT %d FT %d LT %d Deadline %d MU %d Utility %d\n", ptrCurrentEvent->jobInfo.jobID, ptrCurrentEvent->jobInfo.jobSize,
+			printf("jobID %d jobSize %d AT %d FT %d LT %d Deadline %d MU %d Utility %d Cost %.2f Profit %.2f\n", ptrCurrentEvent->jobInfo.jobID, ptrCurrentEvent->jobInfo.jobSize,
 					ptrCurrentEvent->jobInfo.arrivalTime, ptrCurrentEvent->jobInfo.finnishTime, ptrCurrentEvent->jobInfo.longestTask,
-					ptrCurrentEvent->jobInfo.deadline, ptrCurrentEvent->jobInfo.maxUtility, ptrCurrentEvent->jobInfo.utility);
+					ptrCurrentEvent->jobInfo.deadline, ptrCurrentEvent->jobInfo.maxUtility, ptrCurrentEvent->jobInfo.utility, ptrCurrentEvent->jobInfo.cost,
+					( ptrCurrentEvent->jobInfo.utility -  ptrCurrentEvent->jobInfo.cost));
 
 			// if there is donating machines, it creates grid preempted events
 			machine *ptrAuxMachine;
