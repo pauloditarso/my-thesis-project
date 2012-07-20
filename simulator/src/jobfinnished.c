@@ -27,12 +27,13 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 		while(ptrAuxJobList) {
 			if ( ptrAuxJobList->jobID == ptrCurrentEvent->jobInfo.jobID ) {
 				ptrAuxJobList->finnishTime = ptrCurrentEvent->time;
+				ptrAuxJobList->cost = (ptrCurrentEvent->jobInfo.cost + reservationPricePerDay); // add the reservation cost into this calculation
 				break;
 			}
 			ptrAuxJobList = ptrAuxJobList->nextJob;
 		}
 
-		int utility;
+		int utility = 0;
 		switch (utilityFunction) {
 			case CONSTANT:
 				if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) <= ptrAuxJobList->deadline ) {
@@ -79,8 +80,9 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 		ptrAuxJobList->utility = utility;
 
 		printf("eventID %d (Job Finnished) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-		printf("JobID %d AR %d FT %d LT %d Deadline %d MU %d Utility %d\n", ptrAuxJobList->jobID, ptrAuxJobList->arrivalTime, ptrAuxJobList->finnishTime,
-				ptrAuxJobList->longestTask, ptrAuxJobList->deadline, ptrAuxJobList->maxUtility, ptrAuxJobList->utility);
+		printf("JobID %d AR %d FT %d LT %d Deadline %d MU %d Utility %d Cost %.2f Profit %.2f\n", ptrAuxJobList->jobID, ptrAuxJobList->arrivalTime, ptrAuxJobList->finnishTime,
+				ptrAuxJobList->longestTask, ptrAuxJobList->deadline, ptrAuxJobList->maxUtility, ptrAuxJobList->utility, ptrAuxJobList->cost,
+				(ptrAuxJobList->utility - ptrAuxJobList->cost));
 
 	} else printf("ERROR (job finnished): wrong eventID!!!\n");
 }

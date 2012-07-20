@@ -49,8 +49,9 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 				ptrAuxTask = ptrAuxTask->nextTask;
 			}
 
-			// atualizar o finnishTime da task na account list;
+			// atualizar o finnishTime e o cost da task na account list;
 			ptrAuxTaskAccountList->finnishTime = ptrCurrentEvent->time;
+			ptrAuxTaskAccountList->cost = ceil( (float)(ptrAuxTaskAccountList->finnishTime - ptrAuxTaskAccountList->startTime) / 60.0 ) * ptrCurrentEvent->machineInfo.usagePrice;
 
 			// decrement on the grid's balnace
 			if (ptrAuxTaskAccountList->source == GRID) {
@@ -73,7 +74,7 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 
 			// remover a entrada na account list
 //			RemoveTaskAccountList(ptrPtrTaskAccountInfoList, ptrAuxTaskAccountList);
-//			comentado pq n‹o mais ser‹o removidas essas entradas, para efeito do calculo de custo (8/3/12)
+//			comentado pq nao mais serao removidas essas entradas, para efeito do calculo de custo (8/3/12)
 
 			if (ptrCurrentEvent->time < simulationTime) {
 

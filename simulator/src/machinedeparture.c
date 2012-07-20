@@ -136,7 +136,7 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 				}
 
 				printf("eventID %d (Machine Departure) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-				printf("machineID %d source %d status %d AT %d DT %d UP %f RP %f\n", ptrActualMachine->machineID, ptrActualMachine->source,
+				printf("machineID %d source %d status %d AT %d DT %d UP %.2f RP %.2f\n", ptrActualMachine->machineID, ptrActualMachine->source,
 						ptrActualMachine->status, ptrActualMachine->arrivalTime, ptrActualMachine->departureTime, ptrActualMachine->usagePrice,
 						ptrActualMachine->reservationPrice);
 
