@@ -206,7 +206,7 @@ void FillEmptyEventList(event *ptrEventList) {
 			printf("ERROR (fill): merdou o malloc!!!\n");
 		}
 
-		jobArrivalTime += (int)Randn(DAY_TIME, 60); if (jobArrivalTime >=524160) break; // no arrivals after moom of the 365th day
+		jobArrivalTime += (int)Randn(DAY_TIME, 60); if (jobArrivalTime >= 524160) break; // no arrivals after moom of the 365th day
 
 	}
 
