@@ -8,7 +8,7 @@
 #include "simulation.h"
 
 void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
-		gridAccountInfo *ptrGridInfoList, job *ptrJobList, jobAccountInfo *ptrJobAccountInfo, balanceAccountInfo *ptrBalanceAccountInfo) {
+		gridAccountInfo *ptrGridInfoList, job *ptrJobList, jobAccountInfo *ptrJobAccountInfo, balanceAccountInfo *ptrBalanceAccountInfo, task **ptrPtrOrderedTaskList) {
 
 	switch (ptrCurrentEvent->eventID) {
 		case 0:
@@ -32,7 +32,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 5:
 			// TASK ARRIVAL
-			TaskArrival(ptrCurrentEvent, *ptrPtrEventList, ptrTaskList, *ptrPtrMachineList);
+			TaskArrival(ptrCurrentEvent, *ptrPtrEventList, ptrTaskList, *ptrPtrMachineList, ptrPtrOrderedTaskList);
 			break;
 		case 6:
 			// TASK SCHEDULED
@@ -40,11 +40,11 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 7:
 			// TASK PREEMPTED
-			TaskUnSchedule(ptrCurrentEvent, ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrPtrTaskAccountInfoList, ptrBalanceAccountInfo);
+			TaskUnSchedule(ptrCurrentEvent, ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrPtrTaskAccountInfoList, ptrBalanceAccountInfo, ptrJobList);
 			break;
 		case 8:
 			// TASK FINNISHED
-			TaskFinnished(ptrCurrentEvent, ptrPtrEventList, ptrTaskList, *ptrPtrTaskAccountInfoList, *ptrPtrMachineList, ptrBalanceAccountInfo);
+			TaskFinnished(ptrCurrentEvent, ptrPtrEventList, ptrTaskList, *ptrPtrTaskAccountInfoList, *ptrPtrMachineList, ptrBalanceAccountInfo, ptrJobList);
 			break;
 		case 9:
 			// JOB ARRIVAL
@@ -61,11 +61,11 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 		case 12:
 			// ALLOCATION PLANNING
 //			printf("optflag %d\n", optFlag);
-//			if (optFlag == 0) {
+			if (optFlag == 0) {
 				AllocationPlanning(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrBalanceAccountInfo);
-//			} else {
-//				AllocationPlanningOpt(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrBalanceAccountInfo);
-//			}
+			} else {
+				AllocationPlanningOpt(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrBalanceAccountInfo);
+			}
 			break;
 		case 13:
 			printf("eventID %d (Simulation Finnished) time %d\n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);

@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 
 	event *eventList, *ptrAuxList, *ptrLastNode;
 	machine *machineList, *ptrAuxMachine;
-	task *taskList;
+	task *taskList, *orderedTaskList;
 	job *jobList;
 	taskAccountInfo *taskAccountInfoList;
 	gridAccountInfo *gridInfoList;
@@ -87,6 +87,15 @@ int main(int argc, char *argv[]) {
 			printf("ERROR: merdou o malloc!!!\n");
 		}
 
+		// starting an ordered task list
+		if ( (orderedTaskList = malloc(sizeof(task))) ) {
+			orderedTaskList->taskID = 0;			// 0 means code for an empty task list
+			orderedTaskList->nextTask = NULL;
+		}
+		else {
+			printf("ERROR: merdou o malloc!!!\n");
+		}
+
 		// starting a job list
 		if ( (jobList = malloc(sizeof(job))) ) {
 			jobList->jobID = 0;			// 0 means code for an empty job list
@@ -146,59 +155,59 @@ int main(int argc, char *argv[]) {
 			switch (ptrAuxList->eventID) {
 			case 0:
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 1:				// Machine Arrival
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 2:				// Machine Departure
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 3:				// Grid Donating
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 4:				// Grid Preempted
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 5:				// Task Arrival
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 6:				// Task Schedule
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 7:				// Task Preempted
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 8:				// Task Finnished
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 9:				// Job Arrival
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 10:			// Job Started
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 11:			// Job Finnished
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 12:			// Allocation Planning
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			case 13:			// Simulation Finnished
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList);
+						balanceAccountInfoList, &orderedTaskList);
 				break;
 			default:
 				printf("unkwonk event!!!\n");
@@ -239,9 +248,21 @@ int main(int argc, char *argv[]) {
 		count = 0;
 		while(ptrAuxTask) {
 			count++;
-			printf("taskID %d jobID %d jobSize %d AR %d RT %d status %d\n", ptrAuxTask->taskID, ptrAuxTask->jobID, ptrAuxTask->jobSize,
-					ptrAuxTask->arrivalTime, ptrAuxTask->runtime, ptrAuxTask->status);
+			printf("taskID %d jobID %d jobSize %d AR %d RT %d status %d submissions %d\n", ptrAuxTask->taskID, ptrAuxTask->jobID, ptrAuxTask->jobSize,
+					ptrAuxTask->arrivalTime, ptrAuxTask->runtime, ptrAuxTask->status, ptrAuxTask->numberOfSubmissions);
 			ptrAuxTask = ptrAuxTask->nextTask;
+		}
+		//	printf("a lista de tasks tem %d registros\n", count);
+		//	printf("\n");
+
+		task *ptrAuxOrderedTask;
+		ptrAuxOrderedTask = orderedTaskList;
+		count = 0;
+		while(ptrAuxOrderedTask) {
+			count++;
+			printf("taskID %d jobID %d jobSize %d AR %d RT %d status %d submissions %d\n", ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->jobSize,
+					ptrAuxOrderedTask->arrivalTime, ptrAuxOrderedTask->runtime, ptrAuxOrderedTask->status, ptrAuxOrderedTask->numberOfSubmissions);
+			ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
 		}
 		//	printf("a lista de tasks tem %d registros\n", count);
 		//	printf("\n");

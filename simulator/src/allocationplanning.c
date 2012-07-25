@@ -33,13 +33,13 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 
 		if (ptrMachineList && ptrTaskList) {
 
-			//	printf("o balance na grade agora e %d\n", GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time));
 			unsigned int balance, numberOfGridMachines;
 			balance = GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time);
+			numberOfGridMachines = (int)(balance * gridQoSFactor)/TASK_AVG_TIME; // ceiling or trunk???
+//			printf("o balance na grade agora e %d\n", GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time));
 //			printf("\n");
 //			printf("balance %d\n", balance);
 //			printf("gridFactor %.2f\n", gridQoSFactor);
-			numberOfGridMachines = (int)(balance * gridQoSFactor)/TASK_AVG_TIME; // ceiling or trunk???
 //			printf("numberofGridMachines %d\n", numberOfGridMachines);
 
 			task *ptrAuxTask;

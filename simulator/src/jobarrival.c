@@ -110,14 +110,16 @@ void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, ta
 				ptrNewEvent->eventNumber = 0;
 				ptrNewEvent->eventID = ALLOCATIONPLANNING;
 				ptrNewEvent->time = (ptrCurrentEvent->time + 1);
-				ptrNewEvent->flag = 1;
-//				ptrNewEvent->jobInfo.jobID = ptrCurrentEvent->jobInfo.jobID;
-//				ptrNewEvent->jobInfo.jobSize = ptrCurrentEvent->jobInfo.jobSize;
-//				ptrNewEvent->jobInfo.arrivalTime = ptrCurrentEvent->jobInfo.arrivalTime;
-//				ptrNewEvent->jobInfo.finnishTime = ptrCurrentEvent->jobInfo.finnishTime;
-//				ptrNewEvent->jobInfo.longestTask = ptrCurrentEvent->jobInfo.longestTask;
-//				ptrNewEvent->jobInfo.deadline = ptrCurrentEvent->jobInfo.deadline;
-//				ptrNewEvent->jobInfo.nextJob = NULL;
+				ptrNewEvent->jobInfo.jobID = ptrCurrentEvent->jobInfo.jobID;
+				ptrNewEvent->jobInfo.jobSize = ptrCurrentEvent->jobInfo.jobSize;
+				ptrNewEvent->jobInfo.arrivalTime = ptrCurrentEvent->jobInfo.arrivalTime;
+				ptrNewEvent->jobInfo.finnishTime = ptrCurrentEvent->jobInfo.finnishTime;
+				ptrNewEvent->jobInfo.longestTask = ptrCurrentEvent->jobInfo.longestTask;
+				ptrNewEvent->jobInfo.deadline = ptrCurrentEvent->jobInfo.deadline;
+				ptrNewEvent->jobInfo.maxUtility = ptrCurrentEvent->jobInfo.maxUtility;
+				ptrNewEvent->jobInfo.utility = ptrCurrentEvent->jobInfo.utility;
+				ptrNewEvent->jobInfo.cost = ptrCurrentEvent->jobInfo.cost;
+				ptrNewEvent->jobInfo.nextJob = NULL;
 				ptrNewEvent->nextEvent = NULL;
 
 				InsertEvent(ptrEventList, ptrNewEvent);

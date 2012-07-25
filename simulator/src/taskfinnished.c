@@ -8,7 +8,7 @@
 #include "simulation.h"
 
 void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList,
-		balanceAccountInfo *ptrBalanceAccountInfo) {
+		balanceAccountInfo *ptrBalanceAccountInfo, job *ptrJobList) {
 
 	if (ptrCurrentEvent->eventID == TASKFINNISHED) {
 
@@ -18,17 +18,19 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 		ptrAuxTaskAccount = ptrTaskAccountInfoList;
 		machine *ptrAuxMachine;
 		ptrAuxMachine = ptrMachineList;
+		job *ptrAuxJob;
+		ptrAuxJob = ptrJobList;
 
 		if (ptrAuxTask->taskID > 0) { // 0 means code for an empty task list
 
 			while(ptrAuxTask){
-
-				if (ptrAuxTask->taskID == ptrCurrentEvent->taskInfo.taskID &&
-						ptrAuxTask->jobID == ptrCurrentEvent->taskInfo.jobID) {
-					break;
-				}
+				if (ptrAuxTask->taskID == ptrCurrentEvent->taskInfo.taskID &&	ptrAuxTask->jobID == ptrCurrentEvent->taskInfo.jobID) break;
 				ptrAuxTask = ptrAuxTask->nextTask;
+			}
 
+			while(ptrAuxJob) {
+				if (ptrAuxJob->jobID == ptrCurrentEvent->taskInfo.jobID) break;
+				ptrAuxJob = ptrAuxJob->nextJob;
 			}
 
 			if (ptrAuxTask != NULL) {
@@ -41,10 +43,10 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 				}
 
 				printf("eventID %d (Task Finnished) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-				printf("taskID %d jobID %d AT %d jobSize %d runtime %d status %d\n",
+				printf("taskID %d jobID %d AT %d jobSize %d runtime %d status %d submissions %d\n",
 						ptrCurrentEvent->taskInfo.taskID, ptrCurrentEvent->taskInfo.jobID,
 						ptrCurrentEvent->taskInfo.arrivalTime, ptrCurrentEvent->taskInfo.jobSize,
-						ptrCurrentEvent->taskInfo.runtime, ptrCurrentEvent->taskInfo.status);
+						ptrCurrentEvent->taskInfo.runtime, ptrCurrentEvent->taskInfo.status, ptrCurrentEvent->taskInfo.numberOfSubmissions);
 
 
 				unsigned short int countAccountFinnished = 0;
@@ -150,20 +152,28 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 						ptrNewEvent->eventNumber = 0;
 						ptrNewEvent->eventID = JOBFINNISHED;
 						ptrNewEvent->time = ptrCurrentEvent->time;
-						ptrNewEvent->jobInfo.jobID = ptrAuxTask->jobID;
+						ptrNewEvent->jobInfo.jobID = ptrAuxJob->jobID;
+						ptrNewEvent->jobInfo.jobSize = ptrAuxJob->jobSize;
+						ptrNewEvent->jobInfo.arrivalTime = ptrAuxJob->arrivalTime;
+						ptrNewEvent->jobInfo.finnishTime = ptrCurrentEvent->time;
+						ptrNewEvent->jobInfo.longestTask = ptrAuxJob->longestTask;
+						ptrNewEvent->jobInfo.deadline = ptrAuxJob->deadline;
+						ptrNewEvent->jobInfo.maxUtility = ptrAuxJob->maxUtility;
+						ptrNewEvent->jobInfo.utility = ptrAuxJob->utility;
 						ptrNewEvent->jobInfo.cost = totalUsagePrice;
+						ptrNewEvent->jobInfo.nextJob = NULL;
 						ptrNewEvent->nextEvent = NULL;
 
 						InsertAfterEvent(*ptrPtrEventList, ptrNewEvent, ptrTargetEvent);
 					}
 					else {
-						printf("ERROR (task schedule): merdou o malloc!!!\n");
+						printf("ERROR (task finnished): merdou o malloc!!!\n");
 					}
 				}
 
-			} else printf("(task finnished) task not found!!!\n");
+			} else printf("ERROR (task finnished) task not found!!!\n");
 
-		} else printf("(task finnished) empty list!!!\n");
+		} else printf("ERROR (task finnished) empty list!!!\n");
 
 		// code to decide if it inserts a schedule or a donation event
 
@@ -271,15 +281,16 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 					ptrNewEvent->eventNumber = 0;
 					ptrNewEvent->eventID = ALLOCATIONPLANNING;
 					ptrNewEvent->time = (ptrCurrentEvent->time + 1);
-					ptrNewEvent->flag = 1;
-//					ptrNewEvent->taskInfo.taskID = ptrCurrentEvent->taskInfo.taskID;
-//					ptrNewEvent->taskInfo.jobID = ptrCurrentEvent->taskInfo.jobID;
-//					ptrNewEvent->taskInfo.jobSize = ptrCurrentEvent->taskInfo.jobSize;
-//					ptrNewEvent->taskInfo.arrivalTime = ptrCurrentEvent->taskInfo.arrivalTime;
-//					ptrNewEvent->taskInfo.runtime = ptrCurrentEvent->taskInfo.runtime;
-//					ptrNewEvent->taskInfo.status = ptrCurrentEvent->taskInfo.status;
-//					ptrNewEvent->taskInfo.utilityFunction = ptrCurrentEvent->taskInfo.utilityFunction;
-//					ptrNewEvent->taskInfo.nextTask = NULL;
+					ptrNewEvent->jobInfo.jobID = ptrAuxJob->jobID;
+					ptrNewEvent->jobInfo.jobSize = ptrAuxJob->jobSize;
+					ptrNewEvent->jobInfo.arrivalTime = ptrAuxJob->arrivalTime;
+					ptrNewEvent->jobInfo.finnishTime = ptrAuxJob->finnishTime;
+					ptrNewEvent->jobInfo.longestTask = ptrAuxJob->longestTask;
+					ptrNewEvent->jobInfo.deadline = ptrAuxJob->deadline;
+					ptrNewEvent->jobInfo.maxUtility = ptrAuxJob->maxUtility;
+					ptrNewEvent->jobInfo.utility = ptrAuxJob->utility;
+					ptrNewEvent->jobInfo.cost = ptrAuxJob->cost;
+					ptrNewEvent->jobInfo.nextJob = NULL;
 					ptrNewEvent->nextEvent = NULL;
 
 					InsertEvent(*ptrPtrEventList, ptrNewEvent);

@@ -18,7 +18,7 @@ void FillEmptyEventList(event *ptrEventList) {
 		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
 			auxPtrEvent1->eventNumber = 0;
 			auxPtrEvent1->eventID = MACHARRIVAL;
-			auxPtrEvent1->time = 0;
+			auxPtrEvent1->time = 1;
 			auxPtrEvent1->machineInfo.machineID = i;
 			auxPtrEvent1->machineInfo.source = LOCAL;
 			auxPtrEvent1->machineInfo.status = IDLE;
@@ -62,7 +62,7 @@ void FillEmptyEventList(event *ptrEventList) {
 		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
 			auxPtrEvent1->eventNumber = 0;
 			auxPtrEvent1->eventID = MACHARRIVAL;
-			auxPtrEvent1->time = 0;
+			auxPtrEvent1->time = 1;
 			auxPtrEvent1->machineInfo.machineID = i;
 			auxPtrEvent1->machineInfo.source = RESERVED;
 			auxPtrEvent1->machineInfo.status = IDLE;
@@ -107,7 +107,7 @@ void FillEmptyEventList(event *ptrEventList) {
 		if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
 			auxPtrEvent1->eventNumber = 0;
 			auxPtrEvent1->eventID = MACHARRIVAL;
-			auxPtrEvent1->time = 0;
+			auxPtrEvent1->time = 1;
 			auxPtrEvent1->machineInfo.machineID = i;
 			auxPtrEvent1->machineInfo.source = ONDEMAND;
 			auxPtrEvent1->machineInfo.status = IDLE;
@@ -156,7 +156,8 @@ void FillEmptyEventList(event *ptrEventList) {
 		deadline = 0;
 		longestTask = 0;
 		jobLength = (int)Randn(JOB_AVG_LENGTH, JOB_SDV_LENGTH);
-		jobSize = (int)(jobLength/TASK_AVG_TIME);
+//		jobSize = (int)(jobLength/TASK_AVG_TIME);
+		jobSize = 10;
 
 		for (j = 0; j < jobSize; j++) {
 
@@ -171,6 +172,7 @@ void FillEmptyEventList(event *ptrEventList) {
 				auxPtrEvent1->taskInfo.jobSize = jobSize;
 				auxPtrEvent1->taskInfo.runtime = (int)Randn(TASK_AVG_TIME, TASK_SDV_TIME);
 				auxPtrEvent1->taskInfo.status = QUEUED;
+				auxPtrEvent1->taskInfo.numberOfSubmissions = 0;
 				auxPtrEvent1->taskInfo.nextTask = NULL;
 				auxPtrEvent1->nextEvent = NULL;
 
