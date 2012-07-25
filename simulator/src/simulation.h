@@ -31,8 +31,9 @@ enum {CONSTANT, LINEAR, STEP} utilityFunction;
 //char *workloadJobsTrace;
 
 typedef struct task {
-	unsigned int taskID, arrivalTime, jobID, jobSize, runtime;
+	unsigned int taskID, jobID, jobSize, arrivalTime, runtime;
 	enum {QUEUED, STARTED, FINNISHED} status;
+	unsigned short int numberOfSubmissions;
 	struct task *nextTask;
 } task;
 
@@ -136,10 +137,10 @@ void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMach
 
 void InsertGridAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine, gridAccountInfo *ptrGridInfoList);
 
-void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList, machine *ptrMachineList);
+void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList, machine *ptrMachineList, task **ptrPtrOrderedTaskList);
 
 void TaskFinnished(event *ptrCurrentEvenet, event **ptrPtrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList,
-		balanceAccountInfo *ptrBalanceAccountInfo);
+		balanceAccountInfo *ptrBalanceAccountInfo, job *ptrJobList);
 
 void InsertTaskAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *ptrAuxTask, taskAccountInfo *ptrTaskAccountInfoList);
 
@@ -150,7 +151,7 @@ void RemoveTaskAccountList(taskAccountInfo **ptrPtrTaskAccountInfoList, taskAcco
 void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList);
 
 void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
-		balanceAccountInfo *ptrBalanceAccountInfo);
+		balanceAccountInfo *ptrBalanceAccountInfo, job *ptrJobList);
 
 void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, task *ptrTaskList, machine *ptrMachineList, balanceAccountInfo *ptrBalanceAccountInfo);
 
@@ -159,9 +160,11 @@ void JobStarted(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *
 void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *ptrJobList);
 
 void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
-		gridAccountInfo *ptrGridInfoList, job *ptrJobList, jobAccountInfo *ptrJobAccountInfo, balanceAccountInfo *ptrBalanceAccountInfo);
+		gridAccountInfo *ptrGridInfoList, job *ptrJobList, jobAccountInfo *ptrJobAccountInfo, balanceAccountInfo *ptrBalanceAccountInfo, task **ptrPtrOrderedTaskList);
 
 void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, balanceAccountInfo *ptrBalanceAccountInfo);
+
+void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, balanceAccountInfo *ptrBalanceAccountInfo);
 
 double Randn(double mu, double sigma);
 

@@ -38,6 +38,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 							ptrAuxMachine->status = RUNNING;  // SOH PRA CONFIRMAR, POIS JAH ESTAVA RUNNING A UM SEGUNDO ATRAS (VIDE AllocationPlanning())
 							ptrAuxTask->status = STARTED;
+							ptrAuxTask->numberOfSubmissions++;
 
 							InsertTaskAccountList(ptrCurrentEvent, ptrAuxMachine, ptrAuxTask, ptrTaskAccountInfoList);
 
@@ -54,6 +55,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 								ptrNewEvent->taskInfo.arrivalTime = ptrAuxTask->arrivalTime;
 								ptrNewEvent->taskInfo.runtime = ptrAuxTask->runtime;
 								ptrNewEvent->taskInfo.status = FINNISHED;
+								ptrNewEvent->taskInfo.numberOfSubmissions = ptrAuxTask->numberOfSubmissions;
 								ptrNewEvent->taskInfo.nextTask = NULL;
 								ptrNewEvent->nextEvent = NULL;
 
@@ -93,8 +95,8 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 							}
 
 							printf("eventID %d (Task Scheduled) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-							printf("taskID %d jobID %d machineID %d source %d\n", ptrAuxTask->taskID,
-									ptrAuxTask->jobID, ptrAuxMachine->machineID, ptrAuxMachine->source);
+							printf("taskID %d jobID %d machineID %d source %d submissions %d\n", ptrAuxTask->taskID,
+									ptrAuxTask->jobID, ptrAuxMachine->machineID, ptrAuxMachine->source, ptrAuxTask->numberOfSubmissions);
 
 							break;
 						}

@@ -8,7 +8,7 @@
 #include "simulation.h"
 
 void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
-		balanceAccountInfo *ptrBalanceAccountInfo) {
+		balanceAccountInfo *ptrBalanceAccountInfo, job *ptrJobList) {
 
 	if (ptrCurrentEvent->eventID == TASKPREEMPTED) {
 
@@ -113,40 +113,35 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 
 				// insert a new planning into the event list
 				event *ptrNewEvent;
+				job *ptrAuxJobList;
+				ptrAuxJobList = ptrJobList;
+
+				while(ptrAuxJobList) {
+					if (ptrAuxJobList->jobID == ptrAuxTaskAccountList->jobID) break;
+					ptrAuxJobList = ptrAuxJobList->nextJob;
+				}
+
 				if( (ptrNewEvent = malloc(sizeof(event))) ) {
 
 					ptrNewEvent->eventNumber = 0;
 					ptrNewEvent->eventID = ALLOCATIONPLANNING;
 					ptrNewEvent->time = (ptrCurrentEvent->time + 1);
 					ptrNewEvent->flag = 1;
-//					ptrNewEvent->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
-//					ptrNewEvent->machineInfo.source = ptrCurrentEvent->machineInfo.source;
-//					ptrNewEvent->machineInfo.status = ptrCurrentEvent->machineInfo.status;
-//					ptrNewEvent->machineInfo.arrivalTime = ptrCurrentEvent->machineInfo.arrivalTime;
-//					ptrNewEvent->machineInfo.departureTime = ptrCurrentEvent->machineInfo.departureTime;
-//					ptrNewEvent->machineInfo.usagePrice = ptrCurrentEvent->machineInfo.usagePrice;
-//					ptrNewEvent->machineInfo.reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
-//					ptrNewEvent->machineInfo.nextMachine = NULL;
+					ptrNewEvent->jobInfo.jobID = ptrAuxJobList->jobID;
+					ptrNewEvent->jobInfo.jobSize = ptrAuxJobList->jobSize;
+					ptrNewEvent->jobInfo.arrivalTime = ptrAuxJobList->arrivalTime;
+					ptrNewEvent->jobInfo.finnishTime = ptrAuxJobList->finnishTime;
+					ptrNewEvent->jobInfo.longestTask = ptrAuxJobList->longestTask;
+					ptrNewEvent->jobInfo.deadline = ptrAuxJobList->deadline;
+					ptrNewEvent->jobInfo.maxUtility = ptrAuxJobList->maxUtility;
+					ptrNewEvent->jobInfo.utility = ptrAuxJobList->utility;
+					ptrNewEvent->jobInfo.cost = ptrAuxJobList->cost;
+					ptrNewEvent->jobInfo.nextJob = NULL;
 					ptrNewEvent->nextEvent = NULL;
 
 					InsertEvent(*ptrPtrEventList, ptrNewEvent);
 
 				} else printf("ERROR (task unschedule): merdou o malloc!!!\n");
-
-
-//				// insert a new schedule into the event list
-//				event *ptrNewEvent, *ptrTargetEvent;
-//				ptrTargetEvent = ptrCurrentEvent;
-//
-//				if( (ptrNewEvent = malloc(sizeof(event))) ) {
-//					ptrNewEvent->eventID = TASKSCHEDULE;
-//					ptrNewEvent->time = (ptrCurrentEvent->time + 1);
-//					ptrNewEvent->flag = 0;
-//					ptrNewEvent->nextEvent = NULL;
-//
-//					InsertAfterEvent(*ptrPtrEventList, ptrNewEvent, ptrTargetEvent);
-//				}
-//				else printf("ERROR (task unschedule): merdou o malloc!!!\n");
 
 			}
 
