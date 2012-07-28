@@ -74,10 +74,13 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 								ptrNewEvent->eventNumber = 0;
 								ptrNewEvent->eventID = TASKSCHEDULE;
 								ptrNewEvent->time = (ptrCurrentEvent->time + 1);
+								ptrNewEvent->scheduleInfo.scheduleID = ++scheduleID;
+								ptrNewEvent->scheduleInfo.time = (ptrCurrentEvent->time + 1);
 								ptrNewEvent->scheduleInfo.taskID = ptrAuxTask->taskID;
 								ptrNewEvent->scheduleInfo.jobID = ptrAuxTask->jobID;
 								ptrNewEvent->scheduleInfo.machineID = ptrAuxLocalMachine->machineID;
 								ptrNewEvent->scheduleInfo.source = ptrAuxLocalMachine->source;
+								ptrNewEvent->scheduleInfo.nextSchedule = NULL;
 								ptrNewEvent->nextEvent = NULL;
 
 								InsertEvent(ptrEventList, ptrNewEvent);
@@ -155,10 +158,13 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 							ptrNewEvent->eventNumber = 0;
 							ptrNewEvent->eventID = TASKSCHEDULE;
 							ptrNewEvent->time = (ptrCurrentEvent->time + 1);
+							ptrNewEvent->scheduleInfo.scheduleID = ++scheduleID;
+							ptrNewEvent->scheduleInfo.time = (ptrCurrentEvent->time + 1);
 							ptrNewEvent->scheduleInfo.taskID = ptrAuxTask->taskID;
 							ptrNewEvent->scheduleInfo.jobID = ptrAuxTask->jobID;
 							ptrNewEvent->scheduleInfo.machineID = ptrNewGridMachine->machineInfo.machineID;
 							ptrNewEvent->scheduleInfo.source = ptrNewGridMachine->machineInfo.source;
+							ptrNewEvent->scheduleInfo.nextSchedule = NULL;
 							ptrNewEvent->nextEvent = NULL;
 
 							InsertEvent(ptrEventList, ptrNewEvent);
@@ -194,10 +200,13 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 									ptrNewEvent->eventNumber = 0;
 									ptrNewEvent->eventID = TASKSCHEDULE;
 									ptrNewEvent->time = (ptrCurrentEvent->time + 1);
+									ptrNewEvent->scheduleInfo.scheduleID = ++scheduleID;
+									ptrNewEvent->scheduleInfo.time = (ptrCurrentEvent->time + 1);
 									ptrNewEvent->scheduleInfo.taskID = ptrAuxTask->taskID;
 									ptrNewEvent->scheduleInfo.jobID = ptrAuxTask->jobID;
 									ptrNewEvent->scheduleInfo.machineID = ptrAuxCloudMachine->machineID;
 									ptrNewEvent->scheduleInfo.source = ptrAuxCloudMachine->source;
+									ptrNewEvent->scheduleInfo.nextSchedule = NULL;
 									ptrNewEvent->nextEvent = NULL;
 
 									InsertEvent(ptrEventList, ptrNewEvent);
