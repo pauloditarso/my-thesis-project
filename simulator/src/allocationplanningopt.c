@@ -38,10 +38,10 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			numberOfGridMachines = (int)(balance * gridQoSFactor)/TASK_AVG_TIME; // ceiling or trunk???
 			firstTargetFinnishTime = (ptrCurrentEvent->jobInfo.arrivalTime + 2 + ptrCurrentEvent->jobInfo.longestTask); // AT + 2min to start a job + LT
 			deadline = (ptrCurrentEvent->jobInfo.arrivalTime + ptrCurrentEvent->jobInfo.deadline);
-			timeSteps = 1; // steps, in minutes, for the optimizing process
+			timeSteps = 10; // steps, in minutes, for the optimizing process
 
-			float profites[(deadline - firstTargetFinnishTime + 1)];
-			unsigned int targetSchedules[(deadline - firstTargetFinnishTime + 1)][ptrCurrentEvent->jobInfo.jobSize][6]; // targetSchedules[FinishTimes][JobSize][Flag+ScheduleInfo]
+//			float profites[(deadline - firstTargetFinnishTime + 1)];
+//			unsigned int targetSchedules[(deadline - firstTargetFinnishTime + 1)][ptrCurrentEvent->jobInfo.jobSize][6]; // targetSchedules[FinishTimes][JobSize][Flag+ScheduleInfo]
 
 //			printf("o balance na grade agora e %d\n", GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time));
 //			printf("\n");
@@ -52,12 +52,53 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			task *ptrAuxOrderedTask;
 			ptrAuxOrderedTask = ptrOrderedTaskList;
 			unsigned short int allocated = 0;
+			scheduleQueue **ptrPtrScheduleQueue;
 
 			// sweeping the time till deadline
 			unsigned int i;
 			for (i = firstTargetFinnishTime; i <= deadline; i += timeSteps) {
 
-			}
+				scheduleQueue *ptrNewScheduleQueue;
+
+				if (i == firstTargetFinnishTime) {
+					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
+						ptrNewScheduleQueue->targetFinnishtime = i;
+						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+						ptrNewScheduleQueue->status = UNFINNISHED;
+						ptrNewScheduleQueue->profit = 0.0;
+						ptrNewScheduleQueue->previousSchedule = NULL;
+					}
+					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+				}
+				else {
+					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
+						ptrNewScheduleQueue->targetFinnishtime = i;
+						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+						ptrNewScheduleQueue->status = UNFINNISHED;
+						ptrNewScheduleQueue->profit = 0.0;
+						ptrNewScheduleQueue->previousSchedule = *ptrPtrScheduleQueue;
+					}
+					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+				}
+
+				ptrPtrScheduleQueue = &ptrNewScheduleQueue;
+
+				// CRIAR AS VARIAVEIS float greaterProfit == 0 E schedule *ptrTargetScheduleList
+				// PREENCHER ptrNewScheduledQueue->scheduleList COM OS SCHEDULES PARA CADA TEMPO
+				// VERIFICAR SE CONSEGUIU ESCALONAR TODAS AS TAREFAS E ALTERAR ptrNewScheduledQueue->status
+				// CALCULAR O RENDIMENTO BASEADO NO targetFinnishTime ATUAL, CASO ptrNewScheduledQueue->status == SUCCESSFUL
+				// (CASO CONTRARIO, RENDIMENTO == 0)
+				// CALCULAR OS CUSTOS A PARTIR DA UTILIZACAO DAS MAQUINAS DA CLOUD
+				// CALCULAR O PROFIT COMO RENDIMENTO - CUSTO TOTAL
+				// COMPARA O PROFIT DO targetFinnishTime ATUAL COM O greaterProfit
+				// CASO O PROFIT ATUAL SEJA MAIOR,  ATUALIZAR greaterProfit E APONTAR ptrTargetScheduleList PARA ptrNewScheduledQueue->scheduleList
+
+
+
+
+
+
+			} // end of for (i = firstTargetFinnishTime; i <= deadline; i += timeSteps)
 
 
 //			A PARTIR DAQUI EH O ALLOCATIONPLANNING() ORIGINAL!!!

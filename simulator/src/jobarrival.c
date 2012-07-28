@@ -52,13 +52,10 @@ void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, ta
 				ptrNewJob->nextJob = NULL;
 
 				job *ptrAux;
-
 				ptrAux = ptrJobList;
-
 				while(ptrAux->nextJob != NULL) {
 					ptrAux = ptrAux->nextJob;
 				}
-
 				ptrAux->nextJob = ptrNewJob;
 
 			}

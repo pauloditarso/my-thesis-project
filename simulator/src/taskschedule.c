@@ -15,9 +15,49 @@
 
 #include "simulation.h"
 
-void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList) {
+void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, schedule *ptrScheduleList) {
 
 	if (ptrCurrentEvent->eventID == TASKSCHEDULE) {
+
+		if (ptrScheduleList) {
+
+			if (ptrScheduleList->scheduleID == 0) { // code for an empty job list
+
+				ptrScheduleList->scheduleID = ptrCurrentEvent->scheduleInfo.scheduleID;
+				ptrScheduleList->time = ptrCurrentEvent->scheduleInfo.time;
+				ptrScheduleList->taskID = ptrCurrentEvent->scheduleInfo.taskID;
+				ptrScheduleList->jobID = ptrCurrentEvent->scheduleInfo.jobID;
+				ptrScheduleList->machineID = ptrCurrentEvent->scheduleInfo.machineID;
+				ptrScheduleList->source = ptrCurrentEvent->scheduleInfo.source;
+				ptrScheduleList->nextSchedule = NULL;
+
+			}
+			else {
+
+				schedule *ptrNewSchedule;
+
+				if ( !(ptrNewSchedule = malloc(sizeof(schedule))) ) {
+									printf("ERROR (task schedule): merdou o malloc!!!\n");
+				}
+
+				ptrNewSchedule->scheduleID = ptrCurrentEvent->scheduleInfo.scheduleID;
+				ptrNewSchedule->time = ptrCurrentEvent->scheduleInfo.time;
+				ptrNewSchedule->taskID = ptrCurrentEvent->scheduleInfo.taskID;
+				ptrNewSchedule->jobID = ptrCurrentEvent->scheduleInfo.jobID;
+				ptrNewSchedule->machineID = ptrCurrentEvent->scheduleInfo.machineID;
+				ptrNewSchedule->source = ptrCurrentEvent->scheduleInfo.source;
+				ptrNewSchedule->nextSchedule = NULL;
+
+				schedule *ptrAux;
+				ptrAux = ptrScheduleList;
+				while(ptrAux->nextSchedule != NULL) {
+					ptrAux = ptrAux->nextSchedule;
+				}
+				ptrAux->nextSchedule = ptrNewSchedule;
+
+			}
+
+		} // end of if (ptrScheduleList)
 
 		if (ptrMachineList && ptrTaskList) {
 

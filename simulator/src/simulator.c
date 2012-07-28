@@ -19,9 +19,10 @@ int main(int argc, char *argv[]) {
 	gridAccountInfo *gridInfoList;
 	jobAccountInfo *jobAccountInfoList;
 	balanceAccountInfo *balanceAccountInfoList;
+	schedule *scheduleList;
 
 	unsigned int count = 0;
-	gridMachinesID = 0;
+	gridMachinesID = 0; scheduleID = 0;
 
 	if (argc == 9) {
 
@@ -42,12 +43,12 @@ int main(int argc, char *argv[]) {
 		if ( (eventList = malloc(sizeof(event))) ) {
 			// start simulation event
 			eventList->eventNumber = 0; eventList->eventID = 0; eventList->time = 0; eventList->flag = -1; eventList->nextEvent = NULL;
-		} else printf("ERROR: merdou o malloc!!!\n");
+		} else printf("ERROR (main simulator): merdou o malloc!!!\n");
 
 		// finish simulation event
 		if ( (ptrLastNode = malloc(sizeof(event))) ) {
 			ptrLastNode->eventNumber = 1; ptrLastNode->eventID = SIMFINNISHED; ptrLastNode->time = (simulationTime+1); ptrLastNode->flag = -1; ptrLastNode->nextEvent = NULL;
-		} else printf("ERROR: merdou o malloc!!!\n");
+		} else printf("ERROR (main simulator): merdou o malloc!!!\n");
 
 		eventList->nextEvent = ptrLastNode;
 
@@ -75,7 +76,7 @@ int main(int argc, char *argv[]) {
 			machineList->nextMachine = NULL;
 		}
 		else {
-			printf("ERROR: merdou o malloc!!!\n");
+			printf("ERROR (main simulator): merdou o malloc!!!\n");
 		}
 
 		// starting a task list
@@ -84,7 +85,7 @@ int main(int argc, char *argv[]) {
 			taskList->nextTask = NULL;
 		}
 		else {
-			printf("ERROR: merdou o malloc!!!\n");
+			printf("ERROR (main simulator): merdou o malloc!!!\n");
 		}
 
 		// starting an ordered task list
@@ -93,7 +94,7 @@ int main(int argc, char *argv[]) {
 			orderedTaskList->nextTask = NULL;
 		}
 		else {
-			printf("ERROR: merdou o malloc!!!\n");
+			printf("ERROR (main simulator): merdou o malloc!!!\n");
 		}
 
 		// starting a job list
@@ -102,7 +103,7 @@ int main(int argc, char *argv[]) {
 			jobList->nextJob = NULL;
 		}
 		else {
-			printf("ERROR: merdou o malloc!!!\n");
+			printf("ERROR (main simulator): merdou o malloc!!!\n");
 		}
 
 		// starting an account list to register the execution of tasks
@@ -112,7 +113,7 @@ int main(int argc, char *argv[]) {
 			taskAccountInfoList->nextTaskAccountInfo = NULL;
 		}
 		else {
-			printf("ERROR: merdou o malloc!!!\n");
+			printf("ERROR (main simulator): merdou o malloc!!!\n");
 		}
 
 		// starting an account list to register the execution of jobs
@@ -121,7 +122,7 @@ int main(int argc, char *argv[]) {
 			jobAccountInfoList->nextJobAccountInfo = NULL;
 		}
 		else {
-			printf("ERROR: merdou o malloc!!!\n");
+			printf("ERROR (main simulator): merdou o malloc!!!\n");
 		}
 
 		// starting an account list to register the donations to the grid
@@ -130,7 +131,7 @@ int main(int argc, char *argv[]) {
 			gridInfoList->nextGridAccountInfo = NULL;
 		}
 		else {
-			printf("ERROR: merdou o malloc!!!\n");
+			printf("ERROR (main simulator): merdou o malloc!!!\n");
 		}
 
 		// starting a balance account list
@@ -141,7 +142,16 @@ int main(int argc, char *argv[]) {
 			balanceAccountInfoList->nextBalanceAccountInfo = NULL;
 		}
 		else {
-			printf("ERROR: merdou o malloc!!!\n");
+			printf("ERROR (main simulator): merdou o malloc!!!\n");
+		}
+
+		// starting a schedule list
+		if ( (scheduleList = malloc(sizeof(schedule))) ) {
+			scheduleList->scheduleID = 0;
+			scheduleList->nextSchedule = NULL;
+		}
+		else {
+			printf("ERROR (main simulator): merdou o malloc!!!\n");
 		}
 
 		ptrAuxList = eventList;
@@ -155,59 +165,59 @@ int main(int argc, char *argv[]) {
 			switch (ptrAuxList->eventID) {
 			case 0:
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 1:				// Machine Arrival
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 2:				// Machine Departure
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 3:				// Grid Donating
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 4:				// Grid Preempted
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 5:				// Task Arrival
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 6:				// Task Schedule
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 7:				// Task Preempted
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 8:				// Task Finnished
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 9:				// Job Arrival
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 10:			// Job Started
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 11:			// Job Finnished
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 12:			// Allocation Planning
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 13:			// Simulation Finnished
 				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList);
+						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			default:
 				printf("unkwonk event!!!\n");
@@ -266,6 +276,14 @@ int main(int argc, char *argv[]) {
 		}
 		//	printf("a lista de tasks tem %d registros\n", count);
 		//	printf("\n");
+
+		schedule *ptrAuxSchedule;
+		ptrAuxSchedule = scheduleList;
+		while(ptrAuxSchedule) {
+			printf("scheduleID %d time %d machineID %d source %d taskID %d jobID %d\n", ptrAuxSchedule->scheduleID, ptrAuxSchedule->time, ptrAuxSchedule->machineID,
+					ptrAuxSchedule->source, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID);
+			ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
+		}
 
 		// ##### INVARIANTES PARA A LISTA DE EVENTOS #####
 		event *ptrAuxEventList;
