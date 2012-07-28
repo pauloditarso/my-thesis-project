@@ -65,7 +65,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			if (optFlag == 0) {
 				AllocationPlanning(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrBalanceAccountInfo);
 			} else {
-				AllocationPlanningOpt(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrBalanceAccountInfo);
+				AllocationPlanningOpt(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, *ptrPtrOrderedTaskList, ptrBalanceAccountInfo);
 			}
 			break;
 		case 13:
