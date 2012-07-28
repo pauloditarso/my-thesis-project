@@ -32,7 +32,7 @@ enum {CONSTANT, LINEAR, STEP} utilityFunction;
 
 typedef struct task {
 	unsigned int taskID, jobID, jobSize, arrivalTime, runtime;
-	enum {QUEUED, STARTED, FINNISHED} status;
+	enum {QUEUED, SCHEDULED, STARTED, FINNISHED} status;
 	unsigned short int numberOfSubmissions;
 	struct task *nextTask;
 } task;
@@ -174,7 +174,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 
 void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, balanceAccountInfo *ptrBalanceAccountInfo);
 
-void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, balanceAccountInfo *ptrBalanceAccountInfo);
+void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrOrderedTaskList, balanceAccountInfo *ptrBalanceAccountInfo);
 
 double Randn(double mu, double sigma);
 
