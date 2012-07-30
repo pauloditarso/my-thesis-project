@@ -33,9 +33,10 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 		if (ptrMachineList && ptrOrderedTaskList) {
 
-			unsigned int balance, numberOfGridMachines, firstTargetFinnishTime, deadline, timeSteps;
-			balance = GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time);
-			numberOfGridMachines = (int)(balance * gridQoSFactor)/TASK_AVG_TIME; // ceiling or trunk???
+//			unsigned int balance, numberOfGridMachines;
+//			balance = GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time);
+//			numberOfGridMachines = (int)(balance * gridQoSFactor)/TASK_AVG_TIME; // ceiling or trunk???
+			unsigned int firstTargetFinnishTime, deadline, timeSteps;
 			firstTargetFinnishTime = (ptrCurrentEvent->jobInfo.arrivalTime + 2 + ptrCurrentEvent->jobInfo.longestTask); // AT + 2min to start a job + LT
 			deadline = (ptrCurrentEvent->jobInfo.arrivalTime + ptrCurrentEvent->jobInfo.deadline);
 			timeSteps = 60; // steps, in minutes, for the optimizing process
@@ -54,7 +55,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			machine *ptrAuxMachine;
 //			ptrAuxMachine = ptrMachineList;
 			unsigned short int allocated = 0;
-			scheduleQueue **ptrPtrScheduleQueue;
+//			scheduleQueue **ptrPtrScheduleQueue;
 
 			// sweeping the time till deadline
 			unsigned int targetFinnishTime;
@@ -63,66 +64,120 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				printf("\n");
 				printf("targetFT %d firstTargetFT %d deadline %d\n", targetFinnishTime, firstTargetFinnishTime, deadline);
 
-				scheduleQueue *ptrNewScheduleQueue;
-
-				if (targetFinnishTime == firstTargetFinnishTime) {
-					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
-						ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
-						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-						ptrNewScheduleQueue->status = UNFINNISHED;
-						ptrNewScheduleQueue->profit = 0.0;
-						ptrNewScheduleQueue->previousSchedule = NULL;
-					}
-					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-				}
-				else {
-					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
-						ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
-						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-						ptrNewScheduleQueue->status = UNFINNISHED;
-						ptrNewScheduleQueue->profit = 0.0;
-						ptrNewScheduleQueue->previousSchedule = *ptrPtrScheduleQueue;
-					}
-					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-				}
-
-				ptrPtrScheduleQueue = &ptrNewScheduleQueue;
-
-//				float bestProfit = -(ptrCurrentEvent->jobInfo.maxUtility);
-//				schedule *ptrTargetScheduleList;
-				unsigned int accumulatedRunTime = 0;
-
 				// ***************************************
 				// PREENCHER ptrNewScheduledQueue->scheduleList COM OS SCHEDULES PARA CADA TEMPO
 				// ***************************************
 
-				// treating the allocation on in-house machines
 				ptrAuxOrderedTask = ptrOrderedTaskList;
-				ptrAuxMachine = ptrMachineList;  // TALVEZ NAO PRECISE DISSO
-				while(ptrAuxMachine->source == LOCAL) {
+				unsigned int lastFinnishTime = (ptrCurrentEvent->time+1), lastMachineID = 1, lastSource = 0;
 
-					accumulatedRunTime = 0;
+				while(ptrAuxOrderedTask) {
 
-					while(ptrAuxOrderedTask) {
+					ptrAuxMachine = ptrMachineList;
 
-						if ( ptrAuxOrderedTask->status == QUEUED && (ptrAuxOrderedTask->runtime + accumulatedRunTime) <=
-								(targetFinnishTime - (ptrCurrentEvent->time + 1)) ) {
+					while(ptrAuxMachine) {
+						if (ptrAuxMachine->machineID == lastMachineID && ptrAuxMachine->source == lastSource) break;
+						ptrAuxMachine = ptrAuxMachine->nextMachine;
+					}
+					printf("taskID %d jobID %d RT %d\n", ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->runtime);
 
-//							ptrAuxOrderedTask->status = SCHEDULED;
-							accumulatedRunTime += ptrAuxOrderedTask->runtime;
+					int timeLeft = 0;
+					while(ptrAuxMachine) {
 
-							printf("accumulatedRT %d RT %d\n", accumulatedRunTime, ptrAuxOrderedTask->runtime);
+						timeLeft = (targetFinnishTime - (lastFinnishTime + ptrAuxOrderedTask->runtime));
+						if (timeLeft == 0) {
+
+							lastFinnishTime = (ptrCurrentEvent->time+1);
+							lastMachineID = ptrAuxMachine->nextMachine->machineID;
+							lastSource = ptrAuxMachine->nextMachine->source;
+							printf("machineID %d source %d lastFT %d lastMachID %d lastSource %d timeLeft %d\n", ptrAuxMachine->machineID, ptrAuxMachine->source,
+									lastFinnishTime, lastMachineID, lastSource, timeLeft);
+							break;
+
+						}
+						else {
+							if (timeLeft > 0) {
+
+								lastFinnishTime += ptrAuxOrderedTask->runtime;
+								lastMachineID = ptrAuxMachine->machineID;
+								lastSource = ptrAuxMachine->source;
+								printf("machineID %d source %d lastFT %d lastMachID %d lastSource %d timeLeft %d\n", ptrAuxMachine->machineID, ptrAuxMachine->source,
+										lastFinnishTime, lastMachineID, lastSource, timeLeft);
+								break;
+
+							}
+							else {
+								lastFinnishTime = (ptrCurrentEvent->time+1);
+							}
+						}
 
 
-						} // end of if ( (ptrAuxOrderedTask->runtime + accumulatedRunTime) <= (targetFinnishTime - (ptrCurrentEvent->time + 1)) )
+						ptrAuxMachine = ptrAuxMachine->nextMachine;
+					} // end of while(ptrAuxMachine)
 
 
-						ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
-					} // end of while(ptrAuxOrderedTask)
+					ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
+				} // end of while(ptrAuxOrderedTask)
 
 
-					ptrAuxMachine = ptrAuxMachine->nextMachine;
-				} // end of while(ptrAuxMachine->source == LOCAL)
+				// initializing a ScheduleQueue
+//				scheduleQueue *ptrNewScheduleQueue;
+//
+//				if (targetFinnishTime == firstTargetFinnishTime) {
+//					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
+//						ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
+//						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+//						ptrNewScheduleQueue->status = UNFINNISHED;
+//						ptrNewScheduleQueue->profit = 0.0;
+//						ptrNewScheduleQueue->previousSchedule = NULL;
+//					}
+//					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+//				}
+//				else {
+//					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
+//						ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
+//						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+//						ptrNewScheduleQueue->status = UNFINNISHED;
+//						ptrNewScheduleQueue->profit = 0.0;
+//						ptrNewScheduleQueue->previousSchedule = *ptrPtrScheduleQueue;
+//					}
+//					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+//				}
+//
+//				ptrPtrScheduleQueue = &ptrNewScheduleQueue;
+
+//				float bestProfit = -(ptrCurrentEvent->jobInfo.maxUtility);
+//				schedule *ptrTargetScheduleList;
+//				unsigned int accumulatedRunTime = 0;
+
+
+				// treating the allocation on in-house machines
+//				ptrAuxOrderedTask = ptrOrderedTaskList;
+//				ptrAuxMachine = ptrMachineList;  // TALVEZ NAO PRECISE DISSO
+//				while(ptrAuxMachine->source == LOCAL) {
+//
+//					accumulatedRunTime = 0;
+//
+//					while(ptrAuxOrderedTask) {
+//
+//						if ( ptrAuxOrderedTask->status == QUEUED && (ptrAuxOrderedTask->runtime + accumulatedRunTime) <=
+//								(targetFinnishTime - (ptrCurrentEvent->time + 1)) ) {
+//
+////							ptrAuxOrderedTask->status = SCHEDULED;
+//							accumulatedRunTime += ptrAuxOrderedTask->runtime;
+//
+//							printf("accumulatedRT %d RT %d\n", accumulatedRunTime, ptrAuxOrderedTask->runtime);
+//
+//
+//						} // end of if ( (ptrAuxOrderedTask->runtime + accumulatedRunTime) <= (targetFinnishTime - (ptrCurrentEvent->time + 1)) )
+//
+//
+//						ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
+//					} // end of while(ptrAuxOrderedTask)
+//
+//
+//					ptrAuxMachine = ptrAuxMachine->nextMachine;
+//				} // end of while(ptrAuxMachine->source == LOCAL)
 
 				// treating the allocation on cloud machines
 //				ptrAuxOrderedTask = ptrOrderedTaskList;
