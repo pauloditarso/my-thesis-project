@@ -33,30 +33,27 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 		if (ptrMachineList && ptrOrderedTaskList) {
 
-//			unsigned int balance, numberOfGridMachines;
-//			balance = GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time);
-//			numberOfGridMachines = (int)(balance * gridQoSFactor)/TASK_AVG_TIME; // ceiling or trunk???
+			unsigned int balance, numberOfGridMachines;
+			balance = GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time);
+			numberOfGridMachines = (int)(balance * gridQoSFactor)/TASK_AVG_TIME; // ceiling or trunk???
+
 			unsigned int firstTargetFinnishTime, deadline, timeSteps;
 			firstTargetFinnishTime = (ptrCurrentEvent->jobInfo.arrivalTime + 2 + ptrCurrentEvent->jobInfo.longestTask); // AT + 2min to start a job + LT
 			deadline = (ptrCurrentEvent->jobInfo.arrivalTime + ptrCurrentEvent->jobInfo.deadline);
-			timeSteps = 60; // steps, in minutes, for the optimizing process
-
-//			float profites[(deadline - firstTargetFinnishTime + 1)];
-//			unsigned int targetSchedules[(deadline - firstTargetFinnishTime + 1)][ptrCurrentEvent->jobInfo.jobSize][6]; // targetSchedules[FinishTimes][JobSize][Flag+ScheduleInfo]
-
-//			printf("o balance na grade agora e %d\n", GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time));
-//			printf("\n");
-//			printf("balance %d\n", balance);
-//			printf("gridFactor %.2f\n", gridQoSFactor);
-//			printf("numberofGridMachines %d\n", numberOfGridMachines);
+			timeSteps = 1; // steps, in minutes, for the optimizing process
 
 			task *ptrAuxOrderedTask;
-//			ptrAuxOrderedTask = ptrOrderedTaskList;
 			machine *ptrAuxMachine;
-//			ptrAuxMachine = ptrMachineList;
 			unsigned short int allocated = 0;
 //			scheduleQueue **ptrPtrScheduleQueue;
 
+
+			// ***************************************
+			// PREENCHER ptrNewScheduledQueue->scheduleList COM OS SCHEDULES PARA CADA TEMPO
+			// ***************************************
+
+
+			//setbuf(stdout, NULL); // debugguing mode
 			// sweeping the time till deadline
 			unsigned int targetFinnishTime;
 			for (targetFinnishTime = firstTargetFinnishTime; targetFinnishTime <= deadline; targetFinnishTime += timeSteps) {
@@ -65,164 +62,236 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				printf("targetFT %d firstTargetFT %d deadline %d\n", targetFinnishTime, firstTargetFinnishTime, deadline);
 				printf("***************************************************\n");
 
-				// ***************************************
-				// PREENCHER ptrNewScheduledQueue->scheduleList COM OS SCHEDULES PARA CADA TEMPO
-				// ***************************************
-
+				ptrAuxMachine = ptrMachineList;
 				ptrAuxOrderedTask = ptrOrderedTaskList;
-				unsigned int lastFinnishTime = (ptrCurrentEvent->time+1), lastMachineID = 1, lastSource = 0;
 
-				while(ptrAuxOrderedTask) {
+				machineOptSet *ptrMachineOptSetList;
+				if ( (ptrMachineOptSetList = malloc(sizeof(machineOptSet))) ) {
+					ptrMachineOptSetList->machineID = 0;
+					ptrMachineOptSetList->source = 0;
+					ptrMachineOptSetList->timeLeft = 0;
+					ptrMachineOptSetList->nextMachineOptSet = NULL;
+				}
+				else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
 
-					ptrAuxMachine = ptrMachineList;
+				while(ptrAuxMachine->source == 0) {
 
-					while(ptrAuxMachine) {
-						if (ptrAuxMachine->machineID == lastMachineID && ptrAuxMachine->source == lastSource) break;
-						ptrAuxMachine = ptrAuxMachine->nextMachine;
+					if (ptrMachineOptSetList->machineID == 0) {  // means there are no machines in the list yet
+
+						ptrMachineOptSetList->machineID = ptrAuxMachine->machineID;
+						ptrMachineOptSetList->source = ptrAuxMachine->source;
+						ptrMachineOptSetList->timeLeft = (targetFinnishTime - (ptrCurrentEvent->time + 1));
+						ptrMachineOptSetList->nextMachineOptSet = NULL;
+
 					}
-					printf("taskID %d jobID %d RT %d\n", ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->runtime);
+					else {
 
-					int timeLeft = 0;
-					while(ptrAuxMachine) {
+						machineOptSet *ptrAux1;
+						if ( (ptrAux1 = malloc(sizeof(machineOptSet))) ) {
 
-						timeLeft = (targetFinnishTime - (lastFinnishTime + ptrAuxOrderedTask->runtime));
-						if (timeLeft == 0) {
+							ptrAux1->machineID = ptrAuxMachine->machineID;
+							ptrAux1->source = ptrAuxMachine->source;
+							ptrAux1->timeLeft = (targetFinnishTime - (ptrCurrentEvent->time + 1));
+							ptrAux1->nextMachineOptSet = NULL;
 
-							lastFinnishTime = (ptrCurrentEvent->time+1);
-							lastMachineID = ptrAuxMachine->nextMachine->machineID;
-							lastSource = ptrAuxMachine->nextMachine->source;
-							printf("machineID %d source %d lastFT %d lastMachID %d lastSource %d timeLeft %d\n", ptrAuxMachine->machineID, ptrAuxMachine->source,
-									lastFinnishTime, lastMachineID, lastSource, timeLeft);
-							break;
+							machineOptSet *ptrAux2;
+							ptrAux2 = ptrMachineOptSetList;
+							while(ptrAux2->nextMachineOptSet != NULL) ptrAux2 = ptrAux2->nextMachineOptSet;
+
+							ptrAux2->nextMachineOptSet = ptrAux1;
+
+						}
+						else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+
+					}
+
+					ptrAuxMachine = ptrAuxMachine->nextMachine;
+				} // end of while(ptrAuxMachine->source == 0)
+
+				// FALTA INTRODUZIR AS MAQUINAS DA GRADE NA ptrMachineOptSetList!!!
+
+				ptrAuxMachine = ptrMachineList;
+				while(ptrAuxMachine) {
+
+					if ( ptrAuxMachine->source == 2 || ptrAuxMachine->source == 3 || ptrAuxMachine->source == 4 ) {
+
+						if (ptrMachineOptSetList->machineID == 0) {  // means there are no machines in the list yet
+
+							ptrMachineOptSetList->machineID = ptrAuxMachine->machineID;
+							ptrMachineOptSetList->source = ptrAuxMachine->source;
+							ptrMachineOptSetList->timeLeft = (targetFinnishTime - (ptrCurrentEvent->time + 1));
+							ptrMachineOptSetList->nextMachineOptSet = NULL;
 
 						}
 						else {
-							if (timeLeft > 0) {
 
-								lastFinnishTime += ptrAuxOrderedTask->runtime;
-								lastMachineID = ptrAuxMachine->machineID;
-								lastSource = ptrAuxMachine->source;
-								printf("machineID %d source %d lastFT %d lastMachID %d lastSource %d timeLeft %d\n", ptrAuxMachine->machineID, ptrAuxMachine->source,
-										lastFinnishTime, lastMachineID, lastSource, timeLeft);
+							machineOptSet *ptrAux1;
+							if ( (ptrAux1 = malloc(sizeof(machineOptSet))) ) {
+
+								ptrAux1->machineID = ptrAuxMachine->machineID;
+								ptrAux1->source = ptrAuxMachine->source;
+								ptrAux1->timeLeft = (targetFinnishTime - (ptrCurrentEvent->time + 1));
+								ptrAux1->nextMachineOptSet = NULL;
+
+								machineOptSet *ptrAux2;
+								ptrAux2 = ptrMachineOptSetList;
+								while(ptrAux2->nextMachineOptSet != NULL) ptrAux2 = ptrAux2->nextMachineOptSet;
+
+								ptrAux2->nextMachineOptSet = ptrAux1;
+
+							}
+							else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+
+						}
+
+					}
+
+					ptrAuxMachine = ptrAuxMachine->nextMachine;
+				} // end of while(ptrAuxMachine)
+
+
+				while(ptrAuxOrderedTask) {
+
+					if (ptrAuxOrderedTask->jobID == ptrCurrentEvent->jobInfo.jobID) {
+
+						machineOptSet *ptrAuxOptSet;
+						ptrAuxOptSet = ptrMachineOptSetList;
+
+						while(ptrAuxOptSet) {
+
+							int timeLeft = (ptrAuxOptSet->timeLeft - ptrAuxOrderedTask->runtime);
+							if (timeLeft >= 0) {
+
+								unsigned int scheduleTime = (targetFinnishTime - timeLeft - ptrAuxOrderedTask->runtime);
+								ptrAuxOptSet->timeLeft = timeLeft;
+								printf("schedTime %d taskID %d jobID %d RT %d machineID %d source %d timeLeft %d\n", scheduleTime, ptrAuxOrderedTask->taskID,
+										ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->runtime, ptrAuxOptSet->machineID, ptrAuxOptSet->source, timeLeft);
 								break;
 
 							}
-							else {
-								lastFinnishTime = (ptrCurrentEvent->time+1);
-							}
-						}
 
+							ptrAuxOptSet = ptrAuxOptSet->nextMachineOptSet;
 
-						ptrAuxMachine = ptrAuxMachine->nextMachine;
-					} // end of while(ptrAuxMachine)
+						} // end of while(ptrAuxOptSet)
 
+					}
 
 					ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
 				} // end of while(ptrAuxOrderedTask)
 
+//
+//				// initializing a ScheduleQueue
+////				scheduleQueue *ptrNewScheduleQueue;
+////
+////				if (targetFinnishTime == firstTargetFinnishTime) {
+////					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
+////						ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
+////						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+////						ptrNewScheduleQueue->status = UNFINNISHED;
+////						ptrNewScheduleQueue->profit = 0.0;
+////						ptrNewScheduleQueue->previousSchedule = NULL;
+////					}
+////					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+////				}
+////				else {
+////					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
+////						ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
+////						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+////						ptrNewScheduleQueue->status = UNFINNISHED;
+////						ptrNewScheduleQueue->profit = 0.0;
+////						ptrNewScheduleQueue->previousSchedule = *ptrPtrScheduleQueue;
+////					}
+////					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+////				}
+////
+////				ptrPtrScheduleQueue = &ptrNewScheduleQueue;
+//
+////				float bestProfit = -(ptrCurrentEvent->jobInfo.maxUtility);
+////				schedule *ptrTargetScheduleList;
+////				unsigned int accumulatedRunTime = 0;
+//
+//
+//				// treating the allocation on in-house machines
+////				ptrAuxOrderedTask = ptrOrderedTaskList;
+////				ptrAuxMachine = ptrMachineList;  // TALVEZ NAO PRECISE DISSO
+////				while(ptrAuxMachine->source == LOCAL) {
+////
+////					accumulatedRunTime = 0;
+////
+////					while(ptrAuxOrderedTask) {
+////
+////						if ( ptrAuxOrderedTask->status == QUEUED && (ptrAuxOrderedTask->runtime + accumulatedRunTime) <=
+////								(targetFinnishTime - (ptrCurrentEvent->time + 1)) ) {
+////
+//////							ptrAuxOrderedTask->status = SCHEDULED;
+////							accumulatedRunTime += ptrAuxOrderedTask->runtime;
+////
+////							printf("accumulatedRT %d RT %d\n", accumulatedRunTime, ptrAuxOrderedTask->runtime);
+////
+////
+////						} // end of if ( (ptrAuxOrderedTask->runtime + accumulatedRunTime) <= (targetFinnishTime - (ptrCurrentEvent->time + 1)) )
+////
+////
+////						ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
+////					} // end of while(ptrAuxOrderedTask)
+////
+////
+////					ptrAuxMachine = ptrAuxMachine->nextMachine;
+////				} // end of while(ptrAuxMachine->source == LOCAL)
+//
+//				// treating the allocation on cloud machines
+////				ptrAuxOrderedTask = ptrOrderedTaskList;
+////				ptrAuxMachine = ptrMachineList;  // TALVEZ NAO PRECISE DISSO
+////				while(ptrAuxMachine) {
+////
+////					if (ptrAuxMachine->source == RESERVED || ptrAuxMachine->source == ONDEMAND) {
+////
+////						accumulatedRunTime = 0;
+////
+////						while(ptrAuxOrderedTask) {
+////
+////							if ( ptrAuxOrderedTask->status == QUEUED && (ptrAuxOrderedTask->runtime + accumulatedRunTime) <=
+////									(targetFinnishTime - (ptrCurrentEvent->time + 1)) ) {
+////
+//////								ptrAuxOrderedTask->status = SCHEDULED;
+////								accumulatedRunTime += ptrAuxOrderedTask->runtime;
+////
+////								printf("accumulatedRT %d RT %d\n", accumulatedRunTime, ptrAuxOrderedTask->runtime);
+////
+////
+////							} // end of if ( (ptrAuxOrderedTask->runtime + accumulatedRunTime) <= (targetFinnishTime - (ptrCurrentEvent->time + 1)) )
+////
+////
+////							ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
+////						} // end of while(ptrAuxOrderedTask)
+////
+////					} // end of if (ptrAuxMachine->source == RESERVED || ptrAuxMachine->source == ONDEMAND)
+////
+////					ptrAuxMachine = ptrAuxMachine->nextMachine;
+////				} // end of while(ptrAuxMachine)
+//
+//				// VERIFICAR SE CONSEGUIU ESCALONAR TODAS AS TAREFAS E ALTERAR ptrNewScheduledQueue->status
+//				// CALCULAR O RENDIMENTO BASEADO NO targetFinnishTime ATUAL, CASO ptrNewScheduledQueue->status == SUCCESSFUL
+//				// (CASO CONTRARIO, RENDIMENTO == 0)
+//				// CALCULAR OS CUSTOS A PARTIR DA UTILIZACAO DAS MAQUINAS DA CLOUD
+//				// CALCULAR O PROFIT COMO RENDIMENTO - CUSTO TOTAL
+//				// COMPARA O PROFIT DO targetFinnishTime ATUAL COM O bestProfit
+//				// CASO O PROFIT ATUAL SEJA MAIOR,  ATUALIZAR bestProfit E APONTAR ptrTargetScheduleList PARA ptrNewScheduledQueue->scheduleList
+//
 
-				// initializing a ScheduleQueue
-//				scheduleQueue *ptrNewScheduleQueue;
-//
-//				if (targetFinnishTime == firstTargetFinnishTime) {
-//					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
-//						ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
-//						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-//						ptrNewScheduleQueue->status = UNFINNISHED;
-//						ptrNewScheduleQueue->profit = 0.0;
-//						ptrNewScheduleQueue->previousSchedule = NULL;
-//					}
-//					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-//				}
-//				else {
-//					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
-//						ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
-//						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-//						ptrNewScheduleQueue->status = UNFINNISHED;
-//						ptrNewScheduleQueue->profit = 0.0;
-//						ptrNewScheduleQueue->previousSchedule = *ptrPtrScheduleQueue;
-//					}
-//					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-//				}
-//
-//				ptrPtrScheduleQueue = &ptrNewScheduleQueue;
-
-//				float bestProfit = -(ptrCurrentEvent->jobInfo.maxUtility);
-//				schedule *ptrTargetScheduleList;
-//				unsigned int accumulatedRunTime = 0;
-
-
-				// treating the allocation on in-house machines
-//				ptrAuxOrderedTask = ptrOrderedTaskList;
-//				ptrAuxMachine = ptrMachineList;  // TALVEZ NAO PRECISE DISSO
-//				while(ptrAuxMachine->source == LOCAL) {
-//
-//					accumulatedRunTime = 0;
-//
-//					while(ptrAuxOrderedTask) {
-//
-//						if ( ptrAuxOrderedTask->status == QUEUED && (ptrAuxOrderedTask->runtime + accumulatedRunTime) <=
-//								(targetFinnishTime - (ptrCurrentEvent->time + 1)) ) {
-//
-////							ptrAuxOrderedTask->status = SCHEDULED;
-//							accumulatedRunTime += ptrAuxOrderedTask->runtime;
-//
-//							printf("accumulatedRT %d RT %d\n", accumulatedRunTime, ptrAuxOrderedTask->runtime);
-//
-//
-//						} // end of if ( (ptrAuxOrderedTask->runtime + accumulatedRunTime) <= (targetFinnishTime - (ptrCurrentEvent->time + 1)) )
-//
-//
-//						ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
-//					} // end of while(ptrAuxOrderedTask)
-//
-//
-//					ptrAuxMachine = ptrAuxMachine->nextMachine;
-//				} // end of while(ptrAuxMachine->source == LOCAL)
-
-				// treating the allocation on cloud machines
-//				ptrAuxOrderedTask = ptrOrderedTaskList;
-//				ptrAuxMachine = ptrMachineList;  // TALVEZ NAO PRECISE DISSO
-//				while(ptrAuxMachine) {
-//
-//					if (ptrAuxMachine->source == RESERVED || ptrAuxMachine->source == ONDEMAND) {
-//
-//						accumulatedRunTime = 0;
-//
-//						while(ptrAuxOrderedTask) {
-//
-//							if ( ptrAuxOrderedTask->status == QUEUED && (ptrAuxOrderedTask->runtime + accumulatedRunTime) <=
-//									(targetFinnishTime - (ptrCurrentEvent->time + 1)) ) {
-//
-////								ptrAuxOrderedTask->status = SCHEDULED;
-//								accumulatedRunTime += ptrAuxOrderedTask->runtime;
-//
-//								printf("accumulatedRT %d RT %d\n", accumulatedRunTime, ptrAuxOrderedTask->runtime);
-//
-//
-//							} // end of if ( (ptrAuxOrderedTask->runtime + accumulatedRunTime) <= (targetFinnishTime - (ptrCurrentEvent->time + 1)) )
-//
-//
-//							ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
-//						} // end of while(ptrAuxOrderedTask)
-//
-//					} // end of if (ptrAuxMachine->source == RESERVED || ptrAuxMachine->source == ONDEMAND)
-//
-//					ptrAuxMachine = ptrAuxMachine->nextMachine;
-//				} // end of while(ptrAuxMachine)
-
-				// VERIFICAR SE CONSEGUIU ESCALONAR TODAS AS TAREFAS E ALTERAR ptrNewScheduledQueue->status
-				// CALCULAR O RENDIMENTO BASEADO NO targetFinnishTime ATUAL, CASO ptrNewScheduledQueue->status == SUCCESSFUL
-				// (CASO CONTRARIO, RENDIMENTO == 0)
-				// CALCULAR OS CUSTOS A PARTIR DA UTILIZACAO DAS MAQUINAS DA CLOUD
-				// CALCULAR O PROFIT COMO RENDIMENTO - CUSTO TOTAL
-				// COMPARA O PROFIT DO targetFinnishTime ATUAL COM O bestProfit
-				// CASO O PROFIT ATUAL SEJA MAIOR,  ATUALIZAR bestProfit E APONTAR ptrTargetScheduleList PARA ptrNewScheduledQueue->scheduleList
-
-
-
-
-
+				// LEMBRAR DE LIBERAR O ESPACO EM MEMORIA!!!
+				machineOptSet *ptrActual;
+				ptrActual = ptrMachineOptSetList;
+				while(ptrActual) {
+//					printf("\n");
+//					printf("machineID %d source %d timeleft %d\n", ptrActual->machineID, ptrActual->source, ptrActual->timeLeft);
+					machineOptSet *ptrLast;
+					ptrLast = ptrActual;
+					ptrActual = ptrActual->nextMachineOptSet;
+					free(ptrLast);
+					ptrLast = NULL;
+				}
+				ptrMachineOptSetList = NULL;
 
 			} // end of for (i = firstTargetFinnishTime; i <= deadline; i += timeSteps)
 
