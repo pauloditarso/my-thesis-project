@@ -55,6 +55,13 @@ typedef struct machine {
 	struct machine *nextMachine;
 } machine;
 
+typedef struct machineOptSet {
+	unsigned int machineID;
+	enum {LOCALSET, GRIDSET, RESERVEDSET, ONDEMANDSET, SPOTSET} source;
+	unsigned int timeLeft;
+	struct machineOptSet *nextMachineOptSet;
+} machineOptSet;
+
 typedef struct schedule {
 	unsigned int scheduleID, time, taskID, jobID, machineID;
 	enum {MACHLOCAL, MACHGRID, MACHRESERVED, MACHONDEMAND, MACHSPOT} source;
