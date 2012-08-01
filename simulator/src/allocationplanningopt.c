@@ -44,7 +44,9 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 			task *ptrAuxOrderedTask;
 			machine *ptrAuxMachine;
-			scheduleQueue **ptrPtrScheduleQueue;
+			scheduleQueue *ptrScheduleQueue, **ptrPtrScheduleQueue;
+			if ( !(ptrScheduleQueue = malloc(sizeof(scheduleQueue))) )  printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+			ptrPtrScheduleQueue = &ptrScheduleQueue;
 //			schedule *ptrBestScheduleList;
 //			float bestProfit = -(ptrCurrentEvent->jobInfo.maxUtility);
 			unsigned int scheduleID;
@@ -54,7 +56,6 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			// ***************************************
 			// PREENCHER ptrNewScheduledQueue->scheduleList COM OS SCHEDULES PARA CADA TEMPO
 			// ***************************************
-
 
 			//setbuf(stdout, NULL); // debugguing mode
 			// sweeping the time till deadline
@@ -67,31 +68,20 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 				// initializing a ScheduleQueue
 				scheduleQueue *ptrNewScheduleQueue;
+				if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
+					ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
+					if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+					ptrNewScheduleQueue->status = UNFINNISHED;
+					ptrNewScheduleQueue->profit = 0.0;
+					ptrNewScheduleQueue->previousSchedule = NULL;
+				}
+				else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
 
-				if (targetFinnishTime == firstTargetFinnishTime) {
-					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
-						ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
-						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-						ptrNewScheduleQueue->status = UNFINNISHED;
-						ptrNewScheduleQueue->profit = 0.0;
-						ptrNewScheduleQueue->previousSchedule = NULL;
-					}
-					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-				}
-				else {
-					if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
-						ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
-						if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-						ptrNewScheduleQueue->status = UNFINNISHED;
-						ptrNewScheduleQueue->profit = 0.0;
-						ptrNewScheduleQueue->previousSchedule = (*ptrPtrScheduleQueue);
-					}
-					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
-				}
+				if ( !(targetFinnishTime == firstTargetFinnishTime) ) ptrNewScheduleQueue->previousSchedule = (*ptrPtrScheduleQueue);
+				ptrPtrScheduleQueue = &ptrNewScheduleQueue;
 
 				ptrAuxMachine = ptrMachineList;
 				ptrAuxOrderedTask = ptrOrderedTaskList;
-				ptrPtrScheduleQueue = &ptrNewScheduleQueue;
 				scheduleID = 0;
 
 				machineOptSet *ptrMachineOptSetList;
@@ -311,6 +301,8 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 //
 
 
+				// AJEITAR ISSO AQUI EM BAIXO!!!!
+
 				// LEMBRAR DE LIBERAR O ESPACO EM MEMORIA!!!
 				printf("\n");
 				machineOptSet *ptrActual;
@@ -329,25 +321,25 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			} // end of for (i = firstTargetFinnishTime; i <= deadline; i += timeSteps)
 
 			// LEMBRAR DE LIBERAR O ESPACO EM MEMORIA DO ptrPtrScheduleQueue
-//			scheduleQueue *ptrAuxScheduleQueue;
-//			ptrAuxScheduleQueue = (*ptrPtrScheduleQueue);
-//			while(ptrAuxScheduleQueue) {
+			scheduleQueue *ptrAuxScheduleQueue;
+			ptrAuxScheduleQueue = (*ptrPtrScheduleQueue);
+			while(ptrAuxScheduleQueue) {
+
+//				schedule *ptrAuxSchedule;
+//				ptrAuxSchedule = ptrAuxScheduleQueue->scheduleList;
+//				while(ptrAuxSchedule) {
 //
-////				schedule *ptrAuxSchedule;
-////				ptrAuxSchedule = ptrAuxScheduleQueue->scheduleList;
-////				while(ptrAuxSchedule) {
-////
-////					printf("scheduleID %d schedTime %d taskID %d jobID %d machineID %d source %d\n",
-////							ptrAuxSchedule->scheduleID, ptrAuxSchedule->time, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID,
-////							ptrAuxSchedule->machineID, ptrAuxSchedule->source);
-////
-////					ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
-////				}
+//					printf("scheduleID %d schedTime %d taskID %d jobID %d machineID %d source %d\n",
+//							ptrAuxSchedule->scheduleID, ptrAuxSchedule->time, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID,
+//							ptrAuxSchedule->machineID, ptrAuxSchedule->source);
 //
-//				printf("targetFT %d status %d profit %f\n", ptrAuxScheduleQueue->targetFinnishtime, ptrAuxScheduleQueue->status, ptrAuxScheduleQueue->profit);
-//
-//				ptrAuxScheduleQueue = ptrAuxScheduleQueue->previousSchedule;
-//			}
+//					ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
+//				}
+
+				printf("targetFT %d status %d profit %f\n", ptrAuxScheduleQueue->targetFinnishtime, ptrAuxScheduleQueue->status, ptrAuxScheduleQueue->profit);
+
+				ptrAuxScheduleQueue = ptrAuxScheduleQueue->previousSchedule;
+			}
 
 
 
