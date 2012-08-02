@@ -78,7 +78,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
 
 				if ( !(targetFinnishTime == firstTargetFinnishTime) ) ptrNewScheduleQueue->previousSchedule = (*ptrPtrScheduleQueue);
-				ptrPtrScheduleQueue = &ptrNewScheduleQueue;
+				(*ptrPtrScheduleQueue) = ptrNewScheduleQueue;
 
 				ptrAuxMachine = ptrMachineList;
 				ptrAuxOrderedTask = ptrOrderedTaskList;
