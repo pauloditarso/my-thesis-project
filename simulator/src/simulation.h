@@ -63,7 +63,7 @@ typedef struct machineOptSet {
 } machineOptSet;
 
 typedef struct schedule {
-	unsigned int scheduleID, time, taskID, jobID, machineID;
+	unsigned int scheduleID, scheduleTime, taskID, jobID, machineID;
 	enum {MACHLOCAL, MACHGRID, MACHRESERVED, MACHONDEMAND, MACHSPOT} source;
 	struct schedule *nextSchedule;
 } schedule;

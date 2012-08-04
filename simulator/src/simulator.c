@@ -280,7 +280,7 @@ int main(int argc, char *argv[]) {
 		schedule *ptrAuxSchedule;
 		ptrAuxSchedule = scheduleList;
 		while(ptrAuxSchedule) {
-			printf("scheduleID %d time %d machineID %d source %d taskID %d jobID %d\n", ptrAuxSchedule->scheduleID, ptrAuxSchedule->time, ptrAuxSchedule->machineID,
+			printf("scheduleID %d time %d machineID %d source %d taskID %d jobID %d\n", ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->machineID,
 					ptrAuxSchedule->source, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID);
 			ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
 		}
