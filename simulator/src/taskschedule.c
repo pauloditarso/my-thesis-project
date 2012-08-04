@@ -24,7 +24,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 			if (ptrScheduleList->scheduleID == 0) { // code for an empty job list
 
 				ptrScheduleList->scheduleID = ptrCurrentEvent->scheduleInfo.scheduleID;
-				ptrScheduleList->time = ptrCurrentEvent->scheduleInfo.time;
+				ptrScheduleList->scheduleTime = ptrCurrentEvent->scheduleInfo.scheduleTime;
 				ptrScheduleList->taskID = ptrCurrentEvent->scheduleInfo.taskID;
 				ptrScheduleList->jobID = ptrCurrentEvent->scheduleInfo.jobID;
 				ptrScheduleList->machineID = ptrCurrentEvent->scheduleInfo.machineID;
@@ -41,7 +41,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 				}
 
 				ptrNewSchedule->scheduleID = ptrCurrentEvent->scheduleInfo.scheduleID;
-				ptrNewSchedule->time = ptrCurrentEvent->scheduleInfo.time;
+				ptrNewSchedule->scheduleTime = ptrCurrentEvent->scheduleInfo.scheduleTime;
 				ptrNewSchedule->taskID = ptrCurrentEvent->scheduleInfo.taskID;
 				ptrNewSchedule->jobID = ptrCurrentEvent->scheduleInfo.jobID;
 				ptrNewSchedule->machineID = ptrCurrentEvent->scheduleInfo.machineID;

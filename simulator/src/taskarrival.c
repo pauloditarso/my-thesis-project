@@ -80,7 +80,7 @@ void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList,
 
 				while(ptrAuxActual) {
 
-					if (ptrNewOrderedTask->runtime > ptrAuxActual->runtime) break;
+					if ( ptrAuxActual->jobID == ptrCurrentEvent->taskInfo.jobID && ptrNewOrderedTask->runtime > ptrAuxActual->runtime ) break;
 
 					ptrAuxLast = ptrAuxActual;
 					ptrAuxActual = ptrAuxActual->nextTask;
