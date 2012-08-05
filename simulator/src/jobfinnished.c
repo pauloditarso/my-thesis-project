@@ -34,7 +34,7 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 		}
 
 		int utility = 0;
-		switch (utilityFunction) {
+		switch(utilityFunction) {
 			case CONSTANT:
 				if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) <= ptrAuxJobList->deadline ) {
 					utility = ptrAuxJobList->maxUtility;
@@ -76,7 +76,7 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 				break;
 			default:
 				break;
-		}
+		} // end of switch(utilityFunction)
 		ptrAuxJobList->utility = utility;
 
 		printf("eventID %d (Job Finnished) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
