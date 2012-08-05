@@ -134,11 +134,11 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 			}
 
-			// filling ptrMachineOptSetList with cloud machines
+			// filling ptrMachineOptSetList with cloud machines (whithout spot machines!!!)
 			ptrAuxMachine = ptrMachineList;
 			while(ptrAuxMachine) {
 
-				if ( ptrAuxMachine->source == 2 || ptrAuxMachine->source == 3 || ptrAuxMachine->source == 4 ) {
+				if ( ptrAuxMachine->source == 2 || ptrAuxMachine->source == 3 ) {
 
 					if (ptrMachineOptSetList->machineID == 0) {  // means there are no machines in the list yet
 
@@ -183,6 +183,10 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				printf("targetFT %d firstTargetFT %d deadline %d\n", targetFinnishTime, firstTargetFinnishTime, deadline);
 				printf("***************************************************\n");
 
+				unsigned short int count = 0;
+				unsigned int targetUtility = 0;
+				float targetCost = 0.0;
+
 				task *ptrAuxOrderedTask;
 				ptrAuxOrderedTask = ptrOrderedTaskList;
 				scheduleID = 0;
@@ -208,6 +212,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 				if ( !(targetFinnishTime == firstTargetFinnishTime) ) ptrNewScheduleQueue->previousSchedule = (*ptrPtrScheduleQueue);
 				(*ptrPtrScheduleQueue) = ptrNewScheduleQueue;
+				ptrNewScheduleQueue = NULL;
 
 				// sweeping ordered task list
 				unsigned int roundNumberOfGridMachines = numberOfGridMachines;
@@ -228,6 +233,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 								if (timeLeft >= 0) {
 
 									scheduleID++;
+									count++;
 									allocated = 1;
 
 									unsigned int scheduleTime = (targetFinnishTime - timeLeft - ptrAuxOrderedTask->runtime);
@@ -263,23 +269,21 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 									}
 
-									// creating the allocation events
-									// CRIAR OS EVENTOS DE ALLOCACAO!!! taskSchedule()
-
-									printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d timeLeft %d\n",
+									printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d timeLeft %d count %d\n",
 											scheduleID, scheduleTime, ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->runtime,
-											ptrAuxOptSetMachine->machineID, ptrAuxOptSetMachine->source, ptrAuxOptSetMachine->timeLeft);
+											ptrAuxOptSetMachine->machineID, ptrAuxOptSetMachine->source, ptrAuxOptSetMachine->timeLeft, count);
 									break;
 
 								}
 
-							} // end of if (ptrAuxOptSetMachine->source != 1)
+							} // end of if (ptrAuxOptSetMachine->source != GRID)
 							else {
 
 								if ( ptrAuxOrderedTask->runtime <= ptrAuxOptSetMachine->timeLeft && roundNumberOfGridMachines > 0 ) {
 
 									roundNumberOfGridMachines--;
 									scheduleID++;
+									count++;
 									allocated = 1;
 									roundGridMachinesID++;
 
@@ -316,18 +320,14 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 									}
 
-									// CRIAR LOGO AS MAQUINAS DO GRID AQUI??? (machineArrival() e machineDeparture())
-									// NAO PODE PQ EU NAO SEI AINDA QUAL O SET DE MAIOR PROFIT!!!
-									// DEPOIS QUE EU TIVER O SET DE MAIOR PROFIT, DEVO VARRER A scheduleList E GERAR AS MAQUINAS DA GRADE
-
-									printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d timeLeft %d\n",
+									printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d timeLeft %d count %d\n",
 											scheduleID, scheduleTime, ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->runtime,
-											ptrAuxOptSetMachine->machineID, ptrAuxOptSetMachine->source, ptrAuxOptSetMachine->timeLeft);
+											ptrAuxOptSetMachine->machineID, ptrAuxOptSetMachine->source, ptrAuxOptSetMachine->timeLeft, count);
 									break;
 
 								} // end of if (ptrAuxOrderedTask->runtime <= ptrAuxOptSetMachine->timeLeft)
 
-							} // end of else
+							} // end else of if (ptrAuxOptSetMachine->source != 1)
 
 							ptrAuxOptSetMachine = ptrAuxOptSetMachine->nextMachineOptSet;
 
@@ -338,23 +338,95 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 					ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
 				} // end of while(ptrAuxOrderedTask)
 
+				// verifying if all the tasks were computed on this target finish time
+				if (count == ptrCurrentEvent->jobInfo.jobSize) {
 
-//				// VERIFICAR SE CONSEGUIU ESCALONAR TODAS AS TAREFAS E ALTERAR ptrNewScheduledQueue->status
-//				// CALCULAR O RENDIMENTO BASEADO NO targetFinnishTime ATUAL, CASO ptrNewScheduledQueue->status == SUCCESSFUL
-//				// (CASO CONTRARIO, RENDIMENTO == 0)
-//				// CALCULAR OS CUSTOS A PARTIR DA UTILIZACAO DAS MAQUINAS DA CLOUD
-//				// CALCULAR O PROFIT COMO RENDIMENTO - CUSTO TOTAL
-//				// COMPARA O PROFIT DO targetFinnishTime ATUAL COM O bestProfit
-//				// CASO O PROFIT ATUAL SEJA MAIOR,  ATUALIZAR bestProfit E APONTAR ptrTargetScheduleList PARA ptrNewScheduledQueue->scheduleList
-//
+					(*ptrPtrScheduleQueue)->status = SUCCESSFUL;
+
+					// calculating the utility based on the target finish time
+					switch(utilityFunction) {
+						case CONSTANT:
+							if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) <= ptrCurrentEvent->jobInfo.deadline ) {
+								targetUtility = ptrCurrentEvent->jobInfo.maxUtility;
+							}
+							else {
+								targetUtility = 0;
+							}
+							break;
+						case LINEAR:
+							if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) <= ptrCurrentEvent->jobInfo.deadline ) {
+								targetUtility = ( (-1)*(ptrCurrentEvent->jobInfo.maxUtility/ptrCurrentEvent->jobInfo.deadline)*(targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) + ptrCurrentEvent->jobInfo.maxUtility );
+							}
+							else {
+								targetUtility = 0;
+							}
+							break;
+						case STEP:
+							if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) <= (ptrCurrentEvent->jobInfo.deadline/3) ) {
+								targetUtility = ptrCurrentEvent->jobInfo.maxUtility;
+							}
+							else {
+								if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) <= (2*ptrCurrentEvent->jobInfo.deadline/3) ) {
+									targetUtility = (2*ptrCurrentEvent->jobInfo.maxUtility/3);
+								}
+								else {
+									if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) <= ptrCurrentEvent->jobInfo.deadline ) {
+										targetUtility = (ptrCurrentEvent->jobInfo.maxUtility/3);
+									}
+									else {
+										if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) > ptrCurrentEvent->jobInfo.deadline ) {
+											targetUtility = 0;
+										}
+										else {
+											printf("ERROR (job finnished): switch STEP!!!\n");
+										}
+									}
+								}
+							}
+							break;
+						default:
+							break;
+					} // end of switch(utilityFunction)
+				}
+				else {
+					(*ptrPtrScheduleQueue)->status = FAILED;
+					targetUtility = 0;
+				}
+
+				// CALCULAR OS CUSTOS A PARTIR DA UTILIZACAO DAS MAQUINAS DA CLOUD
+				unsigned int totalUsedTime = 0;
+				ptrAuxOptSet = ptrMachineOptSetList;
+				while(ptrAuxOptSet) {
+
+					totalUsedTime = ( (targetFinnishTime - ptrAuxOptSet->timeLeft) - (ptrCurrentEvent->time + 1) );
+
+					if (ptrAuxOptSet->source == 2) {
+						targetCost += ceil( (float)(totalUsedTime) / 60.0 ) * 0.22;
+					}
+					if (ptrAuxOptSet->source == 3) {
+						targetCost += ceil( (float)(totalUsedTime) / 60.0 ) * 0.92;
+					}
+
+					ptrAuxOptSet = ptrAuxOptSet->nextMachineOptSet;
+				}
+
+				targetCost += reservationPricePerDay;
 
 
-				// AJEITAR ISSO AQUI EM BAIXO!!!!
-
+				// CALCULAR O PROFIT COMO RENDIMENTO - CUSTO TOTAL
+				(*ptrPtrScheduleQueue)->profit = (float)targetUtility - targetCost;
 
 			} // end of for (i = firstTargetFinnishTime; i <= deadline; i += timeSteps)
 
-			// freeing memory of the optimized machine set list
+
+			// COMPARA O PROFIT DO targetFinnishTime ATUAL COM O bestProfit
+			// CASO O PROFIT ATUAL SEJA MAIOR,  ATUALIZAR bestProfit E APONTAR ptrTargetScheduleList PARA ptrNewScheduledQueue->scheduleList
+			// CRIAR AS MAQUINAS DO GRID (machineArrival() e machineDeparture())
+			// DEPOIS QUE EU TIVER O SET DE MAIOR PROFIT, DEVO VARRER A scheduleList E GERAR AS MAQUINAS DA GRADE
+
+			// AJEITAR ISSO AQUI EM BAIXO!!!!
+
+			// freeing the memory allocated for the optimized machine set list
 			printf("\n");
 			machineOptSet *ptrActual;
 			ptrActual = ptrMachineOptSetList;
@@ -374,7 +446,8 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			ptrAuxScheduleQueue = (*ptrPtrScheduleQueue);
 			while(ptrAuxScheduleQueue) {
 
-				printf("targetFT %d status %d profit %f\n", ptrAuxScheduleQueue->targetFinnishtime, ptrAuxScheduleQueue->status, ptrAuxScheduleQueue->profit);
+				printf("targetFT %d status %d profit %.2f status %d\n", ptrAuxScheduleQueue->targetFinnishtime, ptrAuxScheduleQueue->status,
+						ptrAuxScheduleQueue->profit, ptrAuxScheduleQueue->status);
 				printf("***************************************************\n");
 
 				schedule *ptrAuxSchedule;
