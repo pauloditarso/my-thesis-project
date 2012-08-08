@@ -22,7 +22,7 @@
 
 unsigned short int optFlag;
 unsigned int simulationTime;
-float gridQoSFactor, reservationPricePerDay, reservationPrice;
+float gridQoSFactor, reservedUsagePrice, ondemandUsagePrice, reservationPricePerDay, reservationPrice;
 unsigned short int simSeed, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines; // TAZER balance E numberOfGridMachines???
 unsigned int gridMachinesID, scheduleID;
 enum {CONSTANT, LINEAR, STEP} utilityFunction;
@@ -63,7 +63,7 @@ typedef struct machineOptSet {
 } machineOptSet;
 
 typedef struct schedule {
-	unsigned int scheduleID, scheduleTime, taskID, jobID, machineID;
+	unsigned int scheduleID, scheduleTime, taskID, jobID, runtime, machineID;
 	enum {MACHLOCAL, MACHGRID, MACHRESERVED, MACHONDEMAND, MACHSPOT} source;
 	struct schedule *nextSchedule;
 } schedule;
@@ -155,6 +155,9 @@ void InsertGridAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine, gridA
 void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList, machine *ptrMachineList, task **ptrPtrOrderedTaskList);
 
 void TaskFinnished(event *ptrCurrentEvenet, event **ptrPtrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList,
+		balanceAccountInfo *ptrBalanceAccountInfo, job *ptrJobList);
+
+void TaskFinnishedOpt(event *ptrCurrentEvenet, event **ptrPtrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList,
 		balanceAccountInfo *ptrBalanceAccountInfo, job *ptrJobList);
 
 void InsertTaskAccountList(event *ptrCurrentEvent, machine *ptrAuxMachine,  task *ptrAuxTask, taskAccountInfo *ptrTaskAccountInfoList);

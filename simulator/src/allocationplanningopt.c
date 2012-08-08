@@ -47,8 +47,6 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			scheduleQueue *ptrScheduleQueue, **ptrPtrScheduleQueue;
 			if ( !(ptrScheduleQueue = malloc(sizeof(scheduleQueue))) )  printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
 			ptrPtrScheduleQueue = &ptrScheduleQueue;
-//			schedule *ptrBestScheduleList;
-//			float bestProfit = -(ptrCurrentEvent->jobInfo.maxUtility);
 			unsigned int scheduleID;
 			unsigned short int allocated = 0;
 
@@ -179,9 +177,10 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			unsigned int targetFinnishTime;
 			for (targetFinnishTime = firstTargetFinnishTime; targetFinnishTime <= deadline; targetFinnishTime += timeSteps) {
 
-				printf("\n");
-				printf("targetFT %d firstTargetFT %d deadline %d\n", targetFinnishTime, firstTargetFinnishTime, deadline);
-				printf("***************************************************\n");
+//				debug mode
+//				printf("\n");
+//				printf("targetFT %d firstTargetFT %d deadline %d\n", targetFinnishTime, firstTargetFinnishTime, deadline);
+//				printf("***************************************************\n");
 
 				unsigned short int count = 0;
 				unsigned int targetUtility = 0;
@@ -244,6 +243,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 										(*ptrPtrScheduleQueue)->scheduleList->scheduleTime = scheduleTime;
 										(*ptrPtrScheduleQueue)->scheduleList->taskID = ptrAuxOrderedTask->taskID;
 										(*ptrPtrScheduleQueue)->scheduleList->jobID = ptrAuxOrderedTask->jobID;
+										(*ptrPtrScheduleQueue)->scheduleList->runtime = ptrAuxOrderedTask->runtime;
 										(*ptrPtrScheduleQueue)->scheduleList->machineID = ptrAuxOptSetMachine->machineID;
 										(*ptrPtrScheduleQueue)->scheduleList->source = ptrAuxOptSetMachine->source;
 									}
@@ -256,6 +256,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 											ptrNewSchedule->scheduleTime = scheduleTime;
 											ptrNewSchedule->taskID = ptrAuxOrderedTask->taskID;
 											ptrNewSchedule->jobID = ptrAuxOrderedTask->jobID;
+											ptrNewSchedule->runtime = ptrAuxOrderedTask->runtime;
 											ptrNewSchedule->machineID = ptrAuxOptSetMachine->machineID;
 											ptrNewSchedule->source = ptrAuxOptSetMachine->source;
 											ptrNewSchedule->nextSchedule = NULL;
@@ -269,9 +270,10 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 									}
 
-									printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d timeLeft %d count %d\n",
-											scheduleID, scheduleTime, ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->runtime,
-											ptrAuxOptSetMachine->machineID, ptrAuxOptSetMachine->source, ptrAuxOptSetMachine->timeLeft, count);
+//									debug mode
+//									printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d timeLeft %d count %d\n",
+//											scheduleID, scheduleTime, ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->runtime,
+//											ptrAuxOptSetMachine->machineID, ptrAuxOptSetMachine->source, ptrAuxOptSetMachine->timeLeft, count);
 									break;
 
 								}
@@ -295,6 +297,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 										(*ptrPtrScheduleQueue)->scheduleList->scheduleTime = scheduleTime;
 										(*ptrPtrScheduleQueue)->scheduleList->taskID = ptrAuxOrderedTask->taskID;
 										(*ptrPtrScheduleQueue)->scheduleList->jobID = ptrAuxOrderedTask->jobID;
+										(*ptrPtrScheduleQueue)->scheduleList->runtime = ptrAuxOrderedTask->runtime;
 										(*ptrPtrScheduleQueue)->scheduleList->machineID = roundGridMachinesID;
 										(*ptrPtrScheduleQueue)->scheduleList->source = ptrAuxOptSetMachine->source;
 									}
@@ -307,6 +310,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 											ptrNewSchedule->scheduleTime = scheduleTime;
 											ptrNewSchedule->taskID = ptrAuxOrderedTask->taskID;
 											ptrNewSchedule->jobID = ptrAuxOrderedTask->jobID;
+											ptrNewSchedule->runtime = ptrAuxOrderedTask->runtime;
 											ptrNewSchedule->machineID = roundGridMachinesID;
 											ptrNewSchedule->source = ptrAuxOptSetMachine->source;
 											ptrNewSchedule->nextSchedule = NULL;
@@ -320,9 +324,10 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 									}
 
-									printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d timeLeft %d count %d\n",
-											scheduleID, scheduleTime, ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->runtime,
-											ptrAuxOptSetMachine->machineID, ptrAuxOptSetMachine->source, ptrAuxOptSetMachine->timeLeft, count);
+//									debug mode
+//									printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d timeLeft %d count %d\n",
+//											scheduleID, scheduleTime, ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->runtime,
+//											ptrAuxOptSetMachine->machineID, ptrAuxOptSetMachine->source, ptrAuxOptSetMachine->timeLeft, count);
 									break;
 
 								} // end of if (ptrAuxOrderedTask->runtime <= ptrAuxOptSetMachine->timeLeft)
@@ -393,7 +398,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 					targetUtility = 0;
 				}
 
-				// CALCULAR OS CUSTOS A PARTIR DA UTILIZACAO DAS MAQUINAS DA CLOUD
+				// calculating the costs based on the machine used times
 				unsigned int totalUsedTime = 0;
 				ptrAuxOptSet = ptrMachineOptSetList;
 				while(ptrAuxOptSet) {
@@ -401,33 +406,23 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 					totalUsedTime = ( (targetFinnishTime - ptrAuxOptSet->timeLeft) - (ptrCurrentEvent->time + 1) );
 
 					if (ptrAuxOptSet->source == 2) {
-						targetCost += ceil( (float)(totalUsedTime) / 60.0 ) * 0.22;
+						targetCost += ceil( (float)(totalUsedTime) / 60.0 ) * reservedUsagePrice;
 					}
 					if (ptrAuxOptSet->source == 3) {
-						targetCost += ceil( (float)(totalUsedTime) / 60.0 ) * 0.92;
+						targetCost += ceil( (float)(totalUsedTime) / 60.0 ) * ondemandUsagePrice;
 					}
 
+//					printf("totalUsedTime %d targetCost %.2f\n", totalUsedTime, targetCost); // debug mode
 					ptrAuxOptSet = ptrAuxOptSet->nextMachineOptSet;
 				}
 
 				targetCost += reservationPricePerDay;
-
-
-				// CALCULAR O PROFIT COMO RENDIMENTO - CUSTO TOTAL
 				(*ptrPtrScheduleQueue)->profit = (float)targetUtility - targetCost;
 
 			} // end of for (i = firstTargetFinnishTime; i <= deadline; i += timeSteps)
 
-
-			// COMPARA O PROFIT DO targetFinnishTime ATUAL COM O bestProfit
-			// CASO O PROFIT ATUAL SEJA MAIOR,  ATUALIZAR bestProfit E APONTAR ptrTargetScheduleList PARA ptrNewScheduledQueue->scheduleList
-			// CRIAR AS MAQUINAS DO GRID (machineArrival() e machineDeparture())
-			// DEPOIS QUE EU TIVER O SET DE MAIOR PROFIT, DEVO VARRER A scheduleList E GERAR AS MAQUINAS DA GRADE
-
-			// AJEITAR ISSO AQUI EM BAIXO!!!!
-
 			// freeing the memory allocated for the optimized machine set list
-			printf("\n");
+//			printf("\n");
 			machineOptSet *ptrActual;
 			ptrActual = ptrMachineOptSetList;
 			while(ptrActual) {
@@ -438,31 +433,142 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				free(ptrLast);
 				ptrLast = NULL;
 			}
-			printf("\n");
+//			printf("\n");
 			ptrMachineOptSetList = NULL;
 
 			// LEMBRAR DE LIBERAR O ESPACO EM MEMORIA DO ptrPtrScheduleQueue
+			// SE O TEMPO DE EXECUCAO FOR MUITO CUSTOSO, OPTAR POR NAO CRIAR ESSA FILA E FAZER A ANALISE DO BEST-PROFIT DIRETO NO LOOP PRINCIPAL
+			// (SOLUCAO DE MARQUITO!!!)
 			scheduleQueue *ptrAuxScheduleQueue;
 			ptrAuxScheduleQueue = (*ptrPtrScheduleQueue);
+			schedule *ptrBestScheduleList;
+			ptrBestScheduleList = ptrAuxScheduleQueue->scheduleList;
+//			if ( !(ptrBestScheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+			float bestProfit = -(ptrCurrentEvent->jobInfo.maxUtility);
 			while(ptrAuxScheduleQueue) {
 
-				printf("targetFT %d status %d profit %.2f status %d\n", ptrAuxScheduleQueue->targetFinnishtime, ptrAuxScheduleQueue->status,
-						ptrAuxScheduleQueue->profit, ptrAuxScheduleQueue->status);
-				printf("***************************************************\n");
+//				debug mode
+//				printf("targetFT %d status %d profit %.2f status %d\n", ptrAuxScheduleQueue->targetFinnishtime, ptrAuxScheduleQueue->status,
+//						ptrAuxScheduleQueue->profit, ptrAuxScheduleQueue->status);
+//				printf("***************************************************\n");
 
-				schedule *ptrAuxSchedule;
-				ptrAuxSchedule = ptrAuxScheduleQueue->scheduleList;
-				while(ptrAuxSchedule) {
-
-					printf("scheduleID %d schedTime %d taskID %d jobID %d machineID %d source %d\n",
-							ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID,
-							ptrAuxSchedule->machineID, ptrAuxSchedule->source);
-
-					ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
+				// comparing to find the profit of the best target finish time scenario
+				if (ptrAuxScheduleQueue->profit >= bestProfit) {
+					bestProfit = ptrAuxScheduleQueue->profit;
+					ptrBestScheduleList = ptrAuxScheduleQueue->scheduleList;
 				}
-				printf("\n");
+
+//				debud mode
+//				schedule *ptrAuxSchedule;
+//				ptrAuxSchedule = ptrAuxScheduleQueue->scheduleList;
+//				while(ptrAuxSchedule) {
+//
+//					printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d\n",
+//							ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID, ptrAuxSchedule->runtime,
+//							ptrAuxSchedule->machineID, ptrAuxSchedule->source);
+//
+//					ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
+//				}
+//				printf("\n");
 
 				ptrAuxScheduleQueue = ptrAuxScheduleQueue->previousSchedule;
+			}
+
+			// CRIAR AS MAQUINAS DO GRID (machineArrival() e machineDeparture())
+			// DEPOIS QUE EU TIVER O SET DE MAIOR PROFIT, DEVO VARRER A scheduleList E GERAR AS MAQUINAS DA GRADE
+			while(ptrBestScheduleList) {
+
+				// creating the grid machines: arrivals and departures
+				if (ptrBestScheduleList->source == 1) {
+
+					// insert a machine arrival event into the event list
+					event *ptrNewGridMachine;
+					if( (ptrNewGridMachine = malloc(sizeof(event))) ) {
+						ptrNewGridMachine->eventNumber = 0;
+						ptrNewGridMachine->eventID = MACHARRIVAL;
+						ptrNewGridMachine->time = ptrCurrentEvent->time;
+						ptrNewGridMachine->machineInfo.machineID = ptrBestScheduleList->machineID;
+						ptrNewGridMachine->machineInfo.source = ptrBestScheduleList->source;
+						ptrNewGridMachine->machineInfo.status = RUNNING;
+						ptrNewGridMachine->machineInfo.arrivalTime = ptrCurrentEvent->time;
+						ptrNewGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + 1 + ptrBestScheduleList->runtime);
+						ptrNewGridMachine->machineInfo.usagePrice = 0.0;
+						ptrNewGridMachine->machineInfo.reservationPrice = 0.0;
+						ptrNewGridMachine->machineInfo.nextMachine = NULL;
+						ptrNewGridMachine->nextEvent = NULL;
+
+						InsertEvent(ptrEventList, ptrNewGridMachine);
+					}
+					else {
+						printf("ERROR (allocation planning): merdou o malloc!!!\n");
+					}
+
+					// insert a machine arrival event into the event list
+					event *ptrOutGridMachine;
+					if( (ptrOutGridMachine = malloc(sizeof(event))) ) {
+						ptrOutGridMachine->eventNumber = 0;
+						ptrOutGridMachine->eventID = MACHDEPARTURE;
+						ptrOutGridMachine->time = (ptrCurrentEvent->time + 1 + ptrBestScheduleList->runtime);
+						ptrOutGridMachine->machineInfo.machineID = ptrBestScheduleList->machineID;
+						ptrOutGridMachine->machineInfo.source = ptrBestScheduleList->source;
+						ptrOutGridMachine->machineInfo.status = IDLE;
+						ptrOutGridMachine->machineInfo.arrivalTime = ptrCurrentEvent->time;
+						ptrOutGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + 1 + ptrBestScheduleList->runtime);
+						ptrOutGridMachine->machineInfo.usagePrice = 0.0;
+						ptrOutGridMachine->machineInfo.reservationPrice = 0.0;
+						ptrOutGridMachine->machineInfo.nextMachine = NULL;
+						ptrOutGridMachine->nextEvent = NULL;
+
+						InsertEvent(ptrEventList, ptrOutGridMachine);
+					}
+					else {
+						printf("ERROR (allocation planning): merdou o malloc!!!\n");
+					}
+
+					// insert a new task schedule into the event list
+					event *ptrNewEvent;
+					if( (ptrNewEvent = malloc(sizeof(event))) ) {
+						ptrNewEvent->eventNumber = 0;
+						ptrNewEvent->eventID = TASKSCHEDULE;
+						ptrNewEvent->time = ptrBestScheduleList->scheduleTime;
+						ptrNewEvent->scheduleInfo.taskID = ptrBestScheduleList->taskID;
+						ptrNewEvent->scheduleInfo.jobID = ptrBestScheduleList->jobID;
+						ptrNewEvent->scheduleInfo.machineID = ptrBestScheduleList->machineID;
+						ptrNewEvent->scheduleInfo.source = ptrBestScheduleList->source;
+						ptrNewEvent->nextEvent = NULL;
+
+						InsertEvent(ptrEventList, ptrNewEvent);
+					}
+					else printf("ERROR (allocation planning): merdou o malloc!!!\n");
+
+				} // end of if (ptrBestScheduleList->source == 1)
+				else {
+
+					// insert a new task schedule into the event list
+					event *ptrNewEvent;
+					if( (ptrNewEvent = malloc(sizeof(event))) ) {
+						ptrNewEvent->eventNumber = 0;
+						ptrNewEvent->eventID = TASKSCHEDULE;
+						ptrNewEvent->time = ptrBestScheduleList->scheduleTime;
+						ptrNewEvent->scheduleInfo.taskID = ptrBestScheduleList->taskID;
+						ptrNewEvent->scheduleInfo.jobID = ptrBestScheduleList->jobID;
+						ptrNewEvent->scheduleInfo.machineID = ptrBestScheduleList->machineID;
+						ptrNewEvent->scheduleInfo.source = ptrBestScheduleList->source;
+						ptrNewEvent->nextEvent = NULL;
+
+						InsertEvent(ptrEventList, ptrNewEvent);
+					}
+					else printf("ERROR (allocation planning): merdou o malloc!!!\n");
+
+				}
+
+//				printf("***************************************************\n");
+//				printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d\n",
+//						ptrBestScheduleList->scheduleID, ptrBestScheduleList->scheduleTime, ptrBestScheduleList->taskID, ptrBestScheduleList->jobID,
+//						ptrBestScheduleList->runtime, ptrBestScheduleList->machineID, ptrBestScheduleList->source);
+
+
+				ptrBestScheduleList = ptrBestScheduleList->nextSchedule;
 			}
 
 

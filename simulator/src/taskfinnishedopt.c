@@ -1,5 +1,5 @@
 /*
- * taskfinnished.c
+ * taskfinnishedopt.c
  *
  *  Created on: Aug 29, 2011
  *      Author: PauloDitarso
@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList,
+void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTaskList, taskAccountInfo *ptrTaskAccountInfoList, machine *ptrMachineList,
 		balanceAccountInfo *ptrBalanceAccountInfo, job *ptrJobList) {
 
 	if (ptrCurrentEvent->eventID == TASKFINNISHED) {
@@ -24,7 +24,7 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 		if (ptrAuxTask->taskID > 0) { // 0 means code for an empty task list
 
 			while(ptrAuxTask){
-				if (ptrAuxTask->taskID == ptrCurrentEvent->taskInfo.taskID &&	ptrAuxTask->jobID == ptrCurrentEvent->taskInfo.jobID) break;
+				if (ptrAuxTask->taskID == ptrCurrentEvent->taskInfo.taskID && ptrAuxTask->jobID == ptrCurrentEvent->taskInfo.jobID) break;
 				ptrAuxTask = ptrAuxTask->nextTask;
 			}
 
@@ -175,25 +175,71 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 
 		} else printf("ERROR (task finnished) empty list!!!\n");
 
-		// code to decide if it inserts a schedule or a donation event
-		ptrAuxTask = ptrTaskList;
-		unsigned short int isThereQueuedTask = 0;
+//		// code to decide if it inserts a schedule or a donation event
+//		ptrAuxTask = ptrTaskList;
+//		unsigned short int isThereQueuedTask = 0;
+//
+//		while(ptrAuxTask != NULL) {
+//
+//			if(ptrAuxTask->taskID != 0 && ptrAuxTask->arrivalTime <= (ptrCurrentEvent->time+1) && ptrAuxTask->status == QUEUED) {
+//				isThereQueuedTask = 1;
+//				break;
+//			}
+//
+//			ptrAuxTask = ptrAuxTask->nextTask;
+//		}
+//
+////		if (ptrAuxMachine == NULL) printf("NULL \n"); else printf("no-NULL\n"); // debug mode
+//
+////		printf("isThereQueuedTask == %d\n", isThereQueuedTask);  // debug mode
+//
+//		if( isThereQueuedTask == 0 ) {
+//
+//			if ( ptrAuxMachine != NULL && ptrAuxMachine->source == LOCAL ) {  // cloud machines may be inserted as well
+//
+//				// insert a new donation into the event list, if there is no waiting tasks
+//				event *ptrNewDonation, *ptrTargetEvent;
+//				ptrTargetEvent = ptrCurrentEvent;
+//
+//				if( (ptrNewDonation = malloc(sizeof(event))) ) {
+//					ptrNewDonation->eventNumber = 0;
+//					ptrNewDonation->eventID = GRIDDONATING;
+//					ptrNewDonation->time = (ptrCurrentEvent->time); // one second after the machine's arrival
+//					ptrNewDonation->machineInfo.machineID = ptrAuxMachine->machineID;
+//					ptrNewDonation->machineInfo.source = ptrAuxMachine->source;
+//					ptrNewDonation->machineInfo.status = DONATING;
+//					ptrNewDonation->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
+//					ptrNewDonation->machineInfo.departureTime = ptrAuxMachine->departureTime;
+//					ptrNewDonation->machineInfo.usagePrice = ptrAuxMachine->usagePrice;
+//					ptrNewDonation->machineInfo.reservationPrice = ptrAuxMachine->reservationPrice;
+//					ptrNewDonation->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
+//					ptrNewDonation->nextEvent = NULL;
+//
+//					InsertAfterEvent(*ptrPtrEventList, ptrNewDonation, ptrTargetEvent);
+////					InsertEvent(*ptrPtrEventList, ptrNewDonation);
+//				}
+//				else printf("ERROR (task finnished): merdou o malloc!!!\n");
+//			}
+//		}
 
-		while(ptrAuxTask != NULL) {
+		// insert a grid donation into the event list, if there isn't a task schedule planned
+		event *ptrAuxEventList;
+		ptrAuxEventList = (*ptrPtrEventList);
+		unsigned short int thereIsASchedule = 0;
 
-			if(ptrAuxTask->taskID != 0 && ptrAuxTask->arrivalTime <= (ptrCurrentEvent->time+1) && ptrAuxTask->status == QUEUED) {
-				isThereQueuedTask = 1;
+		while(ptrAuxEventList) {
+
+			if ( ptrAuxEventList->time == ptrCurrentEvent->time && ptrAuxEventList->eventID == TASKSCHEDULE &&
+					ptrAuxEventList->scheduleInfo.machineID == ptrAuxMachine->machineID &&
+					ptrAuxEventList->scheduleInfo.source == ptrAuxMachine->source) {
+				thereIsASchedule = 1;
 				break;
 			}
 
-			ptrAuxTask = ptrAuxTask->nextTask;
+			ptrAuxEventList = ptrAuxEventList->nextEvent;
 		}
 
-//		if (ptrAuxMachine == NULL) printf("NULL \n"); else printf("no-NULL\n"); // debug mode
-
-//		printf("isThereQueuedTask == %d\n", isThereQueuedTask);  // debug mode
-
-		if( isThereQueuedTask == 0 ) {
+		if (thereIsASchedule == 0) {
 
 			if ( ptrAuxMachine != NULL && ptrAuxMachine->source == LOCAL ) {  // cloud machines may be inserted as well
 
@@ -216,89 +262,14 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 					ptrNewDonation->nextEvent = NULL;
 
 					InsertAfterEvent(*ptrPtrEventList, ptrNewDonation, ptrTargetEvent);
-//					InsertEvent(*ptrPtrEventList, ptrNewDonation);
+					//					InsertEvent(*ptrPtrEventList, ptrNewDonation);
 				}
 				else printf("ERROR (task finnished): merdou o malloc!!!\n");
 			}
-		}
 
-		// insert a new allocation planning into the event list, if there isn't one already planned
-		if (isThereQueuedTask == 1) {
 
-			event *ptrAuxEventList;
-			ptrAuxEventList = (*ptrPtrEventList);
-			unsigned short int thereIsAPlanning = 0;
+		} // end of if (thereIsASchedule == 0)
 
-			while(ptrAuxEventList) {
-
-				if ( ptrAuxEventList->time == (ptrCurrentEvent->time + 1) && ptrAuxEventList->eventID == ALLOCATIONPLANNING ) {
-					thereIsAPlanning = 1;
-					break;
-				}
-
-				ptrAuxEventList = ptrAuxEventList->nextEvent;
-			}
-
-			if(!thereIsAPlanning) {
-
-				// if there is donating machines, it creates grid preempted events
-				machine *ptrAuxMach;
-				ptrAuxMach = ptrMachineList;
-				while(ptrAuxMach) {
-
-					if (ptrAuxMach->source == LOCAL && ptrAuxMach->status == DONATING) {
-
-						ptrAuxMach->status = IDLE;
-						event *ptrNewGridPreemption;
-
-						if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
-							ptrNewGridPreemption->eventNumber = 0;
-							ptrNewGridPreemption->eventID = GRIDPREEMPTED;
-							ptrNewGridPreemption->time = ptrCurrentEvent->time;
-							ptrNewGridPreemption->machineInfo.machineID = ptrAuxMach->machineID;
-							ptrNewGridPreemption->machineInfo.source = ptrAuxMach->source;
-							ptrNewGridPreemption->machineInfo.status = IDLE;
-							ptrNewGridPreemption->machineInfo.arrivalTime = ptrAuxMach->arrivalTime;
-							ptrNewGridPreemption->machineInfo.departureTime = ptrAuxMach->departureTime;
-							ptrNewGridPreemption->machineInfo.reservationPrice = ptrAuxMach->reservationPrice;
-							ptrNewGridPreemption->machineInfo.usagePrice = ptrAuxMach->usagePrice;
-							ptrNewGridPreemption->machineInfo.nextMachine = ptrAuxMach->nextMachine;
-							ptrNewGridPreemption->nextEvent = NULL;
-
-							InsertEvent(*ptrPtrEventList, ptrNewGridPreemption);
-						}
-						else printf("ERROR (job arrival): merdou o malloc!!!\n");
-
-					}
-
-					ptrAuxMach = ptrAuxMach->nextMachine;
-				} // end while(ptrAuxMach)
-
-				event *ptrNewEvent;
-				if( (ptrNewEvent = malloc(sizeof(event))) ) {
-
-					ptrNewEvent->eventNumber = 0;
-					ptrNewEvent->eventID = ALLOCATIONPLANNING;
-					ptrNewEvent->time = (ptrCurrentEvent->time + 1);
-					ptrNewEvent->jobInfo.jobID = ptrAuxJob->jobID;
-					ptrNewEvent->jobInfo.jobSize = ptrAuxJob->jobSize;
-					ptrNewEvent->jobInfo.arrivalTime = ptrAuxJob->arrivalTime;
-					ptrNewEvent->jobInfo.finnishTime = ptrAuxJob->finnishTime;
-					ptrNewEvent->jobInfo.longestTask = ptrAuxJob->longestTask;
-					ptrNewEvent->jobInfo.deadline = ptrAuxJob->deadline;
-					ptrNewEvent->jobInfo.maxUtility = ptrAuxJob->maxUtility;
-					ptrNewEvent->jobInfo.utility = ptrAuxJob->utility;
-					ptrNewEvent->jobInfo.cost = ptrAuxJob->cost;
-					ptrNewEvent->jobInfo.nextJob = NULL;
-					ptrNewEvent->nextEvent = NULL;
-
-					InsertEvent(*ptrPtrEventList, ptrNewEvent);
-
-				} else printf("ERROR (task finnished): merdou o malloc!!!\n");
-
-			} // end if (thereIsAPlanning)
-
-		} // end if (isThereQueuedTask)
 
 	} else printf("ERROR (task finnished): wrong eventID!!!\n");
 

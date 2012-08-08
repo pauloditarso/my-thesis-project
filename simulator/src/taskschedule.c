@@ -27,6 +27,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 				ptrScheduleList->scheduleTime = ptrCurrentEvent->scheduleInfo.scheduleTime;
 				ptrScheduleList->taskID = ptrCurrentEvent->scheduleInfo.taskID;
 				ptrScheduleList->jobID = ptrCurrentEvent->scheduleInfo.jobID;
+				ptrScheduleList->runtime = ptrCurrentEvent->scheduleInfo.runtime;
 				ptrScheduleList->machineID = ptrCurrentEvent->scheduleInfo.machineID;
 				ptrScheduleList->source = ptrCurrentEvent->scheduleInfo.source;
 				ptrScheduleList->nextSchedule = NULL;
@@ -44,6 +45,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 				ptrNewSchedule->scheduleTime = ptrCurrentEvent->scheduleInfo.scheduleTime;
 				ptrNewSchedule->taskID = ptrCurrentEvent->scheduleInfo.taskID;
 				ptrNewSchedule->jobID = ptrCurrentEvent->scheduleInfo.jobID;
+				ptrNewSchedule->runtime = ptrCurrentEvent->scheduleInfo.runtime;
 				ptrNewSchedule->machineID = ptrCurrentEvent->scheduleInfo.machineID;
 				ptrNewSchedule->source = ptrCurrentEvent->scheduleInfo.source;
 				ptrNewSchedule->nextSchedule = NULL;

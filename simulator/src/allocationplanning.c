@@ -78,6 +78,7 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 								ptrNewEvent->scheduleInfo.scheduleTime = (ptrCurrentEvent->time + 1);
 								ptrNewEvent->scheduleInfo.taskID = ptrAuxTask->taskID;
 								ptrNewEvent->scheduleInfo.jobID = ptrAuxTask->jobID;
+								ptrNewEvent->scheduleInfo.runtime = ptrAuxTask->runtime;
 								ptrNewEvent->scheduleInfo.machineID = ptrAuxLocalMachine->machineID;
 								ptrNewEvent->scheduleInfo.source = ptrAuxLocalMachine->source;
 								ptrNewEvent->scheduleInfo.nextSchedule = NULL;
@@ -162,6 +163,7 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 							ptrNewEvent->scheduleInfo.scheduleTime = (ptrCurrentEvent->time + 1);
 							ptrNewEvent->scheduleInfo.taskID = ptrAuxTask->taskID;
 							ptrNewEvent->scheduleInfo.jobID = ptrAuxTask->jobID;
+							ptrNewEvent->scheduleInfo.runtime = ptrAuxTask->runtime;
 							ptrNewEvent->scheduleInfo.machineID = ptrNewGridMachine->machineInfo.machineID;
 							ptrNewEvent->scheduleInfo.source = ptrNewGridMachine->machineInfo.source;
 							ptrNewEvent->scheduleInfo.nextSchedule = NULL;
@@ -204,6 +206,7 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 									ptrNewEvent->scheduleInfo.scheduleTime = (ptrCurrentEvent->time + 1);
 									ptrNewEvent->scheduleInfo.taskID = ptrAuxTask->taskID;
 									ptrNewEvent->scheduleInfo.jobID = ptrAuxTask->jobID;
+									ptrNewEvent->scheduleInfo.runtime = ptrAuxTask->runtime;
 									ptrNewEvent->scheduleInfo.machineID = ptrAuxCloudMachine->machineID;
 									ptrNewEvent->scheduleInfo.source = ptrAuxCloudMachine->source;
 									ptrNewEvent->scheduleInfo.nextSchedule = NULL;
