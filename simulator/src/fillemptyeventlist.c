@@ -68,8 +68,8 @@ void FillEmptyEventList(event *ptrEventList) {
 			auxPtrEvent1->machineInfo.status = IDLE;
 			auxPtrEvent1->machineInfo.arrivalTime = 0;
 			auxPtrEvent1->machineInfo.departureTime = simulationTime;
-			auxPtrEvent1->machineInfo.usagePrice = 0.22;
-			auxPtrEvent1->machineInfo.reservationPrice = 2984.00;
+			auxPtrEvent1->machineInfo.usagePrice = reservedUsagePrice;
+			auxPtrEvent1->machineInfo.reservationPrice = reservationPrice;
 			auxPtrEvent1->machineInfo.nextMachine = NULL;
 			auxPtrEvent1->nextEvent = NULL;
 
@@ -88,8 +88,8 @@ void FillEmptyEventList(event *ptrEventList) {
 			auxPtrEvent2->machineInfo.status = IDLE;
 			auxPtrEvent2->machineInfo.arrivalTime = 0;
 			auxPtrEvent2->machineInfo.departureTime = simulationTime;
-			auxPtrEvent2->machineInfo.usagePrice = 0.22;
-			auxPtrEvent2->machineInfo.reservationPrice = 2984.00;
+			auxPtrEvent2->machineInfo.usagePrice = reservedUsagePrice;
+			auxPtrEvent2->machineInfo.reservationPrice = reservationPrice;
 			auxPtrEvent2->machineInfo.nextMachine = NULL;
 			auxPtrEvent2->nextEvent = NULL;
 
@@ -113,7 +113,7 @@ void FillEmptyEventList(event *ptrEventList) {
 			auxPtrEvent1->machineInfo.status = IDLE;
 			auxPtrEvent1->machineInfo.arrivalTime = 0;
 			auxPtrEvent1->machineInfo.departureTime = simulationTime;
-			auxPtrEvent1->machineInfo.usagePrice = 0.92;
+			auxPtrEvent1->machineInfo.usagePrice = ondemandUsagePrice;
 			auxPtrEvent1->machineInfo.reservationPrice = 0.00;
 			auxPtrEvent1->machineInfo.nextMachine = NULL;
 			auxPtrEvent1->nextEvent = NULL;
@@ -133,7 +133,7 @@ void FillEmptyEventList(event *ptrEventList) {
 			auxPtrEvent2->machineInfo.status = IDLE;
 			auxPtrEvent2->machineInfo.arrivalTime = 0;
 			auxPtrEvent2->machineInfo.departureTime = simulationTime;
-			auxPtrEvent2->machineInfo.usagePrice = 0.92;
+			auxPtrEvent2->machineInfo.usagePrice = ondemandUsagePrice;
 			auxPtrEvent2->machineInfo.reservationPrice = 0.00;
 			auxPtrEvent2->machineInfo.nextMachine = NULL;
 			auxPtrEvent2->nextEvent = NULL;
@@ -156,8 +156,8 @@ void FillEmptyEventList(event *ptrEventList) {
 		deadline = 0;
 		longestTask = 0;
 		jobLength = (int)Randn(JOB_AVG_LENGTH, JOB_SDV_LENGTH);
-//		jobSize = (int)(jobLength/TASK_AVG_TIME);
-		jobSize = 10;
+		jobSize = (int)(jobLength/TASK_AVG_TIME);
+//		jobSize = 10;
 
 		for (j = 0; j < jobSize; j++) {
 

@@ -35,7 +35,8 @@ int main(int argc, char *argv[]) {
 		simSeed = (atoi(argv[7]));
 		utilityFunction = (atoi(argv[8]));
 
-		reservationPrice = 2984.00; reservationPricePerDay = (numberOfReservedMachines * reservationPrice)/365;
+		ondemandUsagePrice = 0.92; reservedUsagePrice = 0.22; reservationPrice = 2984.00;
+		reservationPricePerDay = (numberOfReservedMachines * reservationPrice)/365;
 
 		srand(simSeed);
 
@@ -280,8 +281,8 @@ int main(int argc, char *argv[]) {
 		schedule *ptrAuxSchedule;
 		ptrAuxSchedule = scheduleList;
 		while(ptrAuxSchedule) {
-			printf("scheduleID %d time %d machineID %d source %d taskID %d jobID %d\n", ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->machineID,
-					ptrAuxSchedule->source, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID);
+			printf("scheduleID %d time %d machineID %d source %d taskID %d jobID %d RT %d\n", ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->machineID,
+					ptrAuxSchedule->source, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID, ptrAuxSchedule->runtime);
 			ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
 		}
 
