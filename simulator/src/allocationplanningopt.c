@@ -40,7 +40,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			unsigned int firstTargetFinnishTime, deadline, timeSteps;
 			firstTargetFinnishTime = (ptrCurrentEvent->jobInfo.arrivalTime + 2 + ptrCurrentEvent->jobInfo.longestTask); // AT + 2min to start a job + LT
 			deadline = (ptrCurrentEvent->jobInfo.arrivalTime + ptrCurrentEvent->jobInfo.deadline);
-			timeSteps = 200; // steps, in minutes, for the optimizing process
+			timeSteps = 1; // steps, in minutes, for the optimizing process
 
 			machine *ptrAuxMachine;
 			ptrAuxMachine = ptrMachineList;
@@ -439,11 +439,12 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			// LEMBRAR DE LIBERAR O ESPACO EM MEMORIA DO ptrPtrScheduleQueue
 			// SE O TEMPO DE EXECUCAO FOR MUITO CUSTOSO, OPTAR POR NAO CRIAR ESSA FILA E FAZER A ANALISE DO BEST-PROFIT DIRETO NO LOOP PRINCIPAL
 			// (SOLUCAO DE MARQUITO!!!)
+			FILE *ptrFileSchedules;
+			ptrFileSchedules = fopen("schedules.txt", "a+");
 			scheduleQueue *ptrAuxScheduleQueue;
 			ptrAuxScheduleQueue = (*ptrPtrScheduleQueue);
 			schedule *ptrBestScheduleList;
 			ptrBestScheduleList = ptrAuxScheduleQueue->scheduleList;
-//			if ( !(ptrBestScheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
 			float bestProfit = -(ptrCurrentEvent->jobInfo.maxUtility);
 			while(ptrAuxScheduleQueue) {
 
@@ -451,6 +452,9 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 //				printf("targetFT %d status %d profit %.2f status %d\n", ptrAuxScheduleQueue->targetFinnishtime, ptrAuxScheduleQueue->status,
 //						ptrAuxScheduleQueue->profit, ptrAuxScheduleQueue->status);
 //				printf("***************************************************\n");
+				fprintf(ptrFileSchedules, "targetFT %d status %d profit %.2f status %d\n", ptrAuxScheduleQueue->targetFinnishtime, ptrAuxScheduleQueue->status,
+						ptrAuxScheduleQueue->profit, ptrAuxScheduleQueue->status);
+				fprintf(ptrFileSchedules, "***************************************************\n");
 
 				// comparing to find the profit of the best target finish time scenario
 				if (ptrAuxScheduleQueue->profit >= bestProfit) {
@@ -459,20 +463,21 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				}
 
 //				debud mode
-//				schedule *ptrAuxSchedule;
-//				ptrAuxSchedule = ptrAuxScheduleQueue->scheduleList;
-//				while(ptrAuxSchedule) {
-//
-//					printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d\n",
-//							ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID, ptrAuxSchedule->runtime,
-//							ptrAuxSchedule->machineID, ptrAuxSchedule->source);
-//
-//					ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
-//				}
-//				printf("\n");
+				schedule *ptrAuxSchedule;
+				ptrAuxSchedule = ptrAuxScheduleQueue->scheduleList;
+				while(ptrAuxSchedule) {
+
+					fprintf(ptrFileSchedules, "scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d\n",
+							ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID, ptrAuxSchedule->runtime,
+							ptrAuxSchedule->machineID, ptrAuxSchedule->source);
+
+					ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
+				}
+				fprintf(ptrFileSchedules, "\n");
 
 				ptrAuxScheduleQueue = ptrAuxScheduleQueue->previousSchedule;
 			}
+			fclose(ptrFileSchedules);
 
 			// CRIAR AS MAQUINAS DO GRID (machineArrival() e machineDeparture())
 			// DEPOIS QUE EU TIVER O SET DE MAIOR PROFIT, DEVO VARRER A scheduleList E GERAR AS MAQUINAS DA GRADE
