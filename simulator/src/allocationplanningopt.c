@@ -56,6 +56,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrMachineOptSetList->machineID = 0;
 				ptrMachineOptSetList->source = 0;
 				ptrMachineOptSetList->timeLeft = 0;
+				ptrMachineOptSetList->upTime = 0;
 				ptrMachineOptSetList->nextMachineOptSet = NULL;
 			}
 			else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
@@ -68,6 +69,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 					ptrMachineOptSetList->machineID = ptrAuxMachine->machineID;
 					ptrMachineOptSetList->source = ptrAuxMachine->source;
 					ptrMachineOptSetList->timeLeft = 0;
+					ptrMachineOptSetList->upTime = 0;
 					ptrMachineOptSetList->nextMachineOptSet = NULL;
 
 				}
@@ -79,6 +81,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						ptrAux1->machineID = ptrAuxMachine->machineID;
 						ptrAux1->source = ptrAuxMachine->source;
 						ptrAux1->timeLeft = 0;
+						ptrAux1->upTime = 0;
 						ptrAux1->nextMachineOptSet = NULL;
 
 						machineOptSet *ptrAux2;
@@ -106,6 +109,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 					ptrMachineOptSetList->machineID = 1;
 					ptrMachineOptSetList->source = 1;
 					ptrMachineOptSetList->timeLeft = avgUpTime;
+					ptrMachineOptSetList->upTime = avgUpTime;
 					ptrMachineOptSetList->nextMachineOptSet = NULL;
 
 				}
@@ -117,6 +121,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						ptrAux1->machineID = 1;
 						ptrAux1->source = 1;
 						ptrAux1->timeLeft = avgUpTime;
+						ptrAux1->upTime = avgUpTime;
 						ptrAux1->nextMachineOptSet = NULL;
 
 						machineOptSet *ptrAux2;
@@ -143,6 +148,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						ptrMachineOptSetList->machineID = ptrAuxMachine->machineID;
 						ptrMachineOptSetList->source = ptrAuxMachine->source;
 						ptrMachineOptSetList->timeLeft = 0;
+						ptrMachineOptSetList->upTime = 0;
 						ptrMachineOptSetList->nextMachineOptSet = NULL;
 
 					}
@@ -154,6 +160,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 							ptrAux1->machineID = ptrAuxMachine->machineID;
 							ptrAux1->source = ptrAuxMachine->source;
 							ptrAux1->timeLeft = 0;
+							ptrAux1->upTime = 0;
 							ptrAux1->nextMachineOptSet = NULL;
 
 							machineOptSet *ptrAux2;
@@ -195,6 +202,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrAuxOptSet = ptrMachineOptSetList;
 				while(ptrAuxOptSet) {
 					if (ptrAuxOptSet->source != 1) ptrAuxOptSet->timeLeft = (targetFinnishTime - (ptrCurrentEvent->time + 1));
+					if (ptrAuxOptSet->source == 1) ptrAuxOptSet->timeLeft = ptrAuxOptSet->upTime;
 					ptrAuxOptSet = ptrAuxOptSet->nextMachineOptSet;
 				}
 
@@ -426,7 +434,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			machineOptSet *ptrActual;
 			ptrActual = ptrMachineOptSetList;
 			while(ptrActual) {
-//					printf("machineID %d source %d timeleft %d\n", ptrActual->machineID, ptrActual->source, ptrActual->timeLeft);
+//					printf("machineID %d source %d timeleft %d upTime %d\n", ptrActual->machineID, ptrActual->source, ptrActual->timeLeft, ptrActual->upTime);
 				machineOptSet *ptrLast;
 				ptrLast = ptrActual;
 				ptrActual = ptrActual->nextMachineOptSet;
@@ -445,7 +453,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			ptrAuxScheduleQueue = (*ptrPtrScheduleQueue);
 			schedule *ptrBestScheduleList;
 			ptrBestScheduleList = ptrAuxScheduleQueue->scheduleList;
-			float bestProfit = -(ptrCurrentEvent->jobInfo.maxUtility);
+			float bestProfit = -10000000;
 			while(ptrAuxScheduleQueue) {
 
 //				debug mode
@@ -457,7 +465,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				fprintf(ptrFileSchedules, "***************************************************\n");
 
 				// comparing to find the profit of the best target finish time scenario
-				if (ptrAuxScheduleQueue->profit >= bestProfit) {
+				if (ptrAuxScheduleQueue->profit > bestProfit) {
 					bestProfit = ptrAuxScheduleQueue->profit;
 					ptrBestScheduleList = ptrAuxScheduleQueue->scheduleList;
 				}
@@ -467,9 +475,9 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrAuxSchedule = ptrAuxScheduleQueue->scheduleList;
 				while(ptrAuxSchedule) {
 
-					fprintf(ptrFileSchedules, "scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d\n",
+					fprintf(ptrFileSchedules, "scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d profit %.2f bestProfit %.2f\n",
 							ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID, ptrAuxSchedule->runtime,
-							ptrAuxSchedule->machineID, ptrAuxSchedule->source);
+							ptrAuxSchedule->machineID, ptrAuxSchedule->source, ptrAuxScheduleQueue->profit, bestProfit);
 
 					ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
 				}
@@ -481,6 +489,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 			// CRIAR AS MAQUINAS DO GRID (machineArrival() e machineDeparture())
 			// DEPOIS QUE EU TIVER O SET DE MAIOR PROFIT, DEVO VARRER A scheduleList E GERAR AS MAQUINAS DA GRADE
+			// DESALOCAR A MEMORIA DE ptrBestScheduleList
 			while(ptrBestScheduleList) {
 
 				// creating the grid machines: arrivals and departures
@@ -576,218 +585,6 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrBestScheduleList = ptrBestScheduleList->nextSchedule;
 			}
 
-
-
-
-//			A PARTIR DAQUI EH O ALLOCATIONPLANNING() ORIGINAL!!!
-//			while(ptrAuxTask) {
-//
-////				printf("taskID %d\n", ptrAuxTask->taskID);
-//				unsigned short int found = 0;
-//
-//				if ( ptrAuxTask->taskID > 0 && ptrAuxTask->arrivalTime <= ptrCurrentEvent->time &&
-//						ptrAuxTask->status == QUEUED ) {  // taskID 0 means code for an empty task list
-//
-////					passou();
-//					// treating the allocation on in-house machines
-//					machine *ptrAuxLocalMachine;
-//					ptrAuxLocalMachine = ptrMachineList;
-//
-//					while(ptrAuxLocalMachine) {
-//
-//						if ( ptrAuxLocalMachine->source == LOCAL && (ptrAuxLocalMachine->status == IDLE || ptrAuxLocalMachine->status == DONATING) ) {
-//
-//							found = 1;
-//							allocated = 1;
-//							ptrAuxLocalMachine->status = RUNNING; // LEMBAR QUE ESTOU AQUI A UM SEGUNDO DE COMECAR A EXECUCAO EFETIVAMENTE
-//							ptrAuxTask->status = STARTED; // LEMBAR QUE ESTOU AQUI A UM SEGUNDO DE COMECAR A EXECUCAO EFETIVAMENTE
-//
-//							// insert a new task schedule into the event list
-//							event *ptrNewEvent;
-//							if( (ptrNewEvent = malloc(sizeof(event))) ) {
-//								ptrNewEvent->eventNumber = 0;
-//								ptrNewEvent->eventID = TASKSCHEDULE;
-//								ptrNewEvent->time = (ptrCurrentEvent->time + 1);
-//								ptrNewEvent->scheduleInfo.taskID = ptrAuxTask->taskID;
-//								ptrNewEvent->scheduleInfo.jobID = ptrAuxTask->jobID;
-//								ptrNewEvent->scheduleInfo.machineID = ptrAuxLocalMachine->machineID;
-//								ptrNewEvent->scheduleInfo.source = ptrAuxLocalMachine->source;
-//								ptrNewEvent->nextEvent = NULL;
-//
-//								InsertEvent(ptrEventList, ptrNewEvent);
-//							}
-//							else printf("ERROR (allocation planning): merdou o malloc!!!\n");
-//
-////							printf("eventID %d (Allocation Planning) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-////							printf("taskID %d jobID %d machineID %d source %d\n", ptrAuxTask->taskID,
-////									ptrAuxTask->jobID, ptrAuxLocalMachine->machineID, ptrAuxLocalMachine->source);
-//
-//							break; // finishing while(ptrAuxLocalMachine)
-//						}
-//
-//						ptrAuxLocalMachine = ptrAuxLocalMachine->nextMachine;
-//
-//					} // end of while(ptrAuxLocalMachine)
-//
-//					// treating the allocation on grid machines
-//					if (found == 0 && numberOfGridMachines > 0) {
-//
-//						numberOfGridMachines -= 1;
-//						gridMachinesID += 1;
-//						found = 1;
-//						allocated = 1;
-//						ptrAuxTask->status = STARTED; // LEMBAR QUE ESTOU AQUI A UM SEGUNDO DE COMECAR A EXECUCAO EFETIVAMENTE
-//						unsigned int avgUpTime = (int)Randn(GRID_AVG_TIME, GRID_SDV_TIME);
-////						printf("DT %d\n", departureTime); // debug mode
-//
-//						// insert a machine arrival event into the event list
-//						event *ptrNewGridMachine;
-//						if( (ptrNewGridMachine = malloc(sizeof(event))) ) {
-//							ptrNewGridMachine->eventNumber = 0;
-//							ptrNewGridMachine->eventID = MACHARRIVAL;
-//							ptrNewGridMachine->time = ptrCurrentEvent->time;
-//							ptrNewGridMachine->machineInfo.machineID = gridMachinesID;
-//							ptrNewGridMachine->machineInfo.source = GRID;
-//							ptrNewGridMachine->machineInfo.status = RUNNING;
-//							ptrNewGridMachine->machineInfo.arrivalTime = ptrCurrentEvent->time;
-//							ptrNewGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + avgUpTime);
-//							ptrNewGridMachine->machineInfo.usagePrice = 0.0;
-//							ptrNewGridMachine->machineInfo.reservationPrice = 0.0;
-//							ptrNewGridMachine->machineInfo.nextMachine = NULL;
-//							ptrNewGridMachine->nextEvent = NULL;
-//
-//							InsertEvent(ptrEventList, ptrNewGridMachine);
-//						}
-//						else {
-//							printf("ERROR (allocation planning): merdou o malloc!!!\n");
-//						}
-//
-//						event *ptrOutGridMachine;
-//						if( (ptrOutGridMachine = malloc(sizeof(event))) ) {
-//							ptrOutGridMachine->eventNumber = 0;
-//							ptrOutGridMachine->eventID = MACHDEPARTURE;
-//							ptrOutGridMachine->time = (ptrCurrentEvent->time + avgUpTime);
-//							ptrOutGridMachine->machineInfo.machineID = gridMachinesID;
-//							ptrOutGridMachine->machineInfo.source = GRID;
-//							ptrOutGridMachine->machineInfo.status = IDLE;
-//							ptrOutGridMachine->machineInfo.arrivalTime = ptrCurrentEvent->time;
-//							ptrOutGridMachine->machineInfo.departureTime = (ptrCurrentEvent->time + avgUpTime);
-//							ptrOutGridMachine->machineInfo.usagePrice = 0.0;
-//							ptrOutGridMachine->machineInfo.reservationPrice = 0.0;
-//							ptrOutGridMachine->machineInfo.nextMachine = NULL;
-//							ptrOutGridMachine->nextEvent = NULL;
-//
-//							InsertEvent(ptrEventList, ptrOutGridMachine);
-//						}
-//						else {
-//							printf("ERROR (allocation planning): merdou o malloc!!!\n");
-//						}
-//
-//						// insert a new task schedule into the event list
-//						event *ptrNewEvent;
-//						if( (ptrNewEvent = malloc(sizeof(event))) ) {
-//							ptrNewEvent->eventNumber = 0;
-//							ptrNewEvent->eventID = TASKSCHEDULE;
-//							ptrNewEvent->time = (ptrCurrentEvent->time + 1);
-//							ptrNewEvent->scheduleInfo.taskID = ptrAuxTask->taskID;
-//							ptrNewEvent->scheduleInfo.jobID = ptrAuxTask->jobID;
-//							ptrNewEvent->scheduleInfo.machineID = ptrNewGridMachine->machineInfo.machineID;
-//							ptrNewEvent->scheduleInfo.source = ptrNewGridMachine->machineInfo.source;
-//							ptrNewEvent->nextEvent = NULL;
-//
-//							InsertEvent(ptrEventList, ptrNewEvent);
-//						}
-//						else printf("ERROR (allocation planning): merdou o malloc!!!\n");
-//
-//
-////						printf("eventID %d (Allocation Planning) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-////						printf("taskID %d jobID %d machineID %d source %d\n", ptrAuxTask->taskID,
-////								ptrAuxTask->jobID, ptrNewGridMachine->machineInfo.machineID, ptrNewGridMachine->machineInfo.source);
-//
-//					}
-//
-//					// treating the allocation on cloud machines
-//					if (found == 0) {
-//
-//						machine *ptrAuxCloudMachine;
-//						ptrAuxCloudMachine = ptrMachineList;
-//
-//						while(ptrAuxCloudMachine) {
-//
-//							// TALVEZ TENHA QUE ADICIONAR UM NOVO IF PARA AS MAQUINAS ON-DEMAND
-//							if ( (ptrAuxCloudMachine->source == RESERVED || ptrAuxCloudMachine->source == ONDEMAND)	&& ptrAuxCloudMachine->status == IDLE) {
-//
-//								found = 1;
-//								allocated = 1;
-//								ptrAuxCloudMachine->status = RUNNING; // LEMBAR QUE ESTOU AQUI A UM SEGUNDO DE COMECAR A EXECUCAO EFETIVAMENTE
-//								ptrAuxTask->status = STARTED; // LEMBAR QUE ESTOU AQUI A UM SEGUNDO DE COMECAR A EXECUCAO EFETIVAMENTE
-//
-//								// insert a new task schedule into the event list
-//								event *ptrNewEvent;
-//								if( (ptrNewEvent = malloc(sizeof(event))) ) {
-//									ptrNewEvent->eventNumber = 0;
-//									ptrNewEvent->eventID = TASKSCHEDULE;
-//									ptrNewEvent->time = (ptrCurrentEvent->time + 1);
-//									ptrNewEvent->scheduleInfo.taskID = ptrAuxTask->taskID;
-//									ptrNewEvent->scheduleInfo.jobID = ptrAuxTask->jobID;
-//									ptrNewEvent->scheduleInfo.machineID = ptrAuxCloudMachine->machineID;
-//									ptrNewEvent->scheduleInfo.source = ptrAuxCloudMachine->source;
-//									ptrNewEvent->nextEvent = NULL;
-//
-//									InsertEvent(ptrEventList, ptrNewEvent);
-//								}
-//								else printf("ERROR (allocation planning): merdou o malloc!!!\n");
-//
-//								//							printf("eventID %d (Allocation Planning) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-//								//							printf("taskID %d jobID %d machineID %d source %d\n", ptrAuxTask->taskID,
-//								//									ptrAuxTask->jobID, ptrAuxCloudMachine->machineID, ptrAuxCloudMachine->source);
-//
-//								break;
-//							}
-//
-//							ptrAuxCloudMachine = ptrAuxCloudMachine->nextMachine;
-//
-//						} // end of while(ptrAuxCloudMachine)
-//
-//					} // end if (found == 0)
-//
-//				} // end if (looking for a queued task)
-//
-//				ptrAuxTask = ptrAuxTask->nextTask;
-//
-//			} // end of while(ptrAuxTask)
-//
-//			// if there is any unallocated in-house machine, creates a new donation event
-//			machine *ptrAuxMachine;
-//			ptrAuxMachine = ptrMachineList;
-//			while(ptrAuxMachine) {
-//
-//				if ( ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == IDLE ) {
-//
-//					event *ptrNewDonation;
-//
-//					if( (ptrNewDonation = malloc(sizeof(event))) ) {
-//						ptrNewDonation->eventNumber = 0;
-//						ptrNewDonation->eventID = GRIDDONATING;
-//						ptrNewDonation->time = (ptrCurrentEvent->time); // one second after this event
-//						ptrNewDonation->machineInfo.machineID = ptrAuxMachine->machineID;
-//						ptrNewDonation->machineInfo.source = ptrAuxMachine->source;
-//						ptrNewDonation->machineInfo.status = DONATING;
-//						ptrNewDonation->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
-//						ptrNewDonation->machineInfo.departureTime = ptrAuxMachine->departureTime;
-//						ptrNewDonation->machineInfo.usagePrice = ptrAuxMachine->usagePrice;
-//						ptrNewDonation->machineInfo.reservationPrice = ptrAuxMachine->reservationPrice;
-//						ptrNewDonation->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
-//						ptrNewDonation->nextEvent = NULL;
-//
-//						InsertEvent(ptrEventList, ptrNewDonation);
-//
-//					} else printf("ERROR (task finnished): merdou o malloc!!!\n");
-//
-//				}
-//
-//				ptrAuxMachine = ptrAuxMachine->nextMachine;
-//			}
 
 			printf("eventID %d (Allocation Planning) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			printf("Allocation %d\n", allocated);

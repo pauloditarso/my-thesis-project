@@ -58,7 +58,7 @@ typedef struct machine {
 typedef struct machineOptSet {
 	unsigned int machineID;
 	enum {LOCALSET, GRIDSET, RESERVEDSET, ONDEMANDSET, SPOTSET} source;
-	unsigned int timeLeft;
+	unsigned int timeLeft, upTime;
 	struct machineOptSet *nextMachineOptSet;
 } machineOptSet;
 
