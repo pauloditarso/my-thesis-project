@@ -511,6 +511,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						ptrNewGridMachine->machineInfo.nextMachine = NULL;
 						ptrNewGridMachine->nextEvent = NULL;
 
+						printf("machineID %d source %d time %d AT %d DT %d\n", ptrNewGridMachine->machineInfo.machineID, ptrNewGridMachine->machineInfo.source, ptrNewGridMachine->time, ptrNewGridMachine->machineInfo.arrivalTime, ptrNewGridMachine->machineInfo.departureTime);
 						InsertEvent(ptrEventList, ptrNewGridMachine);
 					}
 					else printf("ERROR (allocation planning): merdou o malloc!!!\n");
@@ -531,6 +532,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						ptrOutGridMachine->machineInfo.nextMachine = NULL;
 						ptrOutGridMachine->nextEvent = NULL;
 
+						printf("machineID %d source %d time %d AT %d DT %d\n", ptrOutGridMachine->machineInfo.machineID, ptrOutGridMachine->machineInfo.source, ptrOutGridMachine->time, ptrOutGridMachine->machineInfo.arrivalTime, ptrOutGridMachine->machineInfo.departureTime);
 						InsertEvent(ptrEventList, ptrOutGridMachine);
 					}
 					else printf("ERROR (allocation planning): merdou o malloc!!!\n");
@@ -541,10 +543,14 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						ptrNewEvent->eventNumber = 0;
 						ptrNewEvent->eventID = TASKSCHEDULE;
 						ptrNewEvent->time = ptrBestScheduleList->scheduleTime;
+						ptrNewEvent->scheduleInfo.scheduleID = ptrBestScheduleList->scheduleID;
+						ptrNewEvent->scheduleInfo.scheduleTime = ptrBestScheduleList->scheduleTime;
 						ptrNewEvent->scheduleInfo.taskID = ptrBestScheduleList->taskID;
 						ptrNewEvent->scheduleInfo.jobID = ptrBestScheduleList->jobID;
+						ptrNewEvent->scheduleInfo.runtime = ptrBestScheduleList->runtime;
 						ptrNewEvent->scheduleInfo.machineID = ptrBestScheduleList->machineID;
 						ptrNewEvent->scheduleInfo.source = ptrBestScheduleList->source;
+						ptrNewEvent->scheduleInfo.nextSchedule = ptrBestScheduleList->nextSchedule;
 						ptrNewEvent->nextEvent = NULL;
 
 						InsertEvent(ptrEventList, ptrNewEvent);
@@ -560,10 +566,14 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						ptrNewEvent->eventNumber = 0;
 						ptrNewEvent->eventID = TASKSCHEDULE;
 						ptrNewEvent->time = ptrBestScheduleList->scheduleTime;
+						ptrNewEvent->scheduleInfo.scheduleID = ptrBestScheduleList->scheduleID;
+						ptrNewEvent->scheduleInfo.scheduleTime = ptrBestScheduleList->scheduleTime;
 						ptrNewEvent->scheduleInfo.taskID = ptrBestScheduleList->taskID;
 						ptrNewEvent->scheduleInfo.jobID = ptrBestScheduleList->jobID;
+						ptrNewEvent->scheduleInfo.runtime = ptrBestScheduleList->runtime;
 						ptrNewEvent->scheduleInfo.machineID = ptrBestScheduleList->machineID;
 						ptrNewEvent->scheduleInfo.source = ptrBestScheduleList->source;
+						ptrNewEvent->scheduleInfo.nextSchedule = ptrBestScheduleList->nextSchedule;
 						ptrNewEvent->nextEvent = NULL;
 
 						InsertEvent(ptrEventList, ptrNewEvent);
@@ -588,4 +598,4 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 		} else printf("ERROR (arrival): there is no machine or task list!!!\n");
 
 	} else printf("ERROR (allocation planning): wrong eventID!!!\n");
-} // end of AllocationPlanning()
+} // end of AllocationPlanningOpt()

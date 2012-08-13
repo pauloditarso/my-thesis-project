@@ -109,31 +109,7 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 
 						ptrAuxMachine = ptrAuxMachine->nextMachine;
 					} // end while(ptrAuxMachine)
-
-					// insert a new planning into the event list
-//					event *ptrNewEvent;
-//					if( (ptrNewEvent = malloc(sizeof(event))) ) {
-//
-//						ptrNewEvent->eventNumber = 0;
-//						ptrNewEvent->eventID = ALLOCATIONPLANNING;
-//						ptrNewEvent->time = (ptrCurrentEvent->time + 1);
-//						ptrNewEvent->flag = 1;
-////						ptrNewEvent->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
-////						ptrNewEvent->machineInfo.source = ptrCurrentEvent->machineInfo.source;
-////						ptrNewEvent->machineInfo.status = ptrCurrentEvent->machineInfo.status;
-////						ptrNewEvent->machineInfo.arrivalTime = ptrCurrentEvent->machineInfo.arrivalTime;
-////						ptrNewEvent->machineInfo.departureTime = ptrCurrentEvent->machineInfo.departureTime;
-////						ptrNewEvent->machineInfo.usagePrice = ptrCurrentEvent->machineInfo.usagePrice;
-////						ptrNewEvent->machineInfo.reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
-////						ptrNewEvent->machineInfo.nextMachine = NULL;
-//						ptrNewEvent->nextEvent = NULL;
-//
-//						InsertEvent(ptrEventList, ptrNewEvent);
-//
-//					} else printf("ERROR (machine arrival): merdou o malloc!!!\n");
-
 				}
-
 			}
 			else {
 
@@ -253,29 +229,6 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 
 						ptrAuxMachine = ptrAuxMachine->nextMachine;
 					} // end while(ptrAuxMachine)
-
-					// insert a new planning into the event list
-//					event *ptrNewEvent;
-//					if( (ptrNewEvent = malloc(sizeof(event))) ) {
-//
-//						ptrNewEvent->eventNumber = 0;
-//						ptrNewEvent->eventID = ALLOCATIONPLANNING;
-//						ptrNewEvent->time = (ptrCurrentEvent->time + 1);
-//						ptrNewEvent->flag = 1;
-////						ptrNewEvent->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
-////						ptrNewEvent->machineInfo.source = ptrCurrentEvent->machineInfo.source;
-////						ptrNewEvent->machineInfo.status = ptrCurrentEvent->machineInfo.status;
-////						ptrNewEvent->machineInfo.arrivalTime = ptrCurrentEvent->machineInfo.arrivalTime;
-////						ptrNewEvent->machineInfo.departureTime = ptrCurrentEvent->machineInfo.departureTime;
-////						ptrNewEvent->machineInfo.usagePrice = ptrCurrentEvent->machineInfo.usagePrice;
-////						ptrNewEvent->machineInfo.reservationPrice = ptrCurrentEvent->machineInfo.reservationPrice;
-////						ptrNewEvent->machineInfo.nextMachine = NULL;
-//						ptrNewEvent->nextEvent = NULL;
-//
-//						InsertEvent(ptrEventList, ptrNewEvent);
-//
-//					} else printf("ERROR (machine arrival): merdou o malloc!!!\n");
-
 				}
 
 			} // end else

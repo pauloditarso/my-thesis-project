@@ -24,7 +24,7 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 		if (ptrAuxTask->taskID > 0) { // 0 means code for an empty task list
 
 			while(ptrAuxTask){
-				if (ptrAuxTask->taskID == ptrCurrentEvent->taskInfo.taskID && ptrAuxTask->jobID == ptrCurrentEvent->taskInfo.jobID) break;
+				if ( ptrAuxTask->taskID == ptrCurrentEvent->taskInfo.taskID && ptrAuxTask->jobID == ptrCurrentEvent->taskInfo.jobID ) break;
 				ptrAuxTask = ptrAuxTask->nextTask;
 			}
 
@@ -39,7 +39,7 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 					ptrAuxTask->status = ptrCurrentEvent->taskInfo.status; // it must be FINNISHED
 				}
 				else {
-					printf("ERROR (task finished): task status is not FINNISHED!!!\n");
+					printf("ERROR (task finishedOpt): task status is not FINNISHED!!!\n");
 				}
 
 				printf("eventID %d (Task Finnished) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
@@ -53,14 +53,14 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 				float usagePrice = 0.00, totalUsagePrice = 0.00;
 				while(ptrAuxTaskAccount != NULL){
 
-					if (ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->taskID == ptrAuxTask->taskID && ptrAuxTaskAccount->finnishTime == 0 ) {
+					if ( ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->taskID == ptrAuxTask->taskID && ptrAuxTaskAccount->finnishTime == 0 ) {
 
 						ptrAuxTaskAccount->finnishTime = ptrCurrentEvent->time;
 						ptrAuxTaskAccount->status = ACCOUNTFINNISHED;
 
 						while(ptrAuxMachine) {
 
-							if (ptrAuxMachine->machineID == ptrAuxTaskAccount->machineID && ptrAuxMachine->source == ptrAuxTaskAccount->source) {
+							if ( ptrAuxMachine->machineID == ptrAuxTaskAccount->machineID && ptrAuxMachine->source == ptrAuxTaskAccount->source ) {
 
 								ptrAuxMachine->status = IDLE;
 
@@ -134,7 +134,7 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 
 					} // end of if (ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->taskID == ptrAuxTask->taskID &&	ptrAuxTaskAccount->finnishTime == 0 )
 
-					if (ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->status == ACCOUNTFINNISHED) {
+					if ( ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->status == ACCOUNTFINNISHED ) {
 						countAccountFinnished++;
 						totalUsagePrice += ptrAuxTaskAccount->cost;
 					}
@@ -167,38 +167,38 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 						InsertAfterEvent(*ptrPtrEventList, ptrNewEvent, ptrTargetEvent);
 					}
 					else {
-						printf("ERROR (task finnished): merdou o malloc!!!\n");
+						printf("ERROR (task finnishedOpt): merdou o malloc!!!\n");
 					}
 				}
 
-			} else printf("ERROR (task finnished) task not found!!!\n");
+			} else printf("ERROR (task finnishedOpt) task not found!!!\n");
 
-		} else printf("ERROR (task finnished) empty list!!!\n");
+		} else printf("ERROR (task finnishedOpt) empty list!!!\n");
 
 		// insert a grid donation into the event list, if there isn't a task schedule planned
 		event *ptrAuxEventList;
 		ptrAuxEventList = (*ptrPtrEventList);
-		unsigned short int thereIsASchedule = 0;
+		unsigned short int thereIsntASchedule = 0, thereIsAMachine = 0;
 
-		if (ptrAuxMachine) {
-			//		printf("machineID %d source %d\n", ptrAuxMachine->machineID, ptrAuxMachine->source);
+		if (ptrAuxMachine != NULL) {
+
+			thereIsAMachine = 1;
+
 			while(ptrAuxEventList) {
-
-				//			printf("event# %d eventID %d time %d\n", ptrAuxEventList->eventNumber, ptrAuxEventList->eventID, ptrAuxEventList->time);
 
 				if ( ptrAuxEventList->time == ptrCurrentEvent->time && ptrAuxEventList->eventID == TASKSCHEDULE &&
 						ptrAuxEventList->scheduleInfo.machineID == ptrAuxMachine->machineID &&
 						ptrAuxEventList->scheduleInfo.source == ptrAuxMachine->source ) {
-					thereIsASchedule = 1;
+					thereIsntASchedule = 1;
 					break;
 				}
 
 				ptrAuxEventList = ptrAuxEventList->nextEvent;
 			}
-			//		passou();
+
 		}
 
-		if (thereIsASchedule == 0) {
+		if (thereIsAMachine && thereIsntASchedule) {
 
 			if ( ptrAuxMachine != NULL && ptrAuxMachine->source == LOCAL ) {  // cloud machines may be inserted as well
 
@@ -225,7 +225,6 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 				}
 				else printf("ERROR (task finnished): merdou o malloc!!!\n");
 			}
-
 
 		} // end of if (thereIsASchedule == 0)
 
