@@ -197,7 +197,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrAuxOrderedTask = ptrOrderedTaskList;
 				scheduleID = 0;
 
-				// setting the left time to non-grid machines
+				// setting the left time to the machines
 				machineOptSet *ptrAuxOptSet;
 				ptrAuxOptSet = ptrMachineOptSetList;
 				while(ptrAuxOptSet) {
@@ -513,9 +513,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 						InsertEvent(ptrEventList, ptrNewGridMachine);
 					}
-					else {
-						printf("ERROR (allocation planning): merdou o malloc!!!\n");
-					}
+					else printf("ERROR (allocation planning): merdou o malloc!!!\n");
 
 					// insert a machine arrival event into the event list
 					event *ptrOutGridMachine;
@@ -535,9 +533,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 						InsertEvent(ptrEventList, ptrOutGridMachine);
 					}
-					else {
-						printf("ERROR (allocation planning): merdou o malloc!!!\n");
-					}
+					else printf("ERROR (allocation planning): merdou o malloc!!!\n");
 
 					// insert a new task schedule into the event list
 					event *ptrNewEvent;
