@@ -35,12 +35,8 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 
 			if (ptrAuxTask != NULL) {
 
-				if (ptrCurrentEvent->taskInfo.status == FINNISHED) {
-					ptrAuxTask->status = ptrCurrentEvent->taskInfo.status; // it must be FINNISHED
-				}
-				else {
-					printf("ERROR (task finishedOpt): task status is not FINNISHED!!!\n");
-				}
+				if (ptrCurrentEvent->taskInfo.status == FINNISHED) ptrAuxTask->status = ptrCurrentEvent->taskInfo.status; // it must be FINNISHED
+				else printf("ERROR (task finishedOpt): task status is not FINNISHED!!!\n");
 
 				printf("eventID %d (Task Finnished) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 				printf("taskID %d jobID %d AT %d jobSize %d runtime %d status %d submissions %d\n",
@@ -51,7 +47,7 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 
 				unsigned short int countAccountFinnished = 0;
 				float usagePrice = 0.00, totalUsagePrice = 0.00;
-				while(ptrAuxTaskAccount != NULL){
+				while(ptrAuxTaskAccount != NULL) {
 
 					if ( ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->taskID == ptrAuxTask->taskID && ptrAuxTaskAccount->finnishTime == 0 ) {
 
@@ -61,57 +57,9 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 						while(ptrAuxMachine) {
 
 							if ( ptrAuxMachine->machineID == ptrAuxTaskAccount->machineID && ptrAuxMachine->source == ptrAuxTaskAccount->source ) {
-
 								ptrAuxMachine->status = IDLE;
-
-								if (ptrAuxMachine->source == GRID) {
-
-									// remover o evento futuro de partida desta maquina na lista de eventos
-									event *ptrOldEvent;
-									ptrOldEvent = (*ptrPtrEventList);
-
-									while(ptrOldEvent) {
-										if ( ptrOldEvent->time >= ptrCurrentEvent->time && ptrOldEvent->eventID == MACHDEPARTURE &&
-												ptrOldEvent->machineInfo.machineID == ptrAuxMachine->machineID &&
-												ptrOldEvent->machineInfo.source == ptrAuxMachine->source ) {
-											break;
-										}
-										ptrOldEvent = ptrOldEvent->nextEvent;
-									}
-
-									if (ptrOldEvent) {
-										RemoveEvent(ptrPtrEventList, ptrOldEvent);
-									}
-									else printf("ERROR (task finished): event not found!!!\n");
-
-									// chamar machine departure para este tempo ou para 1seg a frente
-									event *ptrOutGridMachine;
-									if( (ptrOutGridMachine = malloc(sizeof(event))) ) {
-										ptrOutGridMachine->eventNumber = 0;
-										ptrOutGridMachine->eventID = MACHDEPARTURE;
-										ptrOutGridMachine->time = ptrCurrentEvent->time;
-										ptrOutGridMachine->machineInfo.machineID = ptrAuxMachine->machineID;
-										ptrOutGridMachine->machineInfo.source = ptrAuxMachine->source;
-										ptrOutGridMachine->machineInfo.status = ptrAuxMachine->status;
-										ptrOutGridMachine->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
-										ptrOutGridMachine->machineInfo.departureTime = ptrCurrentEvent->time;
-										ptrOutGridMachine->machineInfo.usagePrice = 0.0;
-										ptrOutGridMachine->machineInfo.reservationPrice = 0.0;
-										ptrOutGridMachine->machineInfo.nextMachine = NULL;
-										ptrOutGridMachine->nextEvent = NULL;
-
-										InsertEvent(*ptrPtrEventList, ptrOutGridMachine);
-									}
-									else {
-										printf("ERROR (task finished): merdou o malloc!!!\n");
-									}
-
-								} // end of if (ptrAuxMachine->source == GRID)
-
 								break;
-
-							} // end of if (ptrAuxMachine->machineID == ptrAuxTaskAccount->machineID && ptrAuxMachine->source == ptrAuxTaskAccount->source)
-
+							}
 							ptrAuxMachine = ptrAuxMachine->nextMachine;
 
 						} // end of while(ptrAuxMachine)
@@ -207,6 +155,7 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 				ptrTargetEvent = ptrCurrentEvent;
 
 				if( (ptrNewDonation = malloc(sizeof(event))) ) {
+
 					ptrNewDonation->eventNumber = 0;
 					ptrNewDonation->eventID = GRIDDONATING;
 					ptrNewDonation->time = (ptrCurrentEvent->time); // one second after the machine's arrival
@@ -221,12 +170,12 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 					ptrNewDonation->nextEvent = NULL;
 
 					InsertAfterEvent(*ptrPtrEventList, ptrNewDonation, ptrTargetEvent);
-					//					InsertEvent(*ptrPtrEventList, ptrNewDonation);
+//					InsertEvent(*ptrPtrEventList, ptrNewDonation);
 				}
 				else printf("ERROR (task finnished): merdou o malloc!!!\n");
 			}
 
-		} // end of if (thereIsASchedule == 0)
+		} // end of if (thereIsAMachine && thereIsntASchedule)
 
 	} else printf("ERROR (task finnished): wrong eventID!!!\n");
 
