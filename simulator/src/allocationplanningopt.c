@@ -511,7 +511,6 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						ptrNewGridMachine->machineInfo.nextMachine = NULL;
 						ptrNewGridMachine->nextEvent = NULL;
 
-						printf("machineID %d source %d time %d AT %d DT %d\n", ptrNewGridMachine->machineInfo.machineID, ptrNewGridMachine->machineInfo.source, ptrNewGridMachine->time, ptrNewGridMachine->machineInfo.arrivalTime, ptrNewGridMachine->machineInfo.departureTime);
 						InsertEvent(ptrEventList, ptrNewGridMachine);
 					}
 					else printf("ERROR (allocation planning): merdou o malloc!!!\n");
@@ -532,7 +531,6 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						ptrOutGridMachine->machineInfo.nextMachine = NULL;
 						ptrOutGridMachine->nextEvent = NULL;
 
-						printf("machineID %d source %d time %d AT %d DT %d\n", ptrOutGridMachine->machineInfo.machineID, ptrOutGridMachine->machineInfo.source, ptrOutGridMachine->time, ptrOutGridMachine->machineInfo.arrivalTime, ptrOutGridMachine->machineInfo.departureTime);
 						InsertEvent(ptrEventList, ptrOutGridMachine);
 					}
 					else printf("ERROR (allocation planning): merdou o malloc!!!\n");
