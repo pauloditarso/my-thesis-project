@@ -9,6 +9,10 @@
 
 void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptrPtrMachineList, taskAccountInfo *ptrTaskAccountInfoList) {
 
+//	printf("\n");
+//	printf("machineID %d source %d status %d\n", ptrCurrentEvent->machineInfo.machineID, ptrCurrentEvent->machineInfo.source, ptrCurrentEvent->machineInfo.status);
+
+
 	if (ptrCurrentEvent->eventID == MACHDEPARTURE) {
 
 		if (ptrPtrMachineList) {
@@ -17,24 +21,25 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 			if (ptrCurrentEvent->time == ptrCurrentEvent->machineInfo.departureTime) {
 
 				machine *ptrActualMachine, *ptrLastMachine;
-				unsigned short int found = 0;
+				unsigned short int machineFound = 0;
 
 				ptrActualMachine = ptrLastMachine = (*ptrPtrMachineList);
 
 				while(ptrActualMachine) {
 
-					if ( ptrCurrentEvent->machineInfo.machineID == ptrActualMachine->machineID &&	ptrCurrentEvent->machineInfo.source == ptrActualMachine->source ) {
-						//&& ptrCurrentEvent->machineInfo.departureTime == ptrAux->departureTime ) {
-						found = 1;
+					if ( ptrCurrentEvent->machineInfo.machineID == ptrActualMachine->machineID && ptrCurrentEvent->machineInfo.source == ptrActualMachine->source ) {
+						machineFound = 1;
 						break;
 					}
-
 					ptrLastMachine = ptrActualMachine;
 					ptrActualMachine = ptrActualMachine->nextMachine;
 
 				}
 
-				if (found) {
+//				printf("\n");
+//				printf("machineID %d source %d status %d\n", ptrActualMachine->machineID, ptrActualMachine->source, ptrActualMachine->status);
+
+				if (machineFound) {
 
 					if ( ptrActualMachine->status == RUNNING ) {
 
@@ -108,27 +113,23 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 						event *ptrNewGridPreemption, *ptrTargetEvent;
 						ptrTargetEvent = ptrCurrentEvent;
 
-						if ( ptrActualMachine->source == LOCAL ) {
+						if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
+							ptrNewGridPreemption->eventNumber = 0;
+							ptrNewGridPreemption->eventID = GRIDPREEMPTED;
+							ptrNewGridPreemption->time = ptrCurrentEvent->time;
+							ptrNewGridPreemption->machineInfo.machineID = ptrActualMachine->machineID;
+							ptrNewGridPreemption->machineInfo.source = ptrActualMachine->source;
+							ptrNewGridPreemption->machineInfo.status = ptrActualMachine->status;
+							ptrNewGridPreemption->machineInfo.arrivalTime = ptrActualMachine->arrivalTime;
+							ptrNewGridPreemption->machineInfo.departureTime = ptrActualMachine->departureTime;
+							ptrNewGridPreemption->machineInfo.reservationPrice = ptrActualMachine->reservationPrice;
+							ptrNewGridPreemption->machineInfo.usagePrice = ptrActualMachine->usagePrice;
+							ptrNewGridPreemption->machineInfo.nextMachine = ptrActualMachine->nextMachine;
+							ptrNewGridPreemption->nextEvent = NULL;
 
-							if( (ptrNewGridPreemption = malloc(sizeof(event))) ) {
-								ptrNewGridPreemption->eventNumber = 0;
-								ptrNewGridPreemption->eventID = GRIDPREEMPTED;
-								ptrNewGridPreemption->time = ptrCurrentEvent->time;
-								ptrNewGridPreemption->machineInfo.machineID = ptrActualMachine->machineID;
-								ptrNewGridPreemption->machineInfo.source = ptrActualMachine->source;
-								ptrNewGridPreemption->machineInfo.status = ptrActualMachine->status;
-								ptrNewGridPreemption->machineInfo.arrivalTime = ptrActualMachine->arrivalTime;
-								ptrNewGridPreemption->machineInfo.departureTime = ptrActualMachine->departureTime;
-								ptrNewGridPreemption->machineInfo.reservationPrice = ptrActualMachine->reservationPrice;
-								ptrNewGridPreemption->machineInfo.usagePrice = ptrActualMachine->usagePrice;
-								ptrNewGridPreemption->machineInfo.nextMachine = ptrActualMachine->nextMachine;
-								ptrNewGridPreemption->nextEvent = NULL;
-
-								InsertAfterEvent(ptrEventList, ptrNewGridPreemption, ptrTargetEvent);
-							}
-							else printf("ERROR (task schedule): merdou o malloc!!!\n");
-
+							InsertAfterEvent(ptrEventList, ptrNewGridPreemption, ptrTargetEvent);
 						}
+						else printf("ERROR (task schedule): merdou o malloc!!!\n");
 
 					}
 

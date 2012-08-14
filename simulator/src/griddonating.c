@@ -16,18 +16,17 @@ void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 		while (ptrAuxMachine) {
 
-			if ( ptrAuxMachine->machineID == ptrCurrentEvent->machineInfo.machineID &&
-					ptrAuxMachine->source == ptrCurrentEvent->machineInfo.source) {
+			if ( ptrAuxMachine->machineID == ptrCurrentEvent->machineInfo.machineID && ptrAuxMachine->source == ptrCurrentEvent->machineInfo.source ) {
 
 				if ( ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == IDLE ) {
 
-					ptrAuxMachine->status = DONATING;
+//					ptrAuxMachine->status = DONATING;
+					ptrAuxMachine->status = ptrCurrentEvent->machineInfo.status;
 
 					InsertGridAccountList(ptrCurrentEvent, ptrAuxMachine, ptrGridInfoList);
 
 					printf("eventID %d (Grid Donating) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-					printf("machineID %d source %d status %d\n", ptrAuxMachine->machineID, ptrAuxMachine->source,
-								ptrAuxMachine->status);
+					printf("machineID %d source %d status %d\n", ptrAuxMachine->machineID, ptrAuxMachine->source, ptrAuxMachine->status);
 
 					break;
 				}
