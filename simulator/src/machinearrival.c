@@ -60,7 +60,7 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 							ptrNewDonation->time = (ptrCurrentEvent->time); // one second after machine's arrival
 							ptrNewDonation->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
 							ptrNewDonation->machineInfo.source = ptrCurrentEvent->machineInfo.source;
-							ptrNewDonation->machineInfo.status = ptrCurrentEvent->machineInfo.status;
+							ptrNewDonation->machineInfo.status = DONATING;
 							ptrNewDonation->machineInfo.arrivalTime = ptrCurrentEvent->machineInfo.arrivalTime;
 							ptrNewDonation->machineInfo.departureTime = ptrCurrentEvent->machineInfo.departureTime;
 							ptrNewDonation->machineInfo.usagePrice = ptrCurrentEvent->machineInfo.usagePrice;
@@ -179,7 +179,7 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 							ptrNewDonation->time = (ptrCurrentEvent->time); // one second after machine's arrival
 							ptrNewDonation->machineInfo.machineID = ptrCurrentEvent->machineInfo.machineID;
 							ptrNewDonation->machineInfo.source = ptrCurrentEvent->machineInfo.source;
-							ptrNewDonation->machineInfo.status = ptrCurrentEvent->machineInfo.status;
+							ptrNewDonation->machineInfo.status = DONATING;
 							ptrNewDonation->machineInfo.arrivalTime = ptrCurrentEvent->machineInfo.arrivalTime;
 							ptrNewDonation->machineInfo.departureTime = ptrCurrentEvent->machineInfo.departureTime;
 							ptrNewDonation->machineInfo.usagePrice = ptrCurrentEvent->machineInfo.usagePrice;

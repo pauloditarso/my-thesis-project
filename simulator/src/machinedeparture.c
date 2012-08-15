@@ -9,10 +9,6 @@
 
 void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptrPtrMachineList, taskAccountInfo *ptrTaskAccountInfoList) {
 
-//	printf("\n");
-//	printf("machineID %d source %d status %d\n", ptrCurrentEvent->machineInfo.machineID, ptrCurrentEvent->machineInfo.source, ptrCurrentEvent->machineInfo.status);
-
-
 	if (ptrCurrentEvent->eventID == MACHDEPARTURE) {
 
 		if (ptrPtrMachineList) {
@@ -35,9 +31,6 @@ void MachineDeparture(event *ptrCurrentEvent, event *ptrEventList, machine **ptr
 					ptrActualMachine = ptrActualMachine->nextMachine;
 
 				}
-
-//				printf("\n");
-//				printf("machineID %d source %d status %d\n", ptrActualMachine->machineID, ptrActualMachine->source, ptrActualMachine->status);
 
 				if (machineFound) {
 
