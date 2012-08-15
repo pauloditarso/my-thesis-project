@@ -126,7 +126,7 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 		// insert a grid donation into the event list, if there isn't a task schedule planned
 		event *ptrAuxEventList;
 		ptrAuxEventList = (*ptrPtrEventList);
-		unsigned short int thereIsntASchedule = 0, thereIsAMachine = 0;
+		unsigned short int thereIsASchedule = 0, thereIsAMachine = 0;
 
 		if (ptrAuxMachine != NULL) {
 
@@ -137,7 +137,7 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 				if ( ptrAuxEventList->time == ptrCurrentEvent->time && ptrAuxEventList->eventID == TASKSCHEDULE &&
 						ptrAuxEventList->scheduleInfo.machineID == ptrAuxMachine->machineID &&
 						ptrAuxEventList->scheduleInfo.source == ptrAuxMachine->source ) {
-					thereIsntASchedule = 1;
+					thereIsASchedule = 1;
 					break;
 				}
 
@@ -146,7 +146,7 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 
 		}
 
-		if (thereIsAMachine && thereIsntASchedule) {
+		if (thereIsAMachine && !thereIsASchedule) {
 
 			if ( ptrAuxMachine != NULL && ptrAuxMachine->source == LOCAL ) {  // cloud machines may be inserted as well
 

@@ -20,8 +20,9 @@ void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 				if ( ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == IDLE ) {
 
-//					ptrAuxMachine->status = DONATING;
-					ptrAuxMachine->status = ptrCurrentEvent->machineInfo.status;
+					// it must be DONATING
+					if(ptrCurrentEvent->machineInfo.status == DONATING) ptrAuxMachine->status = ptrCurrentEvent->machineInfo.status;
+					else printf("ERROR (grid donating): machine status is not DONATING!!!\n");
 
 					InsertGridAccountList(ptrCurrentEvent, ptrAuxMachine, ptrGridInfoList);
 

@@ -407,6 +407,9 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				}
 
 				// calculating the costs based on the machine used times
+				FILE *ptrFileDebug;
+				ptrFileDebug = fopen("debug.txt", "a+");
+				fprintf(ptrFileDebug, "********************* targetFT %d *********************\n", targetFinnishTime);
 				unsigned int totalUsedTime = 0;
 				ptrAuxOptSet = ptrMachineOptSetList;
 				while(ptrAuxOptSet) {
@@ -420,12 +423,14 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						targetCost += ceil( (float)(totalUsedTime) / 60.0 ) * ondemandUsagePrice;
 					}
 
-//					printf("totalUsedTime %d targetCost %.2f\n", totalUsedTime, targetCost); // debug mode
+					fprintf(ptrFileDebug, "source %d totalUsedTime %d targetCost %.2f\n", ptrAuxOptSet->source, totalUsedTime, targetCost); // debug mode
 					ptrAuxOptSet = ptrAuxOptSet->nextMachineOptSet;
 				}
 
 				targetCost += reservationPricePerDay;
 				(*ptrPtrScheduleQueue)->profit = (float)targetUtility - targetCost;
+				fprintf(ptrFileDebug, "profit %.2f targetUtility %d targetCost %.2f\n", ((float)targetUtility - targetCost), targetUtility, targetCost); // debug mode
+				fclose(ptrFileDebug);
 
 			} // end of for (i = firstTargetFinnishTime; i <= deadline; i += timeSteps)
 
