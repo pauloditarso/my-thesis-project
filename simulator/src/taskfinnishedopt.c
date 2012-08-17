@@ -46,10 +46,11 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 
 
 				unsigned short int countAccountFinnished = 0;
-				float usagePrice = 0.00, totalUsagePrice = 0.00;
+//				float usagePrice = 0.00, totalUsagePrice = 0.00;
 				while(ptrAuxTaskAccount != NULL) {
 
-					if ( ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->taskID == ptrAuxTask->taskID && ptrAuxTaskAccount->finnishTime == 0 ) {
+					if ( ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->taskID == ptrAuxTask->taskID &&
+							ptrAuxTaskAccount->finnishTime == 0 ) {
 
 						ptrAuxTaskAccount->finnishTime = ptrCurrentEvent->time;
 						ptrAuxTaskAccount->status = ACCOUNTFINNISHED;
@@ -68,23 +69,23 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 							DecrementBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time, (ptrAuxTaskAccount->finnishTime - ptrAuxTaskAccount->startTime));
 						}
 
-						if (ptrAuxMachine) {
-							usagePrice = ptrAuxMachine->usagePrice;
-						}
-						else {
-							if (ptrAuxTaskAccount->source != GRID) {
-								printf("ERROR (task finished): source nao eh igual a GRID!!!\n");
-							}
-							usagePrice = 0.00;
-						}
-
-						ptrAuxTaskAccount->cost = ceil( (float)(ptrAuxTaskAccount->finnishTime - ptrAuxTaskAccount->startTime) / 60.0 ) * usagePrice;
+//						if (ptrAuxMachine) {
+//							usagePrice = ptrAuxMachine->usagePrice;
+//						}
+//						else {
+//							if (ptrAuxTaskAccount->source != GRID) {
+//								printf("ERROR (task finished): source nao eh igual a GRID!!!\n");
+//							}
+//							usagePrice = 0.00;
+//						}
+//
+//						ptrAuxTaskAccount->cost = ceil( (float)(ptrAuxTaskAccount->finnishTime - ptrAuxTaskAccount->startTime) / 60.0 ) * usagePrice;
 
 					} // end of if (ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->taskID == ptrAuxTask->taskID &&	ptrAuxTaskAccount->finnishTime == 0 )
 
 					if ( ptrAuxTaskAccount->jobID == ptrAuxTask->jobID && ptrAuxTaskAccount->status == ACCOUNTFINNISHED ) {
 						countAccountFinnished++;
-						totalUsagePrice += ptrAuxTaskAccount->cost;
+//						totalUsagePrice += ptrAuxTaskAccount->cost;
 					}
 
 					ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
@@ -108,7 +109,8 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 						ptrNewEvent->jobInfo.deadline = ptrAuxJob->deadline;
 						ptrNewEvent->jobInfo.maxUtility = ptrAuxJob->maxUtility;
 						ptrNewEvent->jobInfo.utility = ptrAuxJob->utility;
-						ptrNewEvent->jobInfo.cost = totalUsagePrice;
+						ptrNewEvent->jobInfo.cost = ptrAuxJob->cost;
+//						ptrNewEvent->jobInfo.cost = totalUsagePrice;
 						ptrNewEvent->jobInfo.nextJob = NULL;
 						ptrNewEvent->nextEvent = NULL;
 

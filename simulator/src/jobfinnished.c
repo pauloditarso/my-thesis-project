@@ -23,6 +23,7 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 			}
 			ptrAuxJobAccount = ptrAuxJobAccount->nextJobAccountInfo;
 		}
+		if (ptrAuxJobAccount == NULL) printf("ERROR (job finnished): job account not found!!!\n");
 
 		while(ptrAuxJobList) {
 			if ( ptrAuxJobList->jobID == ptrCurrentEvent->jobInfo.jobID ) {
@@ -32,6 +33,7 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 			}
 			ptrAuxJobList = ptrAuxJobList->nextJob;
 		}
+		if (ptrAuxJobList == NULL) printf("ERROR (job finnished): job not found!!!\n");
 
 		int utility = 0;
 		switch(utilityFunction) {

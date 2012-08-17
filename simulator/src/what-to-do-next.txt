@@ -1,3 +1,13 @@
+* ideias recentes:
+	- para o caso de doar maquinas da cloud para o grid, eh simplesmente criar os eventos de GRIDDONATING e GRIDPREEMPTED jah
+	na criacao dos eventos de TASKSCHEDULE (ou talvez no TASKFINNISHED);
+		(essa alternativa eh para melhor utilizar as maquinas da cloud, utilizando-as por horas completas para melhorar o custo)
+		(utilizacao seja computando uma task ou doando para a grade, jah que o custo do uso da hora serah o mesmo)
+		
+	- para contabilizar o custo na versao otimizada talvez seja melhor adicionar parametros na estrutura de alucacao e jah levar
+	o custo e a utilidade na hora do escalonamento e tentar puxar essas informacoes no JOBFINNISHED;
+		(lembrar que essas informacoes sao faceis de buscar na hora do escalonamento otimo, por causa da variavel timeLeft)
+
 * IMPLEMENTAR O TaskFinnishedOpt() (OU SERAH JobFinnishedOpt()???) COM O CALCULO CORRETO DO USAGE COST!!!
 
 * VERIFICAR SE O CALCULO DO PROFIT PARA CADA TARGET FINISH TIME ESTAH CORRETO!!!!

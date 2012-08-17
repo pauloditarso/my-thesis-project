@@ -61,7 +61,11 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 11:
 			// JOB FINNISHED
-			JobFinnished(ptrCurrentEvent, ptrJobAccountInfo, ptrJobList);
+			if (optFlag == 0) {
+				JobFinnished(ptrCurrentEvent, ptrJobAccountInfo, ptrJobList);
+			} else {
+				JobFinnishedOpt(ptrCurrentEvent, ptrJobAccountInfo, ptrJobList);
+			}
 			break;
 		case 12:
 			// ALLOCATION PLANNING
@@ -69,7 +73,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			if (optFlag == 0) {
 				AllocationPlanning(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrTaskList, ptrBalanceAccountInfo);
 			} else {
-				AllocationPlanningOpt(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, *ptrPtrOrderedTaskList, ptrBalanceAccountInfo);
+				AllocationPlanningOpt(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, *ptrPtrOrderedTaskList, ptrJobList, ptrBalanceAccountInfo);
 			}
 			break;
 		case 13:
