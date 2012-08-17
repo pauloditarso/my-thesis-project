@@ -27,7 +27,8 @@
 
 #include "simulation.h"
 
-void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrOrderedTaskList, balanceAccountInfo *ptrBalanceAccountInfo) {
+void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrOrderedTaskList, job *ptrJobList,
+		balanceAccountInfo *ptrBalanceAccountInfo) {
 
 	if (ptrCurrentEvent->eventID == ALLOCATIONPLANNING) {
 
@@ -212,6 +213,8 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 					ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
 					if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
 					ptrNewScheduleQueue->status = UNFINNISHED;
+					ptrNewScheduleQueue->utility = 0;
+					ptrNewScheduleQueue->cost = 0.0;
 					ptrNewScheduleQueue->profit = 0.0;
 					ptrNewScheduleQueue->previousSchedule = NULL;
 				}
@@ -428,6 +431,8 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				}
 
 				targetCost += reservationPricePerDay;
+				(*ptrPtrScheduleQueue)->utility = targetUtility;
+				(*ptrPtrScheduleQueue)->cost = targetCost;
 				(*ptrPtrScheduleQueue)->profit = (float)targetUtility - targetCost;
 				fprintf(ptrFileDebug, "profit %.2f targetUtility %d targetCost %.2f\n", ((float)targetUtility - targetCost), targetUtility, targetCost); // debug mode
 				fclose(ptrFileDebug);
@@ -454,8 +459,8 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			// (SOLUCAO DE MARQUITO!!!)
 			FILE *ptrFileSchedules;
 			ptrFileSchedules = fopen("schedules.txt", "a+");
-			scheduleQueue *ptrAuxScheduleQueue;
-			ptrAuxScheduleQueue = (*ptrPtrScheduleQueue);
+			scheduleQueue *ptrAuxScheduleQueue, *ptrBestScheduleQueue;
+			ptrBestScheduleQueue = ptrAuxScheduleQueue = (*ptrPtrScheduleQueue);
 			schedule *ptrBestScheduleList;
 			ptrBestScheduleList = ptrAuxScheduleQueue->scheduleList;
 			float bestProfit = -10000000;
@@ -465,13 +470,14 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 //				printf("targetFT %d status %d profit %.2f status %d\n", ptrAuxScheduleQueue->targetFinnishtime, ptrAuxScheduleQueue->status,
 //						ptrAuxScheduleQueue->profit, ptrAuxScheduleQueue->status);
 //				printf("***************************************************\n");
-				fprintf(ptrFileSchedules, "targetFT %d status %d profit %.2f status %d\n", ptrAuxScheduleQueue->targetFinnishtime, ptrAuxScheduleQueue->status,
-						ptrAuxScheduleQueue->profit, ptrAuxScheduleQueue->status);
+				fprintf(ptrFileSchedules, "targetFT %d status %d utility %d cost %.2f profit %.2f\n", ptrAuxScheduleQueue->targetFinnishtime,
+						ptrAuxScheduleQueue->status, ptrAuxScheduleQueue->utility, ptrAuxScheduleQueue->cost, ptrAuxScheduleQueue->profit);
 				fprintf(ptrFileSchedules, "***************************************************\n");
 
 				// comparing to find the profit of the best target finish time scenario
 				if (ptrAuxScheduleQueue->profit > bestProfit) {
 					bestProfit = ptrAuxScheduleQueue->profit;
+					ptrBestScheduleQueue = ptrAuxScheduleQueue;
 					ptrBestScheduleList = ptrAuxScheduleQueue->scheduleList;
 				}
 
@@ -491,6 +497,22 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrAuxScheduleQueue = ptrAuxScheduleQueue->previousSchedule;
 			}
 			fclose(ptrFileSchedules);
+
+			// adding job information into the jobList (utility and cost)
+			job *ptrAuxJobList;
+			ptrAuxJobList = ptrJobList;
+			while(ptrAuxJobList) {
+
+				if (ptrAuxJobList->jobID == ptrBestScheduleQueue->scheduleList->jobID) break;
+
+				ptrAuxJobList = ptrAuxJobList->nextJob;
+			}
+
+			if (ptrAuxJobList != NULL) {
+				ptrAuxJobList->utility = ptrBestScheduleQueue->utility;
+				ptrAuxJobList->cost = ptrBestScheduleQueue->cost;
+			}
+			else printf("ERROR (allocation planningOpt): job not found!!!\n");
 
 			// CRIAR AS MAQUINAS DO GRID (machineArrival() e machineDeparture())
 			// DEPOIS QUE EU TIVER O SET DE MAIOR PROFIT, DEVO VARRER A scheduleList E GERAR AS MAQUINAS DA GRADE

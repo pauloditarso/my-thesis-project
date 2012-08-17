@@ -72,7 +72,8 @@ typedef struct scheduleQueue {
 	unsigned int targetFinnishtime;
 	schedule *scheduleList;
 	enum {UNFINNISHED, FAILED, SUCCESSFUL} status;
-	float profit;
+	unsigned int utility;
+	float cost, profit;
 	struct scheduleQueue *previousSchedule;
 } scheduleQueue;
 
@@ -178,13 +179,15 @@ void JobStarted(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *
 
 void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *ptrJobList);
 
+void JobFinnishedOpt(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *ptrJobList);
+
 void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task *ptrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
 		gridAccountInfo *ptrGridInfoList, job *ptrJobList, jobAccountInfo *ptrJobAccountInfo, balanceAccountInfo *ptrBalanceAccountInfo, task **ptrPtrOrderedTaskList,
 		schedule *ptrScheduleList);
 
 void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, balanceAccountInfo *ptrBalanceAccountInfo);
 
-void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrOrderedTaskList, balanceAccountInfo *ptrBalanceAccountInfo);
+void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrOrderedTaskList, job *ptrJobList, balanceAccountInfo *ptrBalanceAccountInfo);
 
 double Randn(double mu, double sigma);
 
