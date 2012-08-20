@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 
 		optFlag = (atoi(argv[1]));
 		gridQoSFactor = (atof(argv[2]));
-		simulationTime = (atoi(argv[3]) * 60); // simulationTime is a global variable (minutes) based on the input parameter (in hours)
+		simulationTime = (atoi(argv[3]) * 24 * 60); // simulationTime is a global variable (minutes) based on the input parameter (days)
 		numberOfLocalMachines = (atoi(argv[4]));
 		numberOfReservedMachines = atoi(argv[5]);
 		numberOfOnDemandMachines = atoi(argv[6]);
