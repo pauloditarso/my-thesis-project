@@ -1,3 +1,5 @@
+* TESTAR, TESTAR, TESTAR!!!! E PLANEJAR OS EXPERIMENTOS!!!
+
 * ideias recentes:
 	- para o caso de doar maquinas da cloud para o grid, eh simplesmente criar os eventos de GRIDDONATING e GRIDPREEMPTED jah
 	na criacao dos eventos de TASKSCHEDULE (ou talvez no TASKFINNISHED);
@@ -7,8 +9,6 @@
 	- para contabilizar o custo na versao otimizada talvez seja melhor adicionar parametros na estrutura de alucacao e jah levar
 	o custo e a utilidade na hora do escalonamento e tentar puxar essas informacoes no JOBFINNISHED;
 		(lembrar que essas informacoes sao faceis de buscar na hora do escalonamento otimo, por causa da variavel timeLeft)
-
-* IMPLEMENTAR O TaskFinnishedOpt() (OU SERAH JobFinnishedOpt()???) COM O CALCULO CORRETO DO USAGE COST!!!
 
 * VERIFICAR SE O CALCULO DO PROFIT PARA CADA TARGET FINISH TIME ESTAH CORRETO!!!!
 
@@ -63,7 +63,6 @@
       * uma contra-partida (cujo desenvolvimento eh mais complicado) eh computar as execucoes e gaps entre elas e ver se cabe em porcoes (multiplos) de uma hora;
 
 * verificar a relacao numero de tasks vs runtime medio vs tempo medio do job;
-	(PRECISO CONVERSAR HJ COM MARCUS!!!)
 
 * verificar (e tentar unificar) os modelos desenvolvidos para os trabalhos de short- e long-term management;
 	(tentar utilizar um unico modelo, alterando apenas as funcoes de utilidade);
