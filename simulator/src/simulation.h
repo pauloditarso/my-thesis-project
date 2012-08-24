@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 # define DAY_TIME 1440 // maybe there is a better name
 # define TASK_AVG_TIME 30 // 30 minutes
