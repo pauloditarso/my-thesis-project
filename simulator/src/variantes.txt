@@ -1,18 +1,25 @@
 #!/bin/bash
 
-cd ../Release
-for i in {1..10000} 
+touch paulo.txt
+rm *.txt
+
+for i in {1..10} 
 do
-    ./simulator 0 0.72 8760 2 5 $i 0 > outA$i.txt
-#   ./simulator 0 0.72 8760 2 5 $i 0 > outB$i.txt
+	K1=$[ 1 + $[ RANDOM % 40 ]]
+	K2=$[ 1 + $[ RANDOM % 40 ]]
+	GRID=`echo "scale=2; $[($[ RANDOM % 100 ])]/99" | bc`
+	echo "grid: $GRID K1: $K1 K2: $K2 seed: $i" > scenario.txt
+	cat scenario.txt
+    ./simulator 1 $GRID 365 $K1 $K2 40 $i 1 > outA$i.txt
+#   ./simulator 1 0.72 365 1 2 4 $i 1 > outB$i.txt
 #   RES=$(diff outA$i.txt outB$i.txt | wc -l)
     RES=$(cat outA$i.txt | grep "INVARIANTES\|ERROR" | wc -l)
     if [ "$RES" != 0 ]
     then
 #       echo "DIFERENTE!!!"
-        echo "INVARIANTES!!!"
+        echo "INVARIANTES ou ERROR!!!"
         break
     else
-        rm outA$i.txt
+        rm *.txt
     fi
 done
