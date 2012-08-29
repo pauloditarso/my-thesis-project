@@ -245,9 +245,10 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 					event *ptrNewDonation;
 
 					if( (ptrNewDonation = malloc(sizeof(event))) ) {
+
 						ptrNewDonation->eventNumber = 0;
 						ptrNewDonation->eventID = GRIDDONATING;
-						ptrNewDonation->time = (ptrCurrentEvent->time); // one second after this event
+						ptrNewDonation->time = ptrCurrentEvent->time;
 						ptrNewDonation->machineInfo.machineID = ptrAuxMachine->machineID;
 						ptrNewDonation->machineInfo.source = ptrAuxMachine->source;
 						ptrNewDonation->machineInfo.status = DONATING;
@@ -260,7 +261,7 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 
 						InsertEvent(ptrEventList, ptrNewDonation);
 
-					} else printf("ERROR (task finnished): merdou o malloc!!!\n");
+					} else printf("ERROR (Allocation Planning): merdou o malloc!!!\n");
 
 				}
 
