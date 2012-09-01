@@ -13,6 +13,7 @@
 int main(int argc, char *argv[]) {
 
 	clock_t start = clock();
+	setbuf(stdout, NULL); // debugguing mode
 
 	event *eventList, *ptrAuxList, *ptrLastNode;
 	machine *machineList, *ptrAuxMachine;
@@ -457,7 +458,9 @@ int main(int argc, char *argv[]) {
 
 	} else printf("ERROR (Main Simulator): invalid number of input parameters!!!\n");
 
-	printf("Time elapsed: %ld\n", (clock() - start) / CLOCKS_PER_SEC);
+	printf("Opt Flag: %d Grid QoS-Factor: %.2f Simulation Period (days): %d Machines ([InH, Res, OnD]): [%d, %d, %d] Seed: %d UF: %d Time elapsed (seconds): %ld\n",
+			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
+			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
 
 	return EXIT_SUCCESS;
 }

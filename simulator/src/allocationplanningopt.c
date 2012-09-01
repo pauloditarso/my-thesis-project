@@ -99,9 +99,17 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrAuxMachine = ptrAuxMachine->nextMachine;
 			} // end of while(ptrAuxMachine->source == 0)
 
+			// ######################   BUG   #################################
+
 			// filling ptrMachineOptSetList with grid machines
-			unsigned short int i;
+			unsigned long int i;
 			for (i = 1; i <= numberOfGridMachines; i++) {
+
+				// debug mode
+//				if (ptrCurrentEvent->time > 27800) {
+//					passou();
+//					printf("numberOfGridMachines %ld", i);
+//				}
 
 				unsigned int avgUpTime = (int)Randn(GRID_AVG_TIME, GRID_SDV_TIME);
 
@@ -137,6 +145,10 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				}
 
 			}
+
+			// ######################  end BUG   #################################
+
+
 
 			// filling ptrMachineOptSetList with cloud machines (whithout spot machines!!!)
 			ptrAuxMachine = ptrMachineList;
@@ -180,7 +192,6 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrAuxMachine = ptrAuxMachine->nextMachine;
 			} // end of while(ptrAuxMachine)
 
-			//setbuf(stdout, NULL); // debugguing mode
 			// sweeping the time till deadline
 			unsigned int targetFinnishTime;
 			for (targetFinnishTime = firstTargetFinnishTime; targetFinnishTime <= deadline; targetFinnishTime += timeSteps) {
@@ -410,9 +421,9 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				}
 
 				// calculating the costs based on the machine used times
-				FILE *ptrFileDebug;
-				ptrFileDebug = fopen("debug.txt", "a+");
-				fprintf(ptrFileDebug, "********************* targetFT %d *********************\n", targetFinnishTime);
+//				FILE *ptrFileDebug;
+//				ptrFileDebug = fopen("debug.txt", "a+");
+//				fprintf(ptrFileDebug, "********************* targetFT %d *********************\n", targetFinnishTime);
 				unsigned int totalUsedTime = 0;
 				ptrAuxOptSet = ptrMachineOptSetList;
 				while(ptrAuxOptSet) {
@@ -427,7 +438,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						targetCost += ceil( (float)(totalUsedTime) / 60.0 ) * ondemandUsagePrice;
 					}
 
-					fprintf(ptrFileDebug, "source %d totalUsedTime %d targetCost %.2f\n", ptrAuxOptSet->source, totalUsedTime, targetCost); // debug mode
+//					fprintf(ptrFileDebug, "source %d totalUsedTime %d targetCost %.2f\n", ptrAuxOptSet->source, totalUsedTime, targetCost); // debug mode
 					ptrAuxOptSet = ptrAuxOptSet->nextMachineOptSet;
 				}
 
@@ -435,8 +446,8 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				(*ptrPtrScheduleQueue)->utility = targetUtility;
 				(*ptrPtrScheduleQueue)->cost = targetCost;
 				(*ptrPtrScheduleQueue)->profit = (float)targetUtility - targetCost;
-				fprintf(ptrFileDebug, "profit %.2f targetUtility %d targetCost %.2f\n", ((float)targetUtility - targetCost), targetUtility, targetCost); // debug mode
-				fclose(ptrFileDebug);
+//				fprintf(ptrFileDebug, "profit %.2f targetUtility %d targetCost %.2f\n", ((float)targetUtility - targetCost), targetUtility, targetCost); // debug mode
+//				fclose(ptrFileDebug);
 
 			} // end of for (i = firstTargetFinnishTime; i <= deadline; i += timeSteps)
 
@@ -458,8 +469,8 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			// LEMBRAR DE LIBERAR O ESPACO EM MEMORIA DO ptrPtrScheduleQueue
 			// SE O TEMPO DE EXECUCAO FOR MUITO CUSTOSO, OPTAR POR NAO CRIAR ESSA FILA E FAZER A ANALISE DO BEST-PROFIT DIRETO NO LOOP PRINCIPAL
 			// (SOLUCAO DE MARQUITO!!!)
-			FILE *ptrFileSchedules;
-			ptrFileSchedules = fopen("schedules.txt", "a+");
+//			FILE *ptrFileSchedules;
+//			ptrFileSchedules = fopen("schedules.txt", "a+");
 			scheduleQueue *ptrAuxScheduleQueue, *ptrBestScheduleQueue;
 			ptrBestScheduleQueue = ptrAuxScheduleQueue = (*ptrPtrScheduleQueue);
 			schedule *ptrBestScheduleList;
@@ -471,9 +482,9 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 //				printf("targetFT %d status %d profit %.2f status %d\n", ptrAuxScheduleQueue->targetFinnishtime, ptrAuxScheduleQueue->status,
 //						ptrAuxScheduleQueue->profit, ptrAuxScheduleQueue->status);
 //				printf("***************************************************\n");
-				fprintf(ptrFileSchedules, "targetFT %d status %d utility %d cost %.2f profit %.2f\n", ptrAuxScheduleQueue->targetFinnishtime,
-						ptrAuxScheduleQueue->status, ptrAuxScheduleQueue->utility, ptrAuxScheduleQueue->cost, ptrAuxScheduleQueue->profit);
-				fprintf(ptrFileSchedules, "***************************************************\n");
+//				fprintf(ptrFileSchedules, "targetFT %d status %d utility %d cost %.2f profit %.2f\n", ptrAuxScheduleQueue->targetFinnishtime,
+//						ptrAuxScheduleQueue->status, ptrAuxScheduleQueue->utility, ptrAuxScheduleQueue->cost, ptrAuxScheduleQueue->profit);
+//				fprintf(ptrFileSchedules, "***************************************************\n");
 
 				// comparing to find the profit of the best target finish time scenario
 				if (ptrAuxScheduleQueue->profit > bestProfit) {
@@ -487,17 +498,17 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrAuxSchedule = ptrAuxScheduleQueue->scheduleList;
 				while(ptrAuxSchedule) {
 
-					fprintf(ptrFileSchedules, "scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d profit %.2f bestProfit %.2f\n",
-							ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID, ptrAuxSchedule->runtime,
-							ptrAuxSchedule->machineID, ptrAuxSchedule->source, ptrAuxScheduleQueue->profit, bestProfit);
+//					fprintf(ptrFileSchedules, "scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d profit %.2f bestProfit %.2f\n",
+//							ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID, ptrAuxSchedule->runtime,
+//							ptrAuxSchedule->machineID, ptrAuxSchedule->source, ptrAuxScheduleQueue->profit, bestProfit);
 
 					ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
 				}
-				fprintf(ptrFileSchedules, "\n");
+//				fprintf(ptrFileSchedules, "\n");
 
 				ptrAuxScheduleQueue = ptrAuxScheduleQueue->previousSchedule;
 			}
-			fclose(ptrFileSchedules);
+//			fclose(ptrFileSchedules);
 
 			// adding job information into the jobList (utility and cost)
 			job *ptrAuxJobList;
