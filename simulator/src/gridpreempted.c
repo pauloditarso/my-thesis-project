@@ -50,7 +50,6 @@ void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMach
 			printf("ERROR (grid preempted): didn't find the grid entry!!!\n");
 		}
 
-
 //		printf("eventID %d (Grid Preempted) time %d \n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 		//	printf("machineID %d source %d status %d AT %d DT %d UP %.2f RP %.2f\n",
 		//			ptrCurrentEvent->machineInfo.machineID, ptrCurrentEvent->machineInfo.source,
