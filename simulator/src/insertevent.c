@@ -13,12 +13,12 @@ void InsertEvent(event *ptrEventList, event *ptrNewEvent) {
 
 		event *ptrAuxEvent, *ptrActualEvent, *ptrLastEvent;
 
-		ptrAuxEvent = ptrActualEvent = ptrLastEvent = ptrEventList;
+//		ptrAuxEvent = ptrActualEvent = ptrLastEvent = ptrEventList;
+		ptrAuxEvent = ptrActualEvent = ptrLastEvent = ptrThisEvent;
 
 		while(ptrAuxEvent){
-			if (ptrActualEvent->time > ptrNewEvent->time) {
-				break;
-			}
+
+			if (ptrActualEvent->time > ptrNewEvent->time)	break;
 
 			ptrLastEvent = ptrActualEvent;
 			ptrActualEvent = ptrActualEvent->nextEvent;

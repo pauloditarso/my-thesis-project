@@ -127,6 +127,8 @@ typedef struct balanceAccountInfo {
 	struct balanceAccountInfo *nextBalanceAccountInfo;
 } balanceAccountInfo;
 
+event *ptrThisEvent;
+
 void passou();
 
 void IncrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned int time, unsigned int value);
