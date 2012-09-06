@@ -10,9 +10,16 @@
 #include <time.h>
 #include "simulation.h"
 
+//#define CPU_TIME (getrusage(RUSAGE_SELF,&ruse), ruse.ru_utime.tv_sec + ruse.ru_stime.tv_sec + 1e-6 * (ruse.ru_utime.tv_usec + ruse.ru_stime.tv_usec))
+
 int main(int argc, char *argv[]) {
 
-	clock_t start = clock();
+	time_t newStart, newEnd;
+	time(&newStart);
+//	double first, second;
+//	first = CPU_TIME;
+//	clock_t start = clock();
+
 	setbuf(stdout, NULL); // debugguing mode
 
 	event *eventList, *ptrAuxList, *ptrLastNode;
@@ -56,6 +63,7 @@ int main(int argc, char *argv[]) {
 		} else printf("ERROR (main simulator): merdou o malloc!!!\n");
 
 		eventList->nextEvent = ptrLastNode;
+		ptrThisEvent = eventList;
 
 		// filling the event list with local and grid (???) machines, and workload jobs and tasks
 		FillEmptyEventList(eventList);
@@ -164,6 +172,7 @@ int main(int argc, char *argv[]) {
 		while(ptrAuxList) {
 
 //			if(ptrAuxList->time > (simulationTime + 1)) break;
+			ptrThisEvent = ptrAuxList;
 
 			printf("event# %d ", ptrAuxList->eventNumber);
 
@@ -458,9 +467,17 @@ int main(int argc, char *argv[]) {
 
 	} else printf("ERROR (Main Simulator): invalid number of input parameters!!!\n");
 
+	time(&newEnd);
+//   second = CPU_TIME;
+
+//	printf("Opt Flag: %d Grid QoS-Factor: %.2f Simulation Period (days): %d Machines ([InH, Res, OnD]): [%d, %d, %d] Seed: %d UF: %d Time elapsed (seconds): %ld\n",
+//			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
+//			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
+
 	printf("Opt Flag: %d Grid QoS-Factor: %.2f Simulation Period (days): %d Machines ([InH, Res, OnD]): [%d, %d, %d] Seed: %d UF: %d Time elapsed (seconds): %ld\n",
 			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
-			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
+			simSeed, utilityFunction, (unsigned long int)(newEnd - newStart));
+
 
 	return EXIT_SUCCESS;
 }
