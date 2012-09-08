@@ -111,6 +111,10 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			} // end of while(ptrAuxMachine->source == 0)
 
 			// filling ptrMachineOptSetList with grid machines
+			machineOptSet *ptrAux1;
+			ptrAux1 = ptrMachineOptSetList;
+			while(ptrAux1->nextMachineOptSet != NULL) ptrAux1 = ptrAux1->nextMachineOptSet;
+
 			unsigned long int i;
 			for (i = 1; i <= numberOfGridMachines; i++) {
 
@@ -133,20 +137,18 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				}
 				else {
 
-					machineOptSet *ptrAux1;
-					if ( (ptrAux1 = malloc(sizeof(machineOptSet))) ) {
+					machineOptSet *ptrAux2;
+					if ( (ptrAux2 = malloc(sizeof(machineOptSet))) ) {
 
-						ptrAux1->machineID = 1;
-						ptrAux1->source = 1;
-						ptrAux1->timeLeft = avgUpTime;
-						ptrAux1->upTime = avgUpTime;
-						ptrAux1->nextMachineOptSet = NULL;
+						ptrAux2->machineID = 1;
+						ptrAux2->source = 1;
+						ptrAux2->timeLeft = avgUpTime;
+						ptrAux2->upTime = avgUpTime;
+						ptrAux2->nextMachineOptSet = NULL;
 
-						machineOptSet *ptrAux2;
-						ptrAux2 = ptrMachineOptSetList;
-						while(ptrAux2->nextMachineOptSet != NULL) ptrAux2 = ptrAux2->nextMachineOptSet;
-
-						ptrAux2->nextMachineOptSet = ptrAux1;
+						ptrAux1->nextMachineOptSet = ptrAux2;
+						ptrAux1 = ptrAux2;
+						ptrAux2 = NULL;
 
 					}
 					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
