@@ -43,8 +43,8 @@ int main(int argc, char *argv[]) {
 		numberOfLocalMachines = (atoi(argv[4]));
 		numberOfReservedMachines = atoi(argv[5]);
 		numberOfOnDemandMachines = atoi(argv[6]);
-		simSeed = (atoi(argv[7]));
-		utilityFunction = (atoi(argv[8]));
+		utilityFunction = (atoi(argv[7]));
+		simSeed = (atoi(argv[8]));
 
 		ondemandUsagePrice = 0.92; reservedUsagePrice = 0.22; reservationPrice = 2984.00;
 		reservationPricePerDay = (numberOfReservedMachines * reservationPrice)/365;
@@ -474,9 +474,9 @@ int main(int argc, char *argv[]) {
 //			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 //			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
 
-	printf("Opt Flag: %d Grid QoS-Factor: %.2f Simulation Period (days): %d Machines ([InH, Res, OnD]): [%d, %d, %d] Seed: %d UF: %d Time elapsed (seconds): %ld\n",
+	printf("Opt Flag: %d Grid QoS-Factor: %.2f Simulation Period (days): %d Machines ([InH, Res, OnD]): [%d, %d, %d] UF: %d Seed: %d Time elapsed (seconds): %ld\n",
 			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
-			simSeed, utilityFunction, (unsigned long int)(newEnd - newStart));
+			utilityFunction, simSeed, (unsigned long int)(newEnd - newStart));
 
 
 	return EXIT_SUCCESS;
