@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
 //			if(ptrAuxList->time > (simulationTime + 1)) break;
 			ptrThisEvent = ptrAuxList;
 
-			printf("event# %d ", ptrAuxList->eventNumber);
+			printf("event# %d eventID %d ", ptrAuxList->eventNumber, ptrAuxList->eventID);
 
 			switch (ptrAuxList->eventID) {
 			case 0:

@@ -103,7 +103,7 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 
 								InsertEvent(ptrEventList, ptrNewGridPreemption);
 							}
-							else printf("ERROR (job arrival): merdou o malloc!!!\n");
+							else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 
 						}
 
@@ -223,7 +223,7 @@ void MachineArrival(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMac
 
 								InsertEvent(ptrEventList, ptrNewGridPreemption);
 							}
-							else printf("ERROR (job arrival): merdou o malloc!!!\n");
+							else printf("ERROR (machine arrival): merdou o malloc!!!\n");
 
 						}
 
