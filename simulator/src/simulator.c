@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
 	schedule *scheduleList;
 
 	unsigned int count = 0;
+	unsigned int totalNumberOfEvents = 0;
 	gridMachinesID = 0; scheduleID = 0;
 
 	if (argc == 9) {
@@ -174,7 +175,9 @@ int main(int argc, char *argv[]) {
 //			if(ptrAuxList->time > (simulationTime + 1)) break;
 			ptrThisEvent = ptrAuxList;
 
-			printf("event# %d eventID %d ", ptrAuxList->eventNumber, ptrAuxList->eventID);
+//			printf("event# %d eventID %d ", ptrAuxList->eventNumber, ptrAuxList->eventID);
+			printf("event# %d ", ptrAuxList->eventNumber);
+
 
 			switch (ptrAuxList->eventID) {
 			case 0:
@@ -317,9 +320,8 @@ int main(int argc, char *argv[]) {
 		int lastEventNumber = -1;
 		unsigned int lastEventTime = 0;
 		unsigned short int numberOfArrivals = 0, numberOfDepartures = 0;
-		count = 0;
 		while(ptrAuxEventList) {
-			count++;
+			totalNumberOfEvents++;
 
 			// testar se o atual eh o anterior - 1
 			if ( (ptrAuxEventList->eventNumber - 1) != lastEventNumber ) {
@@ -345,7 +347,7 @@ int main(int argc, char *argv[]) {
 		}
 
 		// testando a numeracao de eventos
-		if ( count != (ptrLastNode->eventNumber+1) || lastEventNumber != ptrLastNode->eventNumber ) {
+		if ( totalNumberOfEvents != (ptrLastNode->eventNumber+1) || lastEventNumber != ptrLastNode->eventNumber ) {
 			//		printf("\n");
 			printf("(INVARIANTES) NUMERO ERRADO DE EVENTOS!!!\n");
 			//		printf("\n");
@@ -474,9 +476,9 @@ int main(int argc, char *argv[]) {
 //			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 //			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
 
-	printf("Opt Flag: %d Grid QoS-Factor: %.2f Simulation Period (days): %d Machines ([InH, Res, OnD]): [%d, %d, %d] UF: %d Seed: %d Time elapsed (seconds): %ld\n",
+printf("Sim Mode: %d Grid QoS: %.2f Simulation Time (days): %d Machines ([InH, Res, OnD]): [%d, %d, %d] UF: %d Seed: %d Number of Events: %d Time elapsed (seconds): %ld\n",
 			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
-			utilityFunction, simSeed, (unsigned long int)(newEnd - newStart));
+			utilityFunction, simSeed, totalNumberOfEvents, (unsigned long int)(newEnd - newStart));
 
 
 	return EXIT_SUCCESS;

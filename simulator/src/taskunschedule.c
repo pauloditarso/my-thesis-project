@@ -126,7 +126,6 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 					ptrNewEvent->eventNumber = 0;
 					ptrNewEvent->eventID = ALLOCATIONPLANNING;
 					ptrNewEvent->time = (ptrCurrentEvent->time + 1);
-					ptrNewEvent->flag = 1;
 					ptrNewEvent->jobInfo.jobID = ptrAuxJobList->jobID;
 					ptrNewEvent->jobInfo.jobSize = ptrAuxJobList->jobSize;
 					ptrNewEvent->jobInfo.arrivalTime = ptrAuxJobList->arrivalTime;

@@ -236,36 +236,38 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 			} // end of while(ptrAuxTask)
 
 			// if there is any unallocated in-house machine, creates a new donation event
-			machine *ptrAuxMachine;
-			ptrAuxMachine = ptrMachineList;
-			while(ptrAuxMachine) {
+			if (allocated != 0) {
+				machine *ptrAuxMachine;
+				ptrAuxMachine = ptrMachineList;
+				while(ptrAuxMachine) {
 
-				if ( ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == IDLE ) {
+					if ( ptrAuxMachine->source == LOCAL && ptrAuxMachine->status == IDLE ) {
 
-					event *ptrNewDonation;
+						event *ptrNewDonation;
 
-					if( (ptrNewDonation = malloc(sizeof(event))) ) {
+						if( (ptrNewDonation = malloc(sizeof(event))) ) {
 
-						ptrNewDonation->eventNumber = 0;
-						ptrNewDonation->eventID = GRIDDONATING;
-						ptrNewDonation->time = ptrCurrentEvent->time;
-						ptrNewDonation->machineInfo.machineID = ptrAuxMachine->machineID;
-						ptrNewDonation->machineInfo.source = ptrAuxMachine->source;
-						ptrNewDonation->machineInfo.status = DONATING;
-						ptrNewDonation->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
-						ptrNewDonation->machineInfo.departureTime = ptrAuxMachine->departureTime;
-						ptrNewDonation->machineInfo.usagePrice = ptrAuxMachine->usagePrice;
-						ptrNewDonation->machineInfo.reservationPrice = ptrAuxMachine->reservationPrice;
-						ptrNewDonation->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
-						ptrNewDonation->nextEvent = NULL;
+							ptrNewDonation->eventNumber = 0;
+							ptrNewDonation->eventID = GRIDDONATING;
+							ptrNewDonation->time = ptrCurrentEvent->time;
+							ptrNewDonation->machineInfo.machineID = ptrAuxMachine->machineID;
+							ptrNewDonation->machineInfo.source = ptrAuxMachine->source;
+							ptrNewDonation->machineInfo.status = DONATING;
+							ptrNewDonation->machineInfo.arrivalTime = ptrAuxMachine->arrivalTime;
+							ptrNewDonation->machineInfo.departureTime = ptrAuxMachine->departureTime;
+							ptrNewDonation->machineInfo.usagePrice = ptrAuxMachine->usagePrice;
+							ptrNewDonation->machineInfo.reservationPrice = ptrAuxMachine->reservationPrice;
+							ptrNewDonation->machineInfo.nextMachine = ptrAuxMachine->nextMachine;
+							ptrNewDonation->nextEvent = NULL;
 
-						InsertEvent(ptrEventList, ptrNewDonation);
+							InsertEvent(ptrEventList, ptrNewDonation);
 
-					} else printf("ERROR (Allocation Planning): merdou o malloc!!!\n");
+						} else printf("ERROR (Allocation Planning): merdou o malloc!!!\n");
 
+					}
+
+					ptrAuxMachine = ptrAuxMachine->nextMachine;
 				}
-
-				ptrAuxMachine = ptrAuxMachine->nextMachine;
 			}
 
 			printf("eventID %d (Allocation Planning) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
@@ -274,4 +276,5 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 		} else printf("ERROR (arrival): there is no machine or task list!!!\n");
 
 	} else printf("ERROR (allocation planning): wrong eventID!!!\n");
+
 } // end of AllocationPlanning()

@@ -11,14 +11,10 @@ void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 	if (ptrCurrentEvent->eventID == GRIDDONATING) {
 
-		printf("machineID %d source %d status %d\n", ptrCurrentEvent->machineInfo.machineID, ptrCurrentEvent->machineInfo.source, ptrCurrentEvent->machineInfo.status);
-
 		machine *ptrAuxMachine;
 		ptrAuxMachine = ptrMachineList;
 
 		while (ptrAuxMachine) {
-
-			printf("machineID %d source %d status %d\n", ptrAuxMachine->machineID, ptrAuxMachine->source, ptrAuxMachine->status);
 
 			if ( ptrAuxMachine->machineID == ptrCurrentEvent->machineInfo.machineID && ptrAuxMachine->source == ptrCurrentEvent->machineInfo.source ) {
 
