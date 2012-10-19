@@ -18,7 +18,7 @@ void InsertEvent(event *ptrEventList, event *ptrNewEvent) {
 
 		while(ptrAuxEvent){
 
-			if (ptrActualEvent->time > ptrNewEvent->time)	break;
+			if (ptrActualEvent->time > ptrNewEvent->time) break;
 
 			ptrLastEvent = ptrActualEvent;
 			ptrActualEvent = ptrActualEvent->nextEvent;

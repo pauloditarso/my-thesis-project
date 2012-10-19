@@ -293,7 +293,7 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 
 				} else printf("ERROR (task finnished): merdou o malloc!!!\n");
 
-			} // end if (thereIsAPlanning)
+			} // end if (!thereIsAPlanning)
 
 		} // end if (isThereQueuedTask)
 
