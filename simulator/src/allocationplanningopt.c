@@ -54,7 +54,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrBestScheduleQueue->status = UNFINNISHED;
 				ptrBestScheduleQueue->utility = 0;
 				ptrBestScheduleQueue->cost = 0.0;
-				ptrBestScheduleQueue->profit = -10000000;
+				ptrBestScheduleQueue->profit = -100000000;
 				ptrBestScheduleQueue->previousSchedule = NULL;
 
 			} else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
