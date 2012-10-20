@@ -153,7 +153,7 @@ void FillEmptyEventList(event *ptrEventList) {
 
 	for (i = 0; i < maximumNumberOfJobs; i++) {
 
-		deadline = 0;
+		deadline = 2; // taking into account the 2 minutes between job arrival and task scheduling (allocation process)
 		longestTask = 0;
 		jobLength = (int)Randn(JOB_AVG_LENGTH, JOB_SDV_LENGTH);
 		jobSize = (int)(jobLength/TASK_AVG_TIME);
