@@ -24,6 +24,7 @@
 unsigned short int optFlag;
 unsigned int simulationTime;
 float gridQoSFactor, reservedUsagePrice, ondemandUsagePrice, reservationPricePerDay, reservationPrice;
+float workloadFactor, ondemandPriceFactor, runtimeFactor, gridUptimeFactor, inhouseFactor;
 unsigned short int simSeed, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines; // TAZER balance E numberOfGridMachines???
 unsigned int gridMachinesID, scheduleID;
 enum {CONSTANT, LINEAR, STEP} utilityFunction;

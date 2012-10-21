@@ -36,7 +36,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 			unsigned int balance, numberOfGridMachines;
 			balance = GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time);
-			numberOfGridMachines = (int)(balance * gridQoSFactor)/TASK_AVG_TIME; // ceiling or trunk???
+			numberOfGridMachines = (int)((balance * gridQoSFactor)/(TASK_AVG_TIME*gridUptimeFactor)); // ceiling or trunk???
 
 			unsigned int firstTargetFinnishTime, deadline, timeSteps;
 			firstTargetFinnishTime = (ptrCurrentEvent->jobInfo.arrivalTime + 2 + ptrCurrentEvent->jobInfo.longestTask); // AT + 2min to start a job + LT
