@@ -36,18 +36,23 @@ int main(int argc, char *argv[]) {
 	unsigned int totalNumberOfEvents = 0;
 	gridMachinesID = 0; scheduleID = 0;
 
-	if (argc == 9) {
+	if (argc == 14) {
 
 		optFlag = (atoi(argv[1]));
-		gridQoSFactor = (atof(argv[2]));
-		simulationTime = (atoi(argv[3]) * 24 * 60); // simulationTime is a global variable (minutes) based on the input parameter (days)
-		numberOfLocalMachines = (atoi(argv[4]));
-		numberOfReservedMachines = atoi(argv[5]);
-		numberOfOnDemandMachines = atoi(argv[6]);
-		utilityFunction = (atoi(argv[7]));
-		simSeed = (atoi(argv[8]));
+		simulationTime = (atoi(argv[2]) * 24 * 60); // simulationTime is a global variable (minutes) based on the input parameter (days)
+		workloadFactor = (atof(argv[3]));
+		gridQoSFactor = (atof(argv[4]));
+		ondemandPriceFactor = (atof(argv[5]));
+		runtimeFactor = (atof(argv[6]));
+		gridUptimeFactor = (atof(argv[7]));
+		inhouseFactor = (atof(argv[8]));
+		numberOfLocalMachines = (atoi(argv[9]));
+		numberOfReservedMachines = atoi(argv[10]);
+		numberOfOnDemandMachines = atoi(argv[11]);
+		utilityFunction = (atoi(argv[12]));
+		simSeed = (atoi(argv[13]));
 
-		ondemandUsagePrice = 0.92; reservedUsagePrice = 0.22; reservationPrice = 2984.00;
+		ondemandUsagePrice = (0.92*ondemandPriceFactor); reservedUsagePrice = 0.22; reservationPrice = 2984.00;
 		reservationPricePerDay = (numberOfReservedMachines * reservationPrice)/365;
 
 		srand(simSeed);
@@ -476,10 +481,10 @@ int main(int argc, char *argv[]) {
 //			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 //			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
 
-printf("Sim Mode: %d Grid QoS: %.2f Simulation Time (days): %d Machines ([InH, Res, OnD]): [%d, %d, %d] UF: %d Seed: %d Number of Events: %d Time elapsed (seconds): %ld\n",
-			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
-			utilityFunction, simSeed, totalNumberOfEvents, (unsigned long int)(newEnd - newStart));
-
+printf("SimMode: %d SimTime (days): %d WlFactor: %.2f GridQoS: %.2f OnDPFactor: %.2f RtFactor: %.2f UpTFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] UF: %d Seed: %d #Events: %d ExecTime (seconds): %ld\n",
+		optFlag, (int)(simulationTime/1440), workloadFactor, gridQoSFactor, ondemandPriceFactor, runtimeFactor,
+		gridUptimeFactor, inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
+		utilityFunction, simSeed, totalNumberOfEvents, (unsigned long int)(newEnd - newStart));
 
 	return EXIT_SUCCESS;
 }
