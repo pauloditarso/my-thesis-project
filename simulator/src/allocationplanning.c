@@ -35,7 +35,7 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 
 			unsigned int balance, numberOfGridMachines;
 			balance = GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time);
-			numberOfGridMachines = (int)((balance * gridQoSFactor)/(TASK_AVG_TIME*gridUptimeFactor)); // ceiling or trunk???
+			numberOfGridMachines = (int)((balance * gridQoSFactor)/taskAvgTime); // ceiling or trunk???
 //			printf("o balance na grade agora e %d\n", GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time));
 //			printf("\n");
 //			printf("balance %d\n", balance);
@@ -107,7 +107,7 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 						found = 1;
 						allocated = 1;
 						ptrAuxTask->status = STARTED; // LEMBAR QUE ESTOU AQUI A UM SEGUNDO DE COMECAR A EXECUCAO EFETIVAMENTE
-						unsigned int avgUpTime = (int)Randn(GRID_AVG_TIME, GRID_SDV_TIME);
+						unsigned int avgUpTime = (int)Randn(gridAvgUptime, (gridAvgUptime*0.1));
 //						printf("DT %d\n", departureTime); // debug mode
 
 						// insert a machine arrival event into the event list
