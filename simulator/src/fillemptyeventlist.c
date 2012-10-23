@@ -149,15 +149,16 @@ void FillEmptyEventList(event *ptrEventList) {
 	// task and job arrival events
 	unsigned int jobArrivalTime = (int)Randn(720, 60); // mean 12 hours; sd 1 hour;
 	unsigned int maximumNumberOfJobs = (int)floor(simulationTime/DAY_TIME); // maximum of one job a day
-	unsigned int deadline, longestTask, jobLength, jobSize, taskSdvTime;
-	taskSdvTime = (int)taskAvgTime*0.1;
+	unsigned int deadline, longestTask, jobLength, jobSize;
+	unsigned int taskSdvTime = (int)taskAvgTime*0.1;
 
 	for (i = 0; i < maximumNumberOfJobs; i++) {
 
 		deadline = 2; // taking into account the 2 minutes between job arrival and task scheduling (allocation process)
 		longestTask = 0;
 		jobLength = (int)Randn(JOB_AVG_LENGTH, JOB_SDV_LENGTH);
-		jobSize = (int)(jobLength/taskAvgTime) + 1; // garantir pelo menos uma task (RETIRAR ESSA SOMA???)
+//		jobSize = (int)(jobLength/taskAvgTime) + 1; // garantir pelo menos uma task (RETIRAR ESSA SOMA???)
+		jobSize = (int)((jobLength/taskAvgTime)*workloadFactor) + 1; // garantir pelo menos uma task (RETIRAR ESSA SOMA???)
 
 		for (j = 0; j < jobSize; j++) {
 
