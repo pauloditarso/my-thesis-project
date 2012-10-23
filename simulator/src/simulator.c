@@ -43,12 +43,12 @@ int main(int argc, char *argv[]) {
 		workloadFactor = (atof(argv[3]));
 		gridQoSFactor = (atof(argv[4]));
 		ondemandPriceFactor = (atof(argv[5]));
-		taskAvgTime = (atoi(argv[6]));
-		gridAvgUptime = (atoi(argv[7]));
-		inhouseFactor = (atof(argv[8]));
-		numberOfLocalMachines = (atoi(argv[9]));
-		numberOfReservedMachines = atoi(argv[10]);
-		numberOfOnDemandMachines = atoi(argv[11]);
+		inhouseFactor = (atof(argv[6]));
+		numberOfLocalMachines = (atoi(argv[7]));
+		numberOfReservedMachines = atoi(argv[8]);
+		numberOfOnDemandMachines = atoi(argv[9]);
+		taskAvgTime = (atoi(argv[10]));
+		gridAvgUptime = (atoi(argv[11]));
 		utilityFunction = (atoi(argv[12]));
 		simSeed = (atoi(argv[13]));
 
@@ -481,10 +481,9 @@ int main(int argc, char *argv[]) {
 //			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 //			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
 
-printf("SimMode: %d SimTime (days): %d WlFactor: %.2f GridQoS: %.2f OnDPFactor: %.2f TaskAvg: %d GridAvg: %d IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] UF: %d Seed: %d #Events: %d ExecTime (seconds): %ld\n",
-		optFlag, (int)(simulationTime/1440), workloadFactor, gridQoSFactor, ondemandPriceFactor, taskAvgTime,
-		gridAvgUptime, inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
-		utilityFunction, simSeed, totalNumberOfEvents, (unsigned long int)(newEnd - newStart));
+printf("SimMode: %d SimTime (days): %d WlFactor: %.2f GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d GridAvg: %d UF: %d Seed: %d #Events: %d ExecTime (seconds): %ld\n",
+		optFlag, (int)(simulationTime/1440), workloadFactor, gridQoSFactor, ondemandPriceFactor, inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
+		taskAvgTime, gridAvgUptime,	utilityFunction, simSeed, totalNumberOfEvents, (unsigned long int)(newEnd - newStart));
 
 	return EXIT_SUCCESS;
 }
