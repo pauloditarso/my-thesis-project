@@ -481,7 +481,7 @@ int main(int argc, char *argv[]) {
 //			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 //			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
 
-printf("SimMode: %d SimTime (days): %d WlFactor: %.2f GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d GridAvg: %d UF: %d Seed: %d #Events: %d ExecTime (seconds): %ld\n",
+printf("SimMode: %d SimTime (days): %d WLFactor: %.2f GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d GridAvg: %d UF: %d Seed: %d #Events: %d ExecTime (seconds): %ld\n",
 		optFlag, (int)(simulationTime/1440), workloadFactor, gridQoSFactor, ondemandPriceFactor, inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 		taskAvgTime, gridAvgUptime,	utilityFunction, simSeed, totalNumberOfEvents, (unsigned long int)(newEnd - newStart));
 
