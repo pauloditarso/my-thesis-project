@@ -149,16 +149,16 @@ void FillEmptyEventList(event *ptrEventList) {
 	// task and job arrival events
 	unsigned int jobArrivalTime = (int)Randn(720, 60); // mean 12 hours; sd 1 hour;
 	unsigned int maximumNumberOfJobs = (int)floor(simulationTime/DAY_TIME); // maximum of one job a day
-	unsigned int deadline, longestTask, jobLength, jobSize;
+	unsigned int longestTask, workload; //, jobSize, deadline, jobLength;
 	unsigned int taskSdvTime = (int)taskAvgTime*0.1;
 
 	for (i = 0; i < maximumNumberOfJobs; i++) {
 
-		deadline = 2; // taking into account the 2 minutes between job arrival and task scheduling (allocation process)
-		longestTask = 0;
-		jobLength = (int)Randn(JOB_AVG_LENGTH, JOB_SDV_LENGTH);
+		longestTask = 0; workload = 0;
+//		deadline = 2; // taking into account the 2 minutes between job arrival and task scheduling (allocation process)
+//		jobLength = (int)Randn(JOB_AVG_LENGTH, JOB_SDV_LENGTH);
 //		jobSize = (int)(jobLength/taskAvgTime) + 1; // garantir pelo menos uma task (RETIRAR ESSA SOMA???)
-		jobSize = (int)((jobLength/taskAvgTime)*workloadFactor) + 1; // garantir pelo menos uma task (RETIRAR ESSA SOMA???)
+//		jobSize = (int)((jobLength/taskAvgTime)*workloadFactor) + 1; // garantir pelo menos uma task (RETIRAR ESSA SOMA???)
 
 		for (j = 0; j < jobSize; j++) {
 
@@ -178,7 +178,8 @@ void FillEmptyEventList(event *ptrEventList) {
 				auxPtrEvent1->nextEvent = NULL;
 
 				InsertEvent(ptrEventList, auxPtrEvent1);
-				deadline += auxPtrEvent1->taskInfo.runtime;
+//				deadline += auxPtrEvent1->taskInfo.runtime;
+				workload += auxPtrEvent1->taskInfo.runtime;
 				if (longestTask < auxPtrEvent1->taskInfo.runtime) longestTask = auxPtrEvent1->taskInfo.runtime;
 
 			}
@@ -196,8 +197,8 @@ void FillEmptyEventList(event *ptrEventList) {
 			auxPtrEvent2->jobInfo.arrivalTime = jobArrivalTime;
 			auxPtrEvent2->jobInfo.finnishTime = 0; // indicates a non-setted finnish time
 			auxPtrEvent2->jobInfo.longestTask = longestTask;
-			auxPtrEvent2->jobInfo.deadline = deadline;
-			auxPtrEvent2->jobInfo.maxUtility = (10 * deadline);
+			auxPtrEvent2->jobInfo.deadline = (jobArrivalTime + DEADLINE);
+			auxPtrEvent2->jobInfo.maxUtility = (10 * workload);
 			auxPtrEvent2->jobInfo.utility = 0;
 			auxPtrEvent2->jobInfo.cost = 0.00;
 			auxPtrEvent2->jobInfo.nextJob = NULL;
