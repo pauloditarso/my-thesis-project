@@ -36,6 +36,9 @@ int main(int argc, char *argv[]) {
 	unsigned int totalNumberOfEvents = 0;
 	gridMachinesID = 0; scheduleID = 0;
 
+	int totalUtility = 0;
+	float totalCost = 0.0, totalProfit = 0.0;
+
 	if (argc == 14) {
 
 		optFlag = (atoi(argv[1]));
@@ -273,10 +276,16 @@ int main(int argc, char *argv[]) {
 		count = 0;
 		while(ptrAuxJob) {
 			count++;
+			totalCost += ptrAuxJob->cost;
+			totalUtility += ptrAuxJob->utility;
+			totalProfit += (ptrAuxJob->utility - ptrAuxJob->cost);
 			fprintf(ptrFileJobList, "jobID %d jobSize %d AR %d FT %d LT %d DL %d MU %d Utility %d Cost %.2f Profit %.2f\n", ptrAuxJob->jobID, ptrAuxJob->jobSize, ptrAuxJob->arrivalTime, ptrAuxJob->finnishTime, ptrAuxJob->longestTask,
 					ptrAuxJob->deadline, ptrAuxJob->maxUtility, ptrAuxJob->utility, ptrAuxJob->cost, (ptrAuxJob->utility - ptrAuxJob->cost));
 			ptrAuxJob = ptrAuxJob->nextJob;
 		}
+//		avgCost = (avgCost/count);
+//		avgUtility = (avgUtility/count);
+//		avgProfit = (avgProfit/count);
 		//	printf("a lista de jobs tem %d registros\n", count);
 		//	printf("\n");
 		fclose(ptrFileJobList);
@@ -481,9 +490,10 @@ int main(int argc, char *argv[]) {
 //			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 //			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
 
-printf("SimMode: %d SimTime (days): %d JobSize: %d GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d GridAvg: %d UF: %d Seed: %d #Events: %d ExecTime (seconds): %ld\n",
+	printf("SimMode: %d SimTime (days): %d JobSize: %d GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d GridAvg: %d UF: %d Seed: %d #Events: %d "
+			"ExecTime (seconds): %ld totalUtility %d totalCost %.2f totalProfit %.2f\n",
 		optFlag, (int)(simulationTime/1440), jobSize, gridQoSFactor, ondemandPriceFactor, inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
-		taskAvgTime, gridAvgUptime,	utilityFunction, simSeed, totalNumberOfEvents, (unsigned long int)(newEnd - newStart));
+		taskAvgTime, gridAvgUptime,	utilityFunction, simSeed, totalNumberOfEvents, (unsigned long int)(newEnd - newStart), totalUtility, totalCost, totalProfit);
 
 	return EXIT_SUCCESS;
 }
