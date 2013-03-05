@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 
 		optFlag = (atoi(argv[1]));
 		simulationTime = (atoi(argv[2]) * 24 * 60); // simulationTime is a global variable (minutes) based on the input parameter (days)
-		workloadFactor = (atof(argv[3]));
+		jobSize = (atoi(argv[3]));
 		gridQoSFactor = (atof(argv[4]));
 		ondemandPriceFactor = (atof(argv[5]));
 		inhouseFactor = (atof(argv[6]));
@@ -481,8 +481,8 @@ int main(int argc, char *argv[]) {
 //			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 //			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
 
-printf("SimMode: %d SimTime (days): %d WLFactor: %.2f GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d GridAvg: %d UF: %d Seed: %d #Events: %d ExecTime (seconds): %ld\n",
-		optFlag, (int)(simulationTime/1440), workloadFactor, gridQoSFactor, ondemandPriceFactor, inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
+printf("SimMode: %d SimTime (days): %d JobSize: %d GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d GridAvg: %d UF: %d Seed: %d #Events: %d ExecTime (seconds): %ld\n",
+		optFlag, (int)(simulationTime/1440), jobSize, gridQoSFactor, ondemandPriceFactor, inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 		taskAvgTime, gridAvgUptime,	utilityFunction, simSeed, totalNumberOfEvents, (unsigned long int)(newEnd - newStart));
 
 	return EXIT_SUCCESS;

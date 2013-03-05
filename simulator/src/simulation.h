@@ -14,18 +14,19 @@
 #include <time.h>
 
 # define DAY_TIME 1440 // maybe there is a better name
+# define DEADLINE 840 // a deadline of 14 hours
 //# define TASK_AVG_TIME 30 // 30 minutes
 //# define TASK_SDV_TIME 3  // 3 minutes
 //# define GRID_AVG_TIME 30
 //# define GRID_SDV_TIME 3
-# define JOB_AVG_LENGTH 600 // 10 hours
-# define JOB_SDV_LENGTH 60 // 1 hours
+//# define JOB_AVG_LENGTH 600 // 10 hours
+//# define JOB_SDV_LENGTH 60 // 1 hours
 
 unsigned short int optFlag;
 unsigned int simulationTime, taskAvgTime, gridAvgUptime;
 float gridQoSFactor, reservedUsagePrice, ondemandUsagePrice, reservationPricePerDay, reservationPrice;
-float workloadFactor, ondemandPriceFactor, inhouseFactor;
-unsigned short int simSeed, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines; // TAZER balance E numberOfGridMachines???
+float ondemandPriceFactor, inhouseFactor; //, workloadFactor;
+unsigned short int jobSize, simSeed, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines; // TAZER balance E numberOfGridMachines???
 unsigned int gridMachinesID, scheduleID;
 enum {CONSTANT, LINEAR, STEP} utilityFunction;
 //char *localMachinesTrace;
