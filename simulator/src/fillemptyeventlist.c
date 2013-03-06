@@ -155,6 +155,7 @@ void FillEmptyEventList(event *ptrEventList) {
 	for (i = 0; i < maximumNumberOfJobs; i++) {
 
 		longestTask = 0; workload = 0;
+//		variaveis abaixo eram usadas qnd o deadline era atrelado ao workload!!!
 //		deadline = 2; // taking into account the 2 minutes between job arrival and task scheduling (allocation process)
 //		jobLength = (int)Randn(JOB_AVG_LENGTH, JOB_SDV_LENGTH);
 //		jobSize = (int)(jobLength/taskAvgTime) + 1; // garantir pelo menos uma task (RETIRAR ESSA SOMA???)
