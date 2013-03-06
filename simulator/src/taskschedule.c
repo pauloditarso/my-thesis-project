@@ -152,7 +152,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 				ptrAuxTask = ptrAuxTask->nextTask;
 			}
 
-		} else printf("ERROR (arrival): there is no machine or task list!!!\n");
+		} else printf("ERROR (task scheduling): there is no machine or task list!!!\n");
 
 	} else printf("ERROR (task scheduling): wrong eventID!!!\n");
 }
