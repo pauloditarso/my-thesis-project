@@ -679,7 +679,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			printf("eventID %d (Allocation Planning) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			printf("Allocation %d\n", allocated);
 
-		} else printf("ERROR (arrival): there is no machine or task list!!!\n");
+		} else printf("ERROR (allocation planning): there is no machine or task list!!!\n");
 
 	} else printf("ERROR (allocation planning): wrong eventID!!!\n");
 } // end of AllocationPlanningOpt()
