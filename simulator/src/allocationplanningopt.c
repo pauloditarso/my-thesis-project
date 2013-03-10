@@ -118,8 +118,8 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			unsigned long int i;
 			for (i = 1; i <= numberOfGridMachines; i++) {
 
-				// debug mode
-//				if (ptrCurrentEvent->time > 27800) {
+//				 debug mode
+//				if (ptrCurrentEvent->eventNumber == 9749) {
 //					passou();
 //					printf("numberOfGridMachines %ld", i);
 //				}
@@ -251,6 +251,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				// sweeping ordered task list
 				unsigned int roundNumberOfGridMachines = numberOfGridMachines;
 				unsigned int roundGridMachinesID = gridMachinesID;
+
 				while(ptrAuxOrderedTask) {
 
 					if (ptrAuxOrderedTask->jobID == ptrCurrentEvent->jobInfo.jobID) {
@@ -394,12 +395,17 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 							}
 							break;
 						case LINEAR:
-							if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) <= ptrCurrentEvent->jobInfo.deadline ) {
-								targetUtility = ( (-1)*(ptrCurrentEvent->jobInfo.maxUtility/ptrCurrentEvent->jobInfo.deadline)*(targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) + ptrCurrentEvent->jobInfo.maxUtility );
+							if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) < ptrCurrentEvent->jobInfo.deadline ) {
+								targetUtility = ( (-1)*(ptrCurrentEvent->jobInfo.maxUtility/(ptrCurrentEvent->jobInfo.deadline-ptrCurrentEvent->jobInfo.arrivalTime))*(targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) + ptrCurrentEvent->jobInfo.maxUtility );
 							}
 							else {
 								targetUtility = 0;
 							}
+//							debug mode
+//							if (ptrCurrentEvent->eventNumber == 9748 && targetFinnishTime == 28654) {
+//								printf("targetUtility %d x %d maxUtility %d deadline %d targetFT %d jobArrival %d\n", targetUtility, (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime),
+//										ptrCurrentEvent->jobInfo.maxUtility, ptrCurrentEvent->jobInfo.deadline, targetFinnishTime, ptrCurrentEvent->jobInfo.arrivalTime);
+//							}
 							break;
 						case STEP:
 							if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) <= (ptrCurrentEvent->jobInfo.deadline/3) ) {
@@ -512,6 +518,30 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrAuxJobList->cost = ptrBestScheduleQueue->cost;
 			}
 			else printf("ERROR (allocation planningOpt): job not found!!!\n");
+
+////			debug mode
+//			if (ptrCurrentEvent->eventNumber == 9748) {
+//
+//				FILE *ptrFileDebug;
+//				ptrFileDebug = fopen("debug.txt", "a+");
+//
+//				scheduleQueue *fila;
+//				fila = ptrBestScheduleQueue;
+//				schedule *teste;
+//				teste = ptrBestScheduleList;
+//
+//				fprintf(ptrFileDebug, "********************* targetFT %d *********************\n", fila->targetFinnishtime);
+//				while(teste) {
+//					fprintf(ptrFileDebug, "scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d\n",
+//							teste->scheduleID, teste->scheduleTime, teste->taskID,
+//							teste->jobID, teste->runtime,
+//							teste->machineID, teste->source);
+//					teste = teste->nextSchedule; // degub mode
+//				}
+//				fprintf(ptrFileDebug, "status %d utility %d cost %.2f profit %.2f\n", fila->status, fila->utility, fila->cost, fila->profit);
+//				fclose(ptrFileDebug);
+//
+//			}
 
 			// CRIAR AS MAQUINAS DO GRID (machineArrival() e machineDeparture())
 			// DEPOIS QUE EU TIVER O SET DE MAIOR PROFIT, DEVO VARRER A scheduleList E GERAR AS MAQUINAS DA GRADE
