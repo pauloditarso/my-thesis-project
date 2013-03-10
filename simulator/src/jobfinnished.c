@@ -46,8 +46,8 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 				}
 				break;
 			case LINEAR:
-				if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) <= ptrAuxJobList->deadline ) {
-					utility = ( (-1)*(ptrAuxJobList->maxUtility/ptrAuxJobList->deadline)*(ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) + ptrAuxJobList->maxUtility );
+				if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) < ptrAuxJobList->deadline ) {
+					utility = ( (-1)*(ptrAuxJobList->maxUtility/(ptrCurrentEvent->jobInfo.deadline-ptrCurrentEvent->jobInfo.arrivalTime))*(ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) + ptrAuxJobList->maxUtility );
 				}
 				else {
 					utility = 0;
