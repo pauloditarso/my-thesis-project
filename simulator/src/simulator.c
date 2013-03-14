@@ -317,16 +317,16 @@ int main(int argc, char *argv[]) {
 		//	printf("\n");
 		fclose(ptrFileTaskList);
 
-		FILE *ptrFileScheduleList;
-		ptrFileScheduleList = fopen("schedulelist.txt", "a+");
-		schedule *ptrAuxSchedule;
-		ptrAuxSchedule = scheduleList;
-		while(ptrAuxSchedule) {
-			fprintf(ptrFileScheduleList, "scheduleID %d scheduleTime %d machineID %d source %d taskID %d jobID %d RT %d\n", ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->machineID,
-					ptrAuxSchedule->source, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID, ptrAuxSchedule->runtime);
-			ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
-		}
-		fclose(ptrFileScheduleList);
+//		FILE *ptrFileScheduleList;
+//		ptrFileScheduleList = fopen("schedulelist.txt", "a+");
+//		schedule *ptrAuxSchedule;
+//		ptrAuxSchedule = scheduleList;
+//		while(ptrAuxSchedule) {
+//			fprintf(ptrFileScheduleList, "scheduleID %d scheduleTime %d machineID %d source %d taskID %d jobID %d RT %d\n", ptrAuxSchedule->scheduleID, ptrAuxSchedule->scheduleTime, ptrAuxSchedule->machineID,
+//					ptrAuxSchedule->source, ptrAuxSchedule->taskID, ptrAuxSchedule->jobID, ptrAuxSchedule->runtime);
+//			ptrAuxSchedule = ptrAuxSchedule->nextSchedule;
+//		}
+//		fclose(ptrFileScheduleList);
 
 		// ##### INVARIANTES PARA A LISTA DE EVENTOS #####
 		event *ptrAuxEventList;
