@@ -424,7 +424,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 											targetUtility = 0;
 										}
 										else {
-											printf("ERROR (job finnished): switch STEP!!!\n");
+											printf("ERROR (allocation planningOpt): switch STEP!!!\n");
 										}
 									}
 								}
