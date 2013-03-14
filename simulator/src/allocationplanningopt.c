@@ -50,14 +50,14 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			schedule *ptrBestScheduleList;
 			if ( (ptrBestScheduleQueue = malloc(sizeof(scheduleQueue))) )  {
 				ptrBestScheduleQueue->targetFinnishtime = 0;
-				if ( !(ptrBestScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+				if ( !(ptrBestScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o 1o malloc!!!\n");
 				ptrBestScheduleQueue->status = UNFINNISHED;
 				ptrBestScheduleQueue->utility = 0;
 				ptrBestScheduleQueue->cost = 0.0;
 				ptrBestScheduleQueue->profit = -100000000;
 				ptrBestScheduleQueue->previousSchedule = NULL;
 
-			} else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+			} else printf("ERROR (allocation planningOpt): merdou o 2o malloc!!!\n");
 			ptrBestScheduleList = ptrBestScheduleQueue->scheduleList;
 
 			// creating an optimized machine set list and filling it after
@@ -69,7 +69,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrMachineOptSetList->upTime = 0;
 				ptrMachineOptSetList->nextMachineOptSet = NULL;
 			}
-			else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+			else printf("ERROR (allocation planningOpt): merdou o 3o malloc!!!\n");
 
 			// filling ptrMachineOptSetList with local machines
 			machine *ptrAuxMachine;
@@ -103,7 +103,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						ptrAux2->nextMachineOptSet = ptrAux1;
 
 					}
-					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+					else printf("ERROR (allocation planningOpt): merdou o 4o malloc!!!\n");
 
 				}
 
@@ -151,7 +151,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 						ptrAux2 = NULL;
 
 					}
-					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+					else printf("ERROR (allocation planningOpt): merdou o 5o malloc!!!\n");
 
 				}
 
@@ -190,7 +190,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 							ptrAux2->nextMachineOptSet = ptrAux1;
 
 						}
-						else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+						else printf("ERROR (allocation planningOpt): merdou o 6o malloc!!!\n");
 
 					}
 
@@ -231,7 +231,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				scheduleQueue *ptrNewScheduleQueue;
 				if ( (ptrNewScheduleQueue = malloc(sizeof(scheduleQueue))) ) {
 					ptrNewScheduleQueue->targetFinnishtime = targetFinnishTime;
-					if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+					if ( !(ptrNewScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o 7o malloc!!!\n");
 					ptrNewScheduleQueue->scheduleList->scheduleID = 0;
 					ptrNewScheduleQueue->scheduleList->scheduleTime = 0;
 					ptrNewScheduleQueue->scheduleList->taskID = 0;
@@ -246,7 +246,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 					ptrNewScheduleQueue->profit = 0.0;
 					ptrNewScheduleQueue->previousSchedule = NULL;
 				}
-				else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+				else printf("ERROR (allocation planningOpt): merdou o 8o malloc!!!\n");
 
 				// sweeping ordered task list
 				unsigned int roundNumberOfGridMachines = numberOfGridMachines;
@@ -298,7 +298,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
                                     		ptrNewSchedule->source = ptrAuxOptSetMachine->source;
                                     		ptrNewSchedule->nextSchedule = NULL;
 
-                                    	} else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+                                    	} else printf("ERROR (allocation planningOpt): merdou o 9o malloc!!!\n");
 
                                     	schedule *ptrAux;
                                     	ptrAux = ptrNewScheduleQueue->scheduleList;
@@ -352,7 +352,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
                                     		ptrNewSchedule->source = ptrAuxOptSetMachine->source;
                                     		ptrNewSchedule->nextSchedule = NULL;
 
-                                    	} else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+                                    	} else printf("ERROR (allocation planningOpt): merdou o 10o malloc!!!\n");
 
                                     	schedule *ptrAux;
                                     	ptrAux = ptrNewScheduleQueue->scheduleList;
@@ -569,7 +569,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 						InsertEvent(ptrEventList, ptrNewGridMachine);
 					}
-					else printf("ERROR (allocation planning): merdou o malloc!!!\n");
+					else printf("ERROR (allocation planning): merdou o 11o malloc!!!\n");
 
 					ptrNewGridMachine = NULL;
 
@@ -591,7 +591,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 						InsertEvent(ptrEventList, ptrOutGridMachine);
 					}
-					else printf("ERROR (allocation planning): merdou o malloc!!!\n");
+					else printf("ERROR (allocation planning): merdou o 12o malloc!!!\n");
 
 					ptrOutGridMachine = NULL;
 
@@ -613,7 +613,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 						InsertEvent(ptrEventList, ptrNewEvent);
 					}
-					else printf("ERROR (allocation planning): merdou o malloc!!!\n");
+					else printf("ERROR (allocation planning): merdou o 13o malloc!!!\n");
 
 					ptrNewEvent = NULL;
 
@@ -638,7 +638,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 						InsertEvent(ptrEventList, ptrNewEvent);
 					}
-					else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+					else printf("ERROR (allocation planningOpt): merdou o 14o malloc!!!\n");
 
 					ptrNewEvent = NULL;
 
@@ -695,7 +695,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 							InsertEvent(ptrEventList, ptrNewDonation);
 
-						} else printf("ERROR (allocation planningOpt): merdou o malloc!!!\n");
+						} else printf("ERROR (allocation planningOpt): merdou o 15o malloc!!!\n");
 
 						ptrNewDonation = NULL;
 

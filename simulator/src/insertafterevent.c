@@ -12,7 +12,8 @@ void InsertAfterEvent(event *ptrEventList, event *ptrNewEvent, event *ptrTargetE
 	if (ptrEventList) {
 
 		event *ptrActualEvent, *ptrNextEvent;
-		ptrActualEvent = ptrEventList;
+//		ptrActualEvent = ptrEventList;
+		ptrActualEvent = ptrThisEvent;
 		ptrNextEvent = NULL;
 
 		while(ptrActualEvent) {

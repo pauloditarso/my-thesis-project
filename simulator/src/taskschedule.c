@@ -21,7 +21,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 		if (ptrScheduleList) {
 
-			if (ptrScheduleList->scheduleID == 0) { // code for an empty job list
+			if (ptrScheduleList->scheduleID == 0) { // code for an empty schedule list
 
 				ptrScheduleList->scheduleID = ptrCurrentEvent->scheduleInfo.scheduleID;
 				ptrScheduleList->scheduleTime = ptrCurrentEvent->scheduleInfo.scheduleTime;
