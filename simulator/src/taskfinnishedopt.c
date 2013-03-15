@@ -152,6 +152,9 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 
 			if ( ptrAuxMachine != NULL && ptrAuxMachine->source == LOCAL ) {  // cloud machines may be inserted as well
 
+				// debug mode
+//				if ( ptrCurrentEvent->time == 1072 && ptrAuxMachine->machineID == 3 ) passou();
+
 				// insert a new donation into the event list, if there is no waiting tasks
 				event *ptrNewDonation, *ptrTargetEvent;
 				ptrTargetEvent = ptrCurrentEvent;
