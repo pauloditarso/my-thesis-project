@@ -177,6 +177,9 @@ int main(int argc, char *argv[]) {
 		}
 
 		ptrAuxList = eventList;
+		int lastEventNumber = -1;
+		unsigned int lastEventTime = 0;
+		unsigned short int numberOfArrivals = 0, numberOfDepartures = 0;
 		//	int count = 0;
 		while(ptrAuxList) {
 
@@ -249,9 +252,72 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 
-			ptrAuxList = ptrAuxList->nextEvent;
-		}
+			// ##### INVARIANTES PARA A LISTA DE EVENTOS #####
+			totalNumberOfEvents++;
+
+			// testar se o atual eh o anterior - 1
+			if ( (ptrAuxList->eventNumber - 1) != lastEventNumber ) {
+				//			printf("\n");
+				printf("(INVARIANTES) NUMERACAO DOS EVENTOS ESTA ERRADA!!!\n");
+				break;
+			}
+			lastEventNumber = ptrAuxList->eventNumber;
+
+			// testas se o tempo estah crescente
+			if (ptrAuxList->time < lastEventTime) {
+				//			printf("\n");
+				printf("(INVARIANTES) EVENTOS NAO ESTAO EM ORDEM DECRESCENTE!!!\n");
+				break;
+			}
+			lastEventTime = ptrAuxList->time;
+
+			// testar se o numero de chegadas de maquinas eh igual ao de partida
+			if (ptrAuxList->eventID == MACHARRIVAL) numberOfArrivals++;
+			if (ptrAuxList->eventID == MACHDEPARTURE) numberOfDepartures++;
+
+			// atualizar o ponteiro para lista de eventos e remover o noh anterior
+
+			event *ptrLastEvent;
+			ptrLastEvent = ptrAuxList;
+			ptrAuxList = ptrAuxList->nextEvent; // passa pro proximo evento
+
+			if ( ptrAuxList != NULL && (ptrAuxList->time > ptrLastEvent->time) ) {
+
+				event *ptrAuxEvent;
+				ptrAuxEvent = eventList;
+				eventList = ptrAuxList;
+				while(ptrAuxEvent != ptrLastEvent) {
+					event *ptrRemove;
+					ptrRemove = ptrAuxEvent;
+					ptrAuxEvent = ptrAuxEvent->nextEvent;
+					free(ptrRemove);
+					ptrRemove = NULL;
+				}
+				if (ptrAuxEvent == ptrLastEvent) {
+					free(ptrLastEvent);
+					ptrLastEvent = NULL;
+					ptrAuxEvent = NULL;
+				}
+
+			}
+
+		} // end of while(ptrAuxList)
 		//	printf("\n");
+
+		// testando a numeracao de eventos
+		if ( totalNumberOfEvents != (lastEventNumber+1) ) {
+			//		printf("\n");
+			printf("(INVARIANTES) NUMERO ERRADO DE EVENTOS!!!\n");
+			//		printf("\n");
+		}
+
+		// testando o numero de chegadas e partidas de maquinas
+		if (numberOfArrivals != numberOfDepartures) {
+			//		printf("\n");
+			printf("(INVARIANTES) NUMERO DE CHEGADAS DIFERENTE DO NUMERO DE SAIDAS!!!\n");
+		}
+		// ##### FIM DAS INVARIANTES PARA A LISTA DE EVENTOS #####
+
 
 		// CIRAR UM TESTE DEPOIS PARA SABER SE TODAS AS TASKS FORAM EXECUTADAS OU NAO
 
@@ -328,51 +394,51 @@ int main(int argc, char *argv[]) {
 //		}
 //		fclose(ptrFileScheduleList);
 
-		// ##### INVARIANTES PARA A LISTA DE EVENTOS #####
-		event *ptrAuxEventList;
-		ptrAuxEventList = eventList;
-		int lastEventNumber = -1;
-		unsigned int lastEventTime = 0;
-		unsigned short int numberOfArrivals = 0, numberOfDepartures = 0;
-		while(ptrAuxEventList) {
-			totalNumberOfEvents++;
-
-			// testar se o atual eh o anterior - 1
-			if ( (ptrAuxEventList->eventNumber - 1) != lastEventNumber ) {
-				//			printf("\n");
-				printf("(INVARIANTES) NUMERACAO DOS EVENTOS ESTA ERRADA!!!\n");
-				break;
-			}
-			lastEventNumber = ptrAuxEventList->eventNumber;
-
-			// testas se o tempo estah crescente
-			if (ptrAuxEventList->time < lastEventTime) {
-				//			printf("\n");
-				printf("(INVARIANTES) EVENTOS NAO ESTAO EM ORDEM DECRESCENTE!!!\n");
-				break;
-			}
-
-			// testar se o numero de chegadas de maquinas eh igual ao de partida
-			if (ptrAuxEventList->eventID == MACHARRIVAL) numberOfArrivals++;
-			if (ptrAuxEventList->eventID == MACHDEPARTURE) numberOfDepartures++;
-
-			ptrAuxEventList = ptrAuxEventList->nextEvent;
-
-		}
-
-		// testando a numeracao de eventos
-		if ( totalNumberOfEvents != (ptrLastNode->eventNumber+1) || lastEventNumber != ptrLastNode->eventNumber ) {
-			//		printf("\n");
-			printf("(INVARIANTES) NUMERO ERRADO DE EVENTOS!!!\n");
-			//		printf("\n");
-		}
-
-		// testando o numero de chegadas e partidas de maquinas
-		if (numberOfArrivals != numberOfDepartures) {
-			//		printf("\n");
-			printf("(INVARIANTES) NUMERO DE CHEGADAS DIFERENTE DO NUMERO DE SAIDAS!!!\n");
-		}
-		// ##### FIM DAS INVARIANTES PARA A LISTA DE EVENTOS #####
+//		// ##### INVARIANTES PARA A LISTA DE EVENTOS #####
+//		event *ptrAuxEventList;
+//		ptrAuxEventList = eventList;
+//		int lastEventNumber = -1;
+//		unsigned int lastEventTime = 0;
+//		unsigned short int numberOfArrivals = 0, numberOfDepartures = 0;
+//		while(ptrAuxEventList) {
+//			totalNumberOfEvents++;
+//
+//			// testar se o atual eh o anterior - 1
+//			if ( (ptrAuxEventList->eventNumber - 1) != lastEventNumber ) {
+//				//			printf("\n");
+//				printf("(INVARIANTES) NUMERACAO DOS EVENTOS ESTA ERRADA!!!\n");
+//				break;
+//			}
+//			lastEventNumber = ptrAuxEventList->eventNumber;
+//
+//			// testas se o tempo estah crescente
+//			if (ptrAuxEventList->time < lastEventTime) {
+//				//			printf("\n");
+//				printf("(INVARIANTES) EVENTOS NAO ESTAO EM ORDEM DECRESCENTE!!!\n");
+//				break;
+//			}
+//
+//			// testar se o numero de chegadas de maquinas eh igual ao de partida
+//			if (ptrAuxEventList->eventID == MACHARRIVAL) numberOfArrivals++;
+//			if (ptrAuxEventList->eventID == MACHDEPARTURE) numberOfDepartures++;
+//
+//			ptrAuxEventList = ptrAuxEventList->nextEvent;
+//
+//		}
+//
+//		// testando a numeracao de eventos
+//		if ( totalNumberOfEvents != (ptrLastNode->eventNumber+1) || lastEventNumber != ptrLastNode->eventNumber ) {
+//			//		printf("\n");
+//			printf("(INVARIANTES) NUMERO ERRADO DE EVENTOS!!!\n");
+//			//		printf("\n");
+//		}
+//
+//		// testando o numero de chegadas e partidas de maquinas
+//		if (numberOfArrivals != numberOfDepartures) {
+//			//		printf("\n");
+//			printf("(INVARIANTES) NUMERO DE CHEGADAS DIFERENTE DO NUMERO DE SAIDAS!!!\n");
+//		}
+//		// ##### FIM DAS INVARIANTES PARA A LISTA DE EVENTOS #####
 
 		// ##### INVARIANTES PARA A LISTA DE MAQUINAS (CHEGADAS E PARTIDAS) #####
 		ptrAuxMachine = machineList;
