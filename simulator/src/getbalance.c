@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-unsigned int GetBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned int time) {
+unsigned int GetBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned long int time) {
 
 	balanceAccountInfo *ptrAuxBalanceAccount;
 	ptrAuxBalanceAccount = ptrBalanceAccountInfo;
