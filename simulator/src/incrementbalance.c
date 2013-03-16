@@ -7,13 +7,13 @@
 
 #include "simulation.h"
 
-void IncrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned int time, unsigned int value) {
+void IncrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned long int time, unsigned long int value) {
 
 	if (ptrBalanceAccountInfo) {
 
 		balanceAccountInfo *ptrAux, *ptrLast;
 		ptrAux = ptrLast = ptrBalanceAccountInfo;
-		unsigned int count = 0;
+		unsigned long int count = 0;
 
 		// going to the end of the balance account info list
 		while(ptrAux->nextBalanceAccountInfo != NULL) {
