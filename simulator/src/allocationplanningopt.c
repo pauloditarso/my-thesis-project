@@ -471,14 +471,12 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				// comparing to find out the best profit scenario
 				if (ptrNewScheduleQueue->profit > ptrBestScheduleQueue->profit) {
 
-//					scheduleQueue *ptrAuxScheduleQueue;
-
-//					ptrAuxScheduleQueue = ptrBestScheduleQueue;
+					scheduleQueue *ptrAuxScheduleQueue;
+					ptrAuxScheduleQueue = ptrBestScheduleQueue;
 					ptrBestScheduleQueue = ptrNewScheduleQueue;
 					ptrBestScheduleList = ptrBestScheduleQueue->scheduleList;
-
-//					free(ptrAuxScheduleQueue);
-//					ptrAuxScheduleQueue = NULL;
+					free(ptrAuxScheduleQueue);
+					ptrAuxScheduleQueue = NULL;
 
 				}
 				else {
