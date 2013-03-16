@@ -32,7 +32,7 @@ void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMach
 //					printf("###################################################\n");
 //					printf("FT %d ST %d Vl %d\n", ptrAuxGrid->finnishTime, ptrAuxGrid->startTime, (ptrAuxGrid->finnishTime - ptrAuxGrid->startTime));
 //				}
-				printf("eventID %d (Grid Preempted) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+				printf("eventID %d (Grid Preempted) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 				printf("machineID %d source %d\n", ptrAuxGrid->machineID, ptrAuxGrid->source);
 
 				break;

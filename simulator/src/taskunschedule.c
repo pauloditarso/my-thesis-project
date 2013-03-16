@@ -30,7 +30,7 @@ void TaskUnSchedule(event *ptrCurrentEvent, event **ptrPtrEventList, machine *pt
 
 		if (found) {
 
-			printf("eventID %d (Task Preempted) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+			printf("eventID %d (Task Preempted) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			printf("taskID %d jobID %d machineID %d source %d\n", ptrAuxTaskAccountList->taskID,
 					ptrAuxTaskAccountList->jobID, ptrAuxTaskAccountList->machineID, ptrAuxTaskAccountList->source);
 
