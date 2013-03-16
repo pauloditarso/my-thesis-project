@@ -32,11 +32,11 @@ int main(int argc, char *argv[]) {
 	balanceAccountInfo *balanceAccountInfoList;
 	schedule *scheduleList;
 
-	unsigned int count = 0;
-	unsigned int totalNumberOfEvents = 0;
+	unsigned long int count = 0;
+	unsigned long int totalNumberOfEvents = 0;
 	gridMachinesID = 0; scheduleID = 0;
 
-	int totalUtility = 0;
+	unsigned long int totalUtility = 0;
 	float totalCost = 0.0, totalProfit = 0.0;
 
 	if (argc == 14) {
@@ -177,9 +177,9 @@ int main(int argc, char *argv[]) {
 		}
 
 		ptrAuxList = eventList;
-		int lastEventNumber = -1;
-		unsigned int lastEventTime = 0;
-		unsigned short int numberOfArrivals = 0, numberOfDepartures = 0;
+		long int lastEventNumber = -1;
+		unsigned long int lastEventTime = 0;
+		unsigned long int numberOfArrivals = 0, numberOfDepartures = 0;
 		//	int count = 0;
 		while(ptrAuxList) {
 
@@ -187,7 +187,7 @@ int main(int argc, char *argv[]) {
 			ptrThisEvent = ptrAuxList;
 
 //			printf("event# %d eventID %d ", ptrAuxList->eventNumber, ptrAuxList->eventID);
-			printf("event# %d ", ptrAuxList->eventNumber);
+			printf("event# %ld ", ptrAuxList->eventNumber);
 
 
 			switch (ptrAuxList->eventID) {
@@ -328,7 +328,7 @@ int main(int argc, char *argv[]) {
 		count = 0;
 		while(ptrAuxJobAccountInfo) {
 			count++;
-			fprintf(ptrFileJobAccountInfo, "jobAccountID %d jobID %d ST %d FT %d\n", ptrAuxJobAccountInfo->jobAccountID, ptrAuxJobAccountInfo->jobID, ptrAuxJobAccountInfo->startTime, ptrAuxJobAccountInfo->finnishTime);
+			fprintf(ptrFileJobAccountInfo, "jobAccountID %d jobID %d ST %ld FT %ld\n", ptrAuxJobAccountInfo->jobAccountID, ptrAuxJobAccountInfo->jobID, ptrAuxJobAccountInfo->startTime, ptrAuxJobAccountInfo->finnishTime);
 			ptrAuxJobAccountInfo = ptrAuxJobAccountInfo->nextJobAccountInfo;
 		}
 		//	printf("a lista de jobs tem %d registros\n", count);
@@ -345,7 +345,7 @@ int main(int argc, char *argv[]) {
 			totalCost += ptrAuxJob->cost;
 			totalUtility += ptrAuxJob->utility;
 			totalProfit += (ptrAuxJob->utility - ptrAuxJob->cost);
-			fprintf(ptrFileJobList, "jobID %d jobSize %d AR %d FT %d LT %d DL %d MU %d Utility %d Cost %.2f Profit %.2f\n", ptrAuxJob->jobID, ptrAuxJob->jobSize, ptrAuxJob->arrivalTime, ptrAuxJob->finnishTime, ptrAuxJob->longestTask,
+			fprintf(ptrFileJobList, "jobID %d jobSize %d AR %ld FT %ld LT %d DL %ld MU %ld Utility %ld Cost %.2f Profit %.2f\n", ptrAuxJob->jobID, ptrAuxJob->jobSize, ptrAuxJob->arrivalTime, ptrAuxJob->finnishTime, ptrAuxJob->longestTask,
 					ptrAuxJob->deadline, ptrAuxJob->maxUtility, ptrAuxJob->utility, ptrAuxJob->cost, (ptrAuxJob->utility - ptrAuxJob->cost));
 			ptrAuxJob = ptrAuxJob->nextJob;
 		}
@@ -359,7 +359,7 @@ int main(int argc, char *argv[]) {
 		count = 0;
 		while(ptrAuxTask) {
 			count++;
-			fprintf(ptrFileTaskList, "taskID %d jobID %d jobSize %d AR %d RT %d status %d submissions %d\n", ptrAuxTask->taskID, ptrAuxTask->jobID, ptrAuxTask->jobSize,
+			fprintf(ptrFileTaskList, "taskID %d jobID %d jobSize %d AR %ld RT %d status %d submissions %d\n", ptrAuxTask->taskID, ptrAuxTask->jobID, ptrAuxTask->jobSize,
 					ptrAuxTask->arrivalTime, ptrAuxTask->runtime, ptrAuxTask->status, ptrAuxTask->numberOfSubmissions);
 			ptrAuxTask = ptrAuxTask->nextTask;
 		}
@@ -370,7 +370,7 @@ int main(int argc, char *argv[]) {
 		count = 0;
 		while(ptrAuxOrderedTask) {
 			count++;
-			fprintf(ptrFileTaskList, "taskID %d jobID %d jobSize %d AR %d RT %d status %d submissions %d\n", ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->jobSize,
+			fprintf(ptrFileTaskList, "taskID %d jobID %d jobSize %d AR %ld RT %d status %d submissions %d\n", ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->jobSize,
 					ptrAuxOrderedTask->arrivalTime, ptrAuxOrderedTask->runtime, ptrAuxOrderedTask->status, ptrAuxOrderedTask->numberOfSubmissions);
 			ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
 		}
@@ -444,12 +444,12 @@ int main(int argc, char *argv[]) {
 			count = 0;
 			while(ptrAuxMachine) {
 				count++;
-				printf("machineID %d source %d status %d AT %d DT %d UP %.2f RP %.2f\n", ptrAuxMachine->machineID,
+				printf("machineID %d source %d status %d AT %ld DT %ld UP %.2f RP %.2f\n", ptrAuxMachine->machineID,
 						ptrAuxMachine->source, ptrAuxMachine->status, ptrAuxMachine->arrivalTime, ptrAuxMachine->departureTime,
 						ptrAuxMachine->usagePrice, ptrAuxMachine->reservationPrice);
 				ptrAuxMachine = ptrAuxMachine->nextMachine;
 			}
-			printf("a lista tem %d maquinas\n", count);
+			printf("a lista tem %ld maquinas\n", count);
 			printf("\n");
 
 		}
@@ -460,7 +460,7 @@ int main(int argc, char *argv[]) {
 		ptrFileTaskAccountInfo = fopen("taskaccountinfo.txt", "a+");
 		taskAccountInfo *ptrAuxTaskAccountInfo;
 		ptrAuxTaskAccountInfo = taskAccountInfoList;
-		unsigned int totalExecutionTime = 0;
+		unsigned long int totalExecutionTime = 0;
 		while(ptrAuxTaskAccountInfo) {
 
 			if (ptrAuxTaskAccountInfo->source == 1) {
@@ -476,7 +476,7 @@ int main(int argc, char *argv[]) {
 				printf("(INVARIANTES) FINNISHTIME MENOR DO QUE STARTTIME!!!\n");
 			}
 
-					fprintf(ptrFileTaskAccountInfo,"taskAccountID %d machineID %d source %d taskID %d jobID %d RT %d ET %d ST %d FT %d Status %d Cost %.2f\n", ptrAuxTaskAccountInfo->taskAccountID,
+					fprintf(ptrFileTaskAccountInfo,"taskAccountID %d machineID %d source %d taskID %d jobID %d RT %d ET %ld ST %ld FT %ld Status %d Cost %.2f\n", ptrAuxTaskAccountInfo->taskAccountID,
 							ptrAuxTaskAccountInfo->machineID, ptrAuxTaskAccountInfo->source, ptrAuxTaskAccountInfo->taskID, ptrAuxTaskAccountInfo->jobID,
 							ptrAuxTaskAccountInfo->runtime, (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime),
 							ptrAuxTaskAccountInfo->startTime, ptrAuxTaskAccountInfo->finnishTime, ptrAuxTaskAccountInfo->status, ptrAuxTaskAccountInfo->cost);
@@ -493,10 +493,10 @@ int main(int argc, char *argv[]) {
 		ptrFileGridAccountInfo = fopen("gridaccountinfo.txt", "a+");
 		gridAccountInfo *ptrAuxGridInfo;
 		ptrAuxGridInfo = gridInfoList;
-		unsigned int credit = 0;
+		unsigned long int credit = 0;
 		while(ptrAuxGridInfo) {
 			credit += (ptrAuxGridInfo->finnishTime - ptrAuxGridInfo->startTime);
-					fprintf(ptrFileGridAccountInfo, "gridAccountID %d machineID %d source %d ST %d FT %d\n", ptrAuxGridInfo->gridAccountID,
+					fprintf(ptrFileGridAccountInfo, "gridAccountID %d machineID %d source %d ST %ld FT %ld\n", ptrAuxGridInfo->gridAccountID,
 							ptrAuxGridInfo->machineID, ptrAuxGridInfo->source, ptrAuxGridInfo->startTime,
 							ptrAuxGridInfo->finnishTime);
 			ptrAuxGridInfo = ptrAuxGridInfo->nextGridAccountInfo;
@@ -509,7 +509,7 @@ int main(int argc, char *argv[]) {
 		ptrFileBalanceAccountInfo = fopen("balanceaccountinfo.txt", "a+");
 		balanceAccountInfo *ptrAuxBalanceAccountInfo;
 		ptrAuxBalanceAccountInfo = balanceAccountInfoList;
-		unsigned int consumed = 0, lastValue = 0;
+		unsigned long int consumed = 0, lastValue = 0;
 		while(ptrAuxBalanceAccountInfo->nextBalanceAccountInfo != NULL) {
 
 			if (ptrAuxBalanceAccountInfo->consumed > lastValue) {
@@ -520,14 +520,14 @@ int main(int argc, char *argv[]) {
 			}
 			lastValue = ptrAuxBalanceAccountInfo->value;
 
-			fprintf(ptrFileBalanceAccountInfo, "balanceAccountID %d time %d consumed %d value %d\n", ptrAuxBalanceAccountInfo->balanceAccountID,
+			fprintf(ptrFileBalanceAccountInfo, "balanceAccountID %ld time %ld consumed %ld value %ld\n", ptrAuxBalanceAccountInfo->balanceAccountID,
 					ptrAuxBalanceAccountInfo->time, ptrAuxBalanceAccountInfo->consumed, ptrAuxBalanceAccountInfo->value);
 
 			ptrAuxBalanceAccountInfo = ptrAuxBalanceAccountInfo->nextBalanceAccountInfo;
 
 		}
 		consumed += ptrAuxBalanceAccountInfo->consumed;
-		fprintf(ptrFileBalanceAccountInfo, "balanceAccountID %d time %d consumed %d value %d\n", ptrAuxBalanceAccountInfo->balanceAccountID, ptrAuxBalanceAccountInfo->time,
+		fprintf(ptrFileBalanceAccountInfo, "balanceAccountID %ld time %ld consumed %ld value %ld\n", ptrAuxBalanceAccountInfo->balanceAccountID, ptrAuxBalanceAccountInfo->time,
 				ptrAuxBalanceAccountInfo->consumed, ptrAuxBalanceAccountInfo->value);
 		//	printf("a lista de balances tem %d registros\n", count);
 		//	printf("\n");
@@ -536,7 +536,7 @@ int main(int argc, char *argv[]) {
 		if ( credit != (ptrAuxBalanceAccountInfo->value + consumed) ) {
 			//		printf("\n");
 			printf("(INVARIANTES) BALANCE DO GRID ERRADO!!!\n");
-			printf("credit %d (balance+consumed) %d consumed %d totalET %d\n", credit, (ptrAuxBalanceAccountInfo->value + consumed), consumed, totalExecutionTime);
+			printf("credit %ld (balance+consumed) %ld consumed %ld totalET %ld\n", credit, (ptrAuxBalanceAccountInfo->value + consumed), consumed, totalExecutionTime);
 		}
 		//	printf("doado %d consumido %d balance %d\n", credit, consumed, ptrAuxBalanceAccountInfo->value);
 		// ##### FIM INVARIANTES PARA O CONSUMO DA GRADE E PARA BALANCO DE CREDITOS #####
@@ -550,10 +550,11 @@ int main(int argc, char *argv[]) {
 //			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 //			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
 
-	printf("SimMode: %d SimTime (days): %d JobSize: %d GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d GridAvg: %d UF: %d Seed: %d #Events: %d "
-			"ExecTime (seconds): %ld totalUtility %d totalCost %.2f totalProfit %.2f\n",
+	printf("SimMode: %d SimTime (days): %d JobSize: %d GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d GridAvg: %d UF: %d Seed: %d #Events: %ld "
+			"ExecTime (seconds): %ld totalUtility %ld totalCost %.2f totalProfit %.2f\n",
 		optFlag, (int)(simulationTime/1440), jobSize, gridQoSFactor, ondemandPriceFactor, inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 		taskAvgTime, gridAvgUptime,	utilityFunction, simSeed, totalNumberOfEvents, (unsigned long int)(newEnd - newStart), totalUtility, totalCost, totalProfit);
 
 	return EXIT_SUCCESS;
 }
+
