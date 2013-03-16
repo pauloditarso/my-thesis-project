@@ -23,27 +23,30 @@
 //# define JOB_SDV_LENGTH 60 // 1 hours
 
 unsigned short int optFlag;
-unsigned int simulationTime, taskAvgTime, gridAvgUptime;
+unsigned long int simulationTime;
+unsigned int taskAvgTime, gridAvgUptime;
 float gridQoSFactor, reservedUsagePrice, ondemandUsagePrice, reservationPricePerDay, reservationPrice;
 float ondemandPriceFactor, inhouseFactor; //, workloadFactor;
 unsigned short int jobSize, simSeed, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines; // TAZER balance E numberOfGridMachines???
-unsigned int gridMachinesID, scheduleID;
+unsigned long int gridMachinesID, scheduleID;
 enum {CONSTANT, LINEAR, STEP} utilityFunction;
 //char *localMachinesTrace;
 //char *workloadTasksTrace;
 //char *workloadJobsTrace;
 
 typedef struct task {
-	unsigned int taskID, jobID, jobSize, arrivalTime, runtime;
+	unsigned int taskID, jobID, jobSize, runtime;
+	unsigned long int arrivalTime;
 	enum {QUEUED, SCHEDULED, STARTED, FINNISHED} status;
-	unsigned short int numberOfSubmissions;
+	unsigned int numberOfSubmissions;
 	struct task *nextTask;
 } task;
 
 typedef struct job {
-	unsigned int jobID, jobSize, arrivalTime, finnishTime, longestTask, deadline, maxUtility;
+	unsigned int jobID, jobSize, longestTask;
+	unsigned long int arrivalTime, finnishTime, deadline, maxUtility;
 //	enum {JOBQUEUED, JOBSTARTED, JOBFINNISHED} status;
-	int utility;
+	unsigned long int utility;
 	float cost;
 	struct job *nextJob;
 } job;
@@ -53,7 +56,7 @@ typedef struct machine {
 	enum {LOCAL, GRID, RESERVED, ONDEMAND, SPOT} source;
 //	unsigned short int capacity; // future implementation
 	enum {IDLE, RUNNING, DONATING} status;
-	unsigned int arrivalTime, departureTime;
+	unsigned long int arrivalTime, departureTime;
 	float usagePrice, reservationPrice;
 	struct machine *nextMachine;
 } machine;
@@ -61,30 +64,31 @@ typedef struct machine {
 typedef struct machineOptSet {
 	unsigned int machineID;
 	enum {LOCALSET, GRIDSET, RESERVEDSET, ONDEMANDSET, SPOTSET} source;
-	unsigned int timeLeft, upTime;
+	unsigned long int timeLeft, upTime;
 	struct machineOptSet *nextMachineOptSet;
 } machineOptSet;
 
 typedef struct schedule {
-	unsigned int scheduleID, scheduleTime, taskID, jobID, runtime, machineID;
+	unsigned long int scheduleID, scheduleTime;
+	unsigned int taskID, jobID, runtime, machineID;
 	enum {MACHLOCAL, MACHGRID, MACHRESERVED, MACHONDEMAND, MACHSPOT} source;
 	struct schedule *nextSchedule;
 } schedule;
 
 typedef struct scheduleQueue {
-	unsigned int targetFinnishtime;
+	unsigned long int targetFinnishtime;
 	schedule *scheduleList;
 	enum {UNFINNISHED, FAILED, SUCCESSFUL} status;
-	unsigned int utility;
+	unsigned long int utility;
 	float cost, profit;
 	struct scheduleQueue *previousSchedule;
 } scheduleQueue;
 
 typedef struct event {
-	unsigned int eventNumber;
+	unsigned long int eventNumber;
 	enum {SIMSTARTED, MACHARRIVAL, MACHDEPARTURE, GRIDDONATING, GRIDPREEMPTED, TASKARRIVAL, TASKSCHEDULE, TASKPREEMPTED,
 	TASKFINNISHED, JOBARRIVAL, JOBSTARTED, JOBFINNISHED, ALLOCATIONPLANNING, SIMFINNISHED} eventID;
-	unsigned int time;
+	unsigned long int time;
 	union {
 		task taskInfo;
 		job jobInfo;
@@ -99,8 +103,8 @@ typedef struct taskAccountInfo {
 	unsigned int taskAccountID;
 	unsigned int machineID;
 	enum {LOCALMACH, GRIDMACH, RESERVEDMACH, ONDEMANDMACH, SPOTMACH} source;
-	unsigned int taskID, jobID;
-	unsigned int runtime, startTime, finnishTime;
+	unsigned int taskID, jobID, runtime;
+	unsigned long int startTime, finnishTime;
 	enum {ACCOUNTUNFINNISHED, ACCOUNTFINNISHED} status;
 	float cost;
 	struct taskAccountInfo *nextTaskAccountInfo;
@@ -109,7 +113,7 @@ typedef struct taskAccountInfo {
 typedef struct jobAccountInfo {
 	unsigned int jobAccountID;
 	unsigned int jobID;
-	unsigned int startTime, finnishTime;
+	unsigned long int startTime, finnishTime;
 	struct jobAccountInfo *nextJobAccountInfo;
 } jobAccountInfo;
 
@@ -117,15 +121,15 @@ typedef struct gridAccountInfo {
 	unsigned int gridAccountID;
 	unsigned int machineID;
 	enum {GRIDLOCAL, GRIDGRID, GRIDRESERVED, GRIDONDEMAND, GRIDSPOT} source;
-	unsigned int startTime, finnishTime;
+	unsigned long int startTime, finnishTime;
 	struct gridAccountInfo *nextGridAccountInfo;
 } gridAccountInfo;
 
 typedef struct balanceAccountInfo {
-	unsigned int balanceAccountID;
-	unsigned int time;
-	unsigned int consumed;
-	unsigned int value;
+	unsigned long int balanceAccountID;
+	unsigned long int time;
+	unsigned long int consumed;
+	unsigned long int value;
 	struct balanceAccountInfo *nextBalanceAccountInfo;
 } balanceAccountInfo;
 
@@ -133,11 +137,11 @@ event *ptrThisEvent;
 
 void passou();
 
-void IncrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned int time, unsigned int value);
+void IncrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned long int time, unsigned long int value);
 
-void DecrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned int time, unsigned int value);
+void DecrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned long int time, unsigned long int value);
 
-unsigned int GetBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned int time);
+unsigned int GetBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned long int time);
 
 void InsertEvent(event *ptrEventList, event *ptrNewEvent);
 
