@@ -102,6 +102,9 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 						ptrAux2->nextMachineOptSet = ptrAux1;
 
+						ptrAux1 = NULL;
+						ptrAux2 = NULL;
+
 					}
 					else printf("ERROR (allocation planningOpt): merdou o 4o malloc!!!\n");
 
@@ -156,6 +159,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				}
 
 			}
+			ptrAux1 = NULL;
 
 			// filling ptrMachineOptSetList with cloud machines (whith no spot machines!!!)
 			ptrAuxMachine = ptrMachineList;
@@ -188,9 +192,11 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 							while(ptrAux2->nextMachineOptSet != NULL) ptrAux2 = ptrAux2->nextMachineOptSet;
 
 							ptrAux2->nextMachineOptSet = ptrAux1;
+							ptrAux2 = NULL;
 
 						}
 						else printf("ERROR (allocation planningOpt): merdou o 6o malloc!!!\n");
+						ptrAux1 = NULL;
 
 					}
 
@@ -210,7 +216,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 //				printf("targetFT %d firstTargetFT %d deadline %d\n", targetFinnishTime, firstTargetFinnishTime, deadline);
 //				printf("***************************************************\n");
 
-				unsigned short int count = 0;
+				unsigned int count = 0;
 				unsigned int targetUtility = 0;
 				float targetCost = 0.0;
 
@@ -305,6 +311,9 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
                                     	while(ptrAux->nextSchedule != NULL) ptrAux = ptrAux->nextSchedule;
                                     	ptrAux->nextSchedule = ptrNewSchedule;
 
+                                    	ptrAux = NULL;
+                                    	ptrNewSchedule = NULL;
+
                                     }
 //									debug mode
 //									printf("scheduleID %d schedTime %d taskID %d jobID %d RT %d machineID %d source %d timeLeft %d count %d\n",
@@ -358,6 +367,9 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
                                     	ptrAux = ptrNewScheduleQueue->scheduleList;
                                     	while(ptrAux->nextSchedule != NULL) ptrAux = ptrAux->nextSchedule;
                                     	ptrAux->nextSchedule = ptrNewSchedule;
+
+                                    	ptrAux = NULL;
+                                    	ptrNewSchedule = NULL;
 
                                     }
 //									debug mode
@@ -477,6 +489,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 					ptrBestScheduleList = ptrBestScheduleQueue->scheduleList;
 					free(ptrAuxScheduleQueue);
 					ptrAuxScheduleQueue = NULL;
+					ptrNewScheduleQueue = NULL;
 
 				}
 				else {
@@ -650,6 +663,10 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 				ptrBestScheduleList = ptrBestScheduleList->nextSchedule;
 			}
+
+			free(ptrBestScheduleQueue);
+			ptrBestScheduleQueue = NULL;
+			ptrBestScheduleList = NULL;
 
 			// donating to the grid unscheduled local machines
 			event *ptrAuxEventList;
