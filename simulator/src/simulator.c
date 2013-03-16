@@ -349,10 +349,6 @@ int main(int argc, char *argv[]) {
 					ptrAuxJob->deadline, ptrAuxJob->maxUtility, ptrAuxJob->utility, ptrAuxJob->cost, (ptrAuxJob->utility - ptrAuxJob->cost));
 			ptrAuxJob = ptrAuxJob->nextJob;
 		}
-//		avgCost = (avgCost/count);
-//		avgUtility = (avgUtility/count);
-//		avgProfit = (avgProfit/count);
-		//	printf("a lista de jobs tem %d registros\n", count);
 		//	printf("\n");
 		fclose(ptrFileJobList);
 
@@ -367,7 +363,6 @@ int main(int argc, char *argv[]) {
 					ptrAuxTask->arrivalTime, ptrAuxTask->runtime, ptrAuxTask->status, ptrAuxTask->numberOfSubmissions);
 			ptrAuxTask = ptrAuxTask->nextTask;
 		}
-		//	printf("a lista de tasks tem %d registros\n", count);
 		//	printf("\n");
 
 		task *ptrAuxOrderedTask;
@@ -379,7 +374,6 @@ int main(int argc, char *argv[]) {
 					ptrAuxOrderedTask->arrivalTime, ptrAuxOrderedTask->runtime, ptrAuxOrderedTask->status, ptrAuxOrderedTask->numberOfSubmissions);
 			ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
 		}
-		//	printf("a lista de tasks tem %d registros\n", count);
 		//	printf("\n");
 		fclose(ptrFileTaskList);
 
