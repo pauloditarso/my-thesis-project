@@ -136,7 +136,7 @@ void TaskSchedule(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 							}
 
-							printf("eventID %d (Task Scheduled) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+							printf("eventID %d (Task Scheduled) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 							printf("taskID %d jobID %d machineID %d source %d submissions %d\n", ptrAuxTask->taskID,
 									ptrAuxTask->jobID, ptrAuxMachine->machineID, ptrAuxMachine->source, ptrAuxTask->numberOfSubmissions);
 

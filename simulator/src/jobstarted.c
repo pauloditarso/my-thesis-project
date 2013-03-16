@@ -13,7 +13,7 @@ void JobStarted(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *
 
 		InsertJobAccountList(ptrCurrentEvent, ptrJobAccountInfo);
 
-		printf("eventID %d (Job Started) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+		printf("eventID %d (Job Started) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 		printf("JobID %d\n", ptrCurrentEvent->jobInfo.jobID);
 //		printf("eventID %d (Job Started) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 //		printf("JobID %d AT %d FT %d LT %d DL %d\n", ptrCurrentEvent->jobInfo.jobID, ptrCurrentEvent->jobInfo.arrivalTime, ptrCurrentEvent->jobInfo.finnishTime,

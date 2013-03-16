@@ -106,8 +106,8 @@ void TaskArrival(event *ptrCurrentEvent, event *ptrEventList, task *ptrTaskList,
 			} // end else
 
 
-			printf("eventID %d (Task Arrival) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-			printf("taskID %d jobID %d jobSize %d AT %d RT %d status %d submissions %d\n",
+			printf("eventID %d (Task Arrival) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+			printf("taskID %d jobID %d jobSize %d AT %ld RT %d status %d submissions %d\n",
 					ptrCurrentEvent->taskInfo.taskID, ptrCurrentEvent->taskInfo.jobID,
 					ptrCurrentEvent->taskInfo.jobSize, ptrCurrentEvent->taskInfo.arrivalTime,
 					ptrCurrentEvent->taskInfo.runtime, ptrCurrentEvent->taskInfo.status, ptrCurrentEvent->taskInfo.numberOfSubmissions);

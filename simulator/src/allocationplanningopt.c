@@ -721,7 +721,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrAuxMachine = ptrAuxMachine->nextMachine;
 			}
 
-			printf("eventID %d (Allocation Planning) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+			printf("eventID %d (Allocation Planning) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			printf("Allocation %d\n", allocated);
 
 		} else printf("ERROR (allocation planning): there is no machine or task list!!!\n");

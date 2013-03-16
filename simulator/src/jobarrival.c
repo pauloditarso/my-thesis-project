@@ -61,11 +61,11 @@ void JobArrival(event *ptrCurrentEvent, event *ptrEventList, job *ptrJobList, ta
 			}
 
 			//	printf("o balance na grade agora e %d\n", GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time));
-			printf("eventID %d (Job Arrival) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-			printf("jobID %d jobSize %d AT %d FT %d LT %d Deadline %d MU %d Utility %d Cost %.2f Profit %.2f\n", ptrCurrentEvent->jobInfo.jobID, ptrCurrentEvent->jobInfo.jobSize,
+			printf("eventID %d (Job Arrival) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+			printf("jobID %d jobSize %d AT %ld FT %ld LT %d Deadline %ld MU %ld Utility %ld Cost %.2f Profit %.2f\n", ptrCurrentEvent->jobInfo.jobID, ptrCurrentEvent->jobInfo.jobSize,
 					ptrCurrentEvent->jobInfo.arrivalTime, ptrCurrentEvent->jobInfo.finnishTime, ptrCurrentEvent->jobInfo.longestTask,
 					ptrCurrentEvent->jobInfo.deadline, ptrCurrentEvent->jobInfo.maxUtility, ptrCurrentEvent->jobInfo.utility, ptrCurrentEvent->jobInfo.cost,
-					( ptrCurrentEvent->jobInfo.utility -  ptrCurrentEvent->jobInfo.cost));
+					(ptrCurrentEvent->jobInfo.utility -  ptrCurrentEvent->jobInfo.cost));
 
 			// if there is donating machines, it creates grid preempted events
 			machine *ptrAuxMachine;

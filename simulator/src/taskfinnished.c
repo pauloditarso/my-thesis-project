@@ -39,8 +39,8 @@ void TaskFinnished(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptrTas
 				if (ptrCurrentEvent->taskInfo.status == FINNISHED) ptrAuxTask->status = ptrCurrentEvent->taskInfo.status;
 				else printf("ERROR (task finished): task status is not FINNISHED!!!\n");
 
-				printf("eventID %d (Task Finnished) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-				printf("taskID %d jobID %d AT %d jobSize %d runtime %d status %d submissions %d\n",
+				printf("eventID %d (Task Finnished) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+				printf("taskID %d jobID %d AT %ld jobSize %d runtime %d status %d submissions %d\n",
 						ptrCurrentEvent->taskInfo.taskID, ptrCurrentEvent->taskInfo.jobID,
 						ptrCurrentEvent->taskInfo.arrivalTime, ptrCurrentEvent->taskInfo.jobSize,
 						ptrCurrentEvent->taskInfo.runtime, ptrCurrentEvent->taskInfo.status, ptrCurrentEvent->taskInfo.numberOfSubmissions);

@@ -26,7 +26,7 @@ void GridDonating(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachi
 
 					InsertGridAccountList(ptrCurrentEvent, ptrAuxMachine, ptrGridInfoList);
 
-					printf("eventID %d (Grid Donating) time %d ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
+					printf("eventID %d (Grid Donating) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 					printf("machineID %d source %d status %d\n", ptrAuxMachine->machineID, ptrAuxMachine->source, ptrAuxMachine->status);
 
 					break;
