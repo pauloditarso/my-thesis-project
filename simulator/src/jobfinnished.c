@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *ptrJobList) {
+void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *ptrJobList, task **ptrPtrTaskList) {
 
 	if ( ptrCurrentEvent->eventID == JOBFINNISHED ) {
 
@@ -80,6 +80,21 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 				break;
 		} // end of switch(utilityFunction)
 		ptrAuxJobList->utility = utility;
+
+		// desalocando memoria da lista de tasks
+		task *ptrAuxTaskList;
+		ptrAuxTaskList = ptrPtrTaskList;
+		while(ptrAuxTaskList->status == 3) { // 3 -> FINNISHED
+
+			task *ptrRemove;
+			ptrRemove = ptrAuxTaskList;
+			ptrAuxTaskList = ptrAuxTaskList->nextTask;
+			(*ptrPtrTaskList) = (*ptrPtrTaskList)->nextTask;
+			free(ptrRemove);
+			ptrRemove = NULL;
+
+		}
+
 
 		printf("eventID %d (Job Finnished) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 		printf("JobID %d AR %ld FT %ld LT %d Deadline %ld MU %ld Utility %ld Cost %.2f Profit %.2f\n", ptrAuxJobList->jobID, ptrAuxJobList->arrivalTime, ptrAuxJobList->finnishTime,
