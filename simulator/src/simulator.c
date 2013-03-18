@@ -36,8 +36,8 @@ int main(int argc, char *argv[]) {
 	unsigned long int totalNumberOfEvents = 0;
 	gridMachinesID = 0; scheduleID = 0;
 
-	unsigned long int totalUtility = 0;
-	float totalCost = 0.0, totalProfit = 0.0;
+//	unsigned long int totalUtility = 0;
+//	float totalCost = 0.0, totalProfit = 0.0;
 
 	if (argc == 14) {
 
@@ -192,59 +192,59 @@ int main(int argc, char *argv[]) {
 
 			switch (ptrAuxList->eventID) {
 			case 0:
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 1:				// Machine Arrival
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 2:				// Machine Departure
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 3:				// Grid Donating
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 4:				// Grid Preempted
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 5:				// Task Arrival
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 6:				// Task Schedule
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 7:				// Task Preempted
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 8:				// Task Finnished
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 9:				// Job Arrival
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 10:			// Job Started
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 11:			// Job Finnished
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 12:			// Allocation Planning
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 13:			// Simulation Finnished
-				EventHandler(ptrAuxList, &eventList, &machineList, taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
+				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
 						balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			default:
@@ -321,61 +321,61 @@ int main(int argc, char *argv[]) {
 
 		// CIRAR UM TESTE DEPOIS PARA SABER SE TODAS AS TASKS FORAM EXECUTADAS OU NAO
 
-		FILE *ptrFileJobAccountInfo;
-		ptrFileJobAccountInfo = fopen("jobaccountinfo.txt", "a+");
-		jobAccountInfo *ptrAuxJobAccountInfo;
-		ptrAuxJobAccountInfo = jobAccountInfoList;
-		count = 0;
-		while(ptrAuxJobAccountInfo) {
-			count++;
-			fprintf(ptrFileJobAccountInfo, "jobAccountID %d jobID %d ST %ld FT %ld\n", ptrAuxJobAccountInfo->jobAccountID, ptrAuxJobAccountInfo->jobID, ptrAuxJobAccountInfo->startTime, ptrAuxJobAccountInfo->finnishTime);
-			ptrAuxJobAccountInfo = ptrAuxJobAccountInfo->nextJobAccountInfo;
-		}
-		//	printf("a lista de jobs tem %d registros\n", count);
-		//	printf("\n");
-		fclose(ptrFileJobAccountInfo);
+//		FILE *ptrFileJobAccountInfo;
+//		ptrFileJobAccountInfo = fopen("jobaccountinfo.txt", "a+");
+//		jobAccountInfo *ptrAuxJobAccountInfo;
+//		ptrAuxJobAccountInfo = jobAccountInfoList;
+//		count = 0;
+//		while(ptrAuxJobAccountInfo) {
+//			count++;
+//			fprintf(ptrFileJobAccountInfo, "jobAccountID %d jobID %d ST %ld FT %ld\n", ptrAuxJobAccountInfo->jobAccountID, ptrAuxJobAccountInfo->jobID, ptrAuxJobAccountInfo->startTime, ptrAuxJobAccountInfo->finnishTime);
+//			ptrAuxJobAccountInfo = ptrAuxJobAccountInfo->nextJobAccountInfo;
+//		}
+//		//	printf("a lista de jobs tem %d registros\n", count);
+//		//	printf("\n");
+//		fclose(ptrFileJobAccountInfo);
 
-		FILE *ptrFileJobList;
-		ptrFileJobList = fopen("joblist.txt", "a+");
-		job *ptrAuxJob;
-		ptrAuxJob = jobList;
-		count = 0;
-		while(ptrAuxJob) {
-			count++;
-			totalCost += ptrAuxJob->cost;
-			totalUtility += ptrAuxJob->utility;
-			totalProfit += (ptrAuxJob->utility - ptrAuxJob->cost);
-			fprintf(ptrFileJobList, "jobID %d jobSize %d AR %ld FT %ld LT %d DL %ld MU %ld Utility %ld Cost %.2f Profit %.2f\n", ptrAuxJob->jobID, ptrAuxJob->jobSize, ptrAuxJob->arrivalTime, ptrAuxJob->finnishTime, ptrAuxJob->longestTask,
-					ptrAuxJob->deadline, ptrAuxJob->maxUtility, ptrAuxJob->utility, ptrAuxJob->cost, (ptrAuxJob->utility - ptrAuxJob->cost));
-			ptrAuxJob = ptrAuxJob->nextJob;
-		}
-		//	printf("\n");
-		fclose(ptrFileJobList);
+//		FILE *ptrFileJobList;
+//		ptrFileJobList = fopen("joblist.txt", "a+");
+//		job *ptrAuxJob;
+//		ptrAuxJob = jobList;
+//		count = 0;
+//		while(ptrAuxJob) {
+//			count++;
+//			totalCost += ptrAuxJob->cost;
+//			totalUtility += ptrAuxJob->utility;
+//			totalProfit += (ptrAuxJob->utility - ptrAuxJob->cost);
+//			fprintf(ptrFileJobList, "jobID %d jobSize %d AR %ld FT %ld LT %d DL %ld MU %ld Utility %ld Cost %.2f Profit %.2f\n", ptrAuxJob->jobID, ptrAuxJob->jobSize, ptrAuxJob->arrivalTime, ptrAuxJob->finnishTime, ptrAuxJob->longestTask,
+//					ptrAuxJob->deadline, ptrAuxJob->maxUtility, ptrAuxJob->utility, ptrAuxJob->cost, (ptrAuxJob->utility - ptrAuxJob->cost));
+//			ptrAuxJob = ptrAuxJob->nextJob;
+//		}
+//		//	printf("\n");
+//		fclose(ptrFileJobList);
 
-		FILE *ptrFileTaskList;
-		ptrFileTaskList = fopen("tasklist.txt", "a+");
-		task *ptrAuxTask;
-		ptrAuxTask = taskList;
-		count = 0;
-		while(ptrAuxTask) {
-			count++;
-			fprintf(ptrFileTaskList, "taskID %d jobID %d jobSize %d AR %ld RT %d status %d submissions %d\n", ptrAuxTask->taskID, ptrAuxTask->jobID, ptrAuxTask->jobSize,
-					ptrAuxTask->arrivalTime, ptrAuxTask->runtime, ptrAuxTask->status, ptrAuxTask->numberOfSubmissions);
-			ptrAuxTask = ptrAuxTask->nextTask;
-		}
-		//	printf("\n");
+//		FILE *ptrFileTaskList;
+//		ptrFileTaskList = fopen("tasklist.txt", "a+");
+//		task *ptrAuxTask;
+//		ptrAuxTask = taskList;
+//		count = 0;
+//		while(ptrAuxTask) {
+//			count++;
+//			fprintf(ptrFileTaskList, "taskID %d jobID %d jobSize %d AR %ld RT %d status %d submissions %d\n", ptrAuxTask->taskID, ptrAuxTask->jobID, ptrAuxTask->jobSize,
+//					ptrAuxTask->arrivalTime, ptrAuxTask->runtime, ptrAuxTask->status, ptrAuxTask->numberOfSubmissions);
+//			ptrAuxTask = ptrAuxTask->nextTask;
+//		}
+//		//	printf("\n");
 
-		task *ptrAuxOrderedTask;
-		ptrAuxOrderedTask = orderedTaskList;
-		count = 0;
-		while(ptrAuxOrderedTask) {
-			count++;
-			fprintf(ptrFileTaskList, "taskID %d jobID %d jobSize %d AR %ld RT %d status %d submissions %d\n", ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->jobSize,
-					ptrAuxOrderedTask->arrivalTime, ptrAuxOrderedTask->runtime, ptrAuxOrderedTask->status, ptrAuxOrderedTask->numberOfSubmissions);
-			ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
-		}
-		//	printf("\n");
-		fclose(ptrFileTaskList);
+//		task *ptrAuxOrderedTask;
+//		ptrAuxOrderedTask = orderedTaskList;
+//		count = 0;
+//		while(ptrAuxOrderedTask) {
+//			count++;
+//			fprintf(ptrFileTaskList, "taskID %d jobID %d jobSize %d AR %ld RT %d status %d submissions %d\n", ptrAuxOrderedTask->taskID, ptrAuxOrderedTask->jobID, ptrAuxOrderedTask->jobSize,
+//					ptrAuxOrderedTask->arrivalTime, ptrAuxOrderedTask->runtime, ptrAuxOrderedTask->status, ptrAuxOrderedTask->numberOfSubmissions);
+//			ptrAuxOrderedTask = ptrAuxOrderedTask->nextTask;
+//		}
+//		//	printf("\n");
+//		fclose(ptrFileTaskList);
 
 //		FILE *ptrFileScheduleList;
 //		ptrFileScheduleList = fopen("schedulelist.txt", "a+");
@@ -550,10 +550,10 @@ int main(int argc, char *argv[]) {
 //			optFlag, gridQoSFactor, (int)(simulationTime/1440), numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
 //			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
 
-	printf("SimMode: %d SimTime (days): %d JobSize: %d GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d GridAvg: %d UF: %d Seed: %d #Events: %ld "
-			"ExecTime (seconds): %ld totalUtility %ld totalCost %.2f totalProfit %.2f\n",
-		optFlag, (int)(simulationTime/1440), jobSize, gridQoSFactor, ondemandPriceFactor, inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines,
-		taskAvgTime, gridAvgUptime,	utilityFunction, simSeed, totalNumberOfEvents, (unsigned long int)(newEnd - newStart), totalUtility, totalCost, totalProfit);
+	printf("SimMode: %d SimTime (days): %d JobSize: %d GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d "
+			"GridAvg: %d UF: %d Seed: %d #Events: %ld ExecTime (seconds): %ld\n", optFlag, (int)(simulationTime/1440), jobSize, gridQoSFactor, ondemandPriceFactor,
+			inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines, taskAvgTime, gridAvgUptime, utilityFunction, simSeed,
+			totalNumberOfEvents, (unsigned long int)(newEnd - newStart));
 
 	return EXIT_SUCCESS;
 }

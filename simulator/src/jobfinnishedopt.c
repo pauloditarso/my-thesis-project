@@ -7,7 +7,7 @@
 
 #include "simulation.h"
 
-void JobFinnishedOpt(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *ptrJobList) {
+void JobFinnishedOpt(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *ptrJobList, task **ptrPtrTaskList, task **ptrPtrOrderedTaskList) {
 
 	if ( ptrCurrentEvent->eventID == JOBFINNISHED ) {
 
@@ -80,6 +80,35 @@ void JobFinnishedOpt(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, 
 		} // end of switch(utilityFunction)
 
 		if (ptrAuxJobList->utility != utility) printf("ERROR (job finnishedOpt): different utility values!!!\n");
+
+		// desalocando memoria da lista de tasks
+		task *ptrAuxTaskList;
+		ptrAuxTaskList = ptrPtrTaskList;
+		while(ptrAuxTaskList->status == 3) { // 3 -> FINNISHED
+
+			task *ptrRemove;
+			ptrRemove = ptrAuxTaskList;
+			ptrAuxTaskList = ptrAuxTaskList->nextTask;
+			(*ptrPtrTaskList) = (*ptrPtrTaskList)->nextTask;
+			free(ptrRemove);
+			ptrRemove = NULL;
+
+		}
+
+		// desalocando memoria da lista ordenada de tasks
+		task *ptrAuxOrderedTaskList;
+		ptrAuxOrderedTaskList = ptrPtrOrderedTaskList;
+		while(ptrAuxOrderedTaskList->status == 3) { // 3 -> FINNISHED
+
+			task *ptrRemove;
+			ptrRemove = ptrAuxOrderedTaskList;
+			ptrAuxOrderedTaskList = ptrAuxOrderedTaskList->nextTask;
+			(*ptrPtrOrderedTaskList) = (*ptrPtrOrderedTaskList)->nextTask;
+			free(ptrRemove);
+			ptrRemove = NULL;
+
+		}
+
 
 		printf("eventID %d (Job Finnished) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 		printf("JobID %d AR %ld FT %ld LT %d Deadline %ld MU %ld Utility %ld Cost %.2f Profit %.2f\n", ptrAuxJobList->jobID, ptrAuxJobList->arrivalTime, ptrAuxJobList->finnishTime,
