@@ -41,7 +41,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			unsigned int firstTargetFinnishTime, deadline, timeSteps;
 			firstTargetFinnishTime = (ptrCurrentEvent->jobInfo.arrivalTime + 2 + ptrCurrentEvent->jobInfo.longestTask); // AT + 2min to start a job + LT
 			deadline = ptrCurrentEvent->jobInfo.deadline;
-			timeSteps = 1; // steps, in minutes, for the optimizing process
+			timeSteps = 2; // steps, in minutes, for the optimizing process
 
 			unsigned int scheduleID;
 			unsigned short int allocated = 0;
