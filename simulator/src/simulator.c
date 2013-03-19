@@ -555,6 +555,9 @@ int main(int argc, char *argv[]) {
 			inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines, taskAvgTime, gridAvgUptime, utilityFunction, simSeed,
 			totalNumberOfEvents, (unsigned long int)(newEnd - newStart));
 
+//	event teste;
+//	printf("tamanho das estruturas: %d\n", sizeof(teste));
+
 	return EXIT_SUCCESS;
 }
 
