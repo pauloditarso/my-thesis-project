@@ -176,6 +176,7 @@ int main(int argc, char *argv[]) {
 			printf("ERROR (main simulator): merdou o malloc!!!\n");
 		}
 
+		ptrLastBalance = balanceAccountInfoList;
 		ptrAuxList = eventList;
 		long int lastEventNumber = -1;
 		unsigned long int lastEventTime = 0;

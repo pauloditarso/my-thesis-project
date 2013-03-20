@@ -134,6 +134,7 @@ typedef struct balanceAccountInfo {
 } balanceAccountInfo;
 
 event *ptrThisEvent;
+balanceAccountInfo *ptrLastBalance;
 
 void passou();
 
