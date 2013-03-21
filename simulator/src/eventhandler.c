@@ -8,7 +8,7 @@
 #include "simulation.h"
 
 void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task **ptrPtrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
-		gridAccountInfo *ptrGridInfoList, job *ptrJobList, jobAccountInfo *ptrJobAccountInfo, balanceAccountInfo *ptrBalanceAccountInfo, task **ptrPtrOrderedTaskList,
+		gridAccountInfo *ptrGridInfoList, job *ptrJobList, jobAccountInfo *ptrJobAccountInfo, balanceAccountInfo **ptrPtrBalanceAccountInfo, task **ptrPtrOrderedTaskList,
 		schedule *ptrScheduleList) {
 
 	switch (ptrCurrentEvent->eventID) {
@@ -29,7 +29,7 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 4:
 			// GRID PREEMPTED
-			GridPreempted(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrGridInfoList, ptrBalanceAccountInfo);
+			GridPreempted(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, ptrGridInfoList, *ptrPtrBalanceAccountInfo);
 			break;
 		case 5:
 			// TASK ARRIVAL
@@ -41,19 +41,19 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			break;
 		case 7:
 			// TASK PREEMPTED
-			TaskUnSchedule(ptrCurrentEvent, ptrPtrEventList, *ptrPtrMachineList, *ptrPtrTaskList, ptrPtrTaskAccountInfoList, ptrBalanceAccountInfo, ptrJobList);
+			TaskUnSchedule(ptrCurrentEvent, ptrPtrEventList, *ptrPtrMachineList, *ptrPtrTaskList, ptrPtrTaskAccountInfoList, *ptrPtrBalanceAccountInfo, ptrJobList);
 			break;
 		case 8:
 			// TASK FINNISHED
 			if (optFlag == 0) {
-				TaskFinnished(ptrCurrentEvent, ptrPtrEventList, *ptrPtrTaskList, *ptrPtrTaskAccountInfoList, *ptrPtrMachineList, ptrBalanceAccountInfo, ptrJobList);
+				TaskFinnished(ptrCurrentEvent, ptrPtrEventList, *ptrPtrTaskList, *ptrPtrTaskAccountInfoList, *ptrPtrMachineList, *ptrPtrBalanceAccountInfo, ptrJobList);
 			} else {
-				TaskFinnishedOpt(ptrCurrentEvent, ptrPtrEventList, *ptrPtrTaskList, *ptrPtrTaskAccountInfoList, *ptrPtrMachineList, ptrBalanceAccountInfo, ptrJobList);
+				TaskFinnishedOpt(ptrCurrentEvent, ptrPtrEventList, *ptrPtrTaskList, *ptrPtrTaskAccountInfoList, *ptrPtrMachineList, *ptrPtrBalanceAccountInfo, ptrJobList);
 			}
 			break;
 		case 9:
 			// JOB ARRIVAL
-			JobArrival(ptrCurrentEvent, *ptrPtrEventList, ptrJobList, *ptrPtrTaskList, *ptrPtrMachineList, ptrBalanceAccountInfo);
+			JobArrival(ptrCurrentEvent, *ptrPtrEventList, ptrJobList, *ptrPtrTaskList, *ptrPtrMachineList, *ptrPtrBalanceAccountInfo);
 			break;
 		case 10:
 			// JOB STARTED
@@ -71,9 +71,9 @@ void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptr
 			// ALLOCATION PLANNING
 //			printf("optflag %d\n", optFlag);
 			if (optFlag == 0) {
-				AllocationPlanning(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, *ptrPtrTaskList, ptrBalanceAccountInfo);
+				AllocationPlanning(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, *ptrPtrTaskList, ptrPtrBalanceAccountInfo);
 			} else {
-				AllocationPlanningOpt(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, *ptrPtrOrderedTaskList, ptrJobList, ptrBalanceAccountInfo);
+				AllocationPlanningOpt(ptrCurrentEvent, *ptrPtrEventList, *ptrPtrMachineList, *ptrPtrOrderedTaskList, ptrJobList, ptrPtrBalanceAccountInfo);
 			}
 			break;
 		case 13:

@@ -28,14 +28,14 @@
 #include "simulation.h"
 
 void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrOrderedTaskList, job *ptrJobList,
-		balanceAccountInfo *ptrBalanceAccountInfo) {
+		balanceAccountInfo **ptrPtrBalanceAccountInfo) {
 
 	if (ptrCurrentEvent->eventID == ALLOCATIONPLANNING) {
 
 		if (ptrMachineList && ptrOrderedTaskList) {
 
 			unsigned int balance, numberOfGridMachines;
-			balance = GetBalance(ptrBalanceAccountInfo, ptrCurrentEvent->time);
+			balance = GetBalance(ptrPtrBalanceAccountInfo, ptrCurrentEvent->time);
 			numberOfGridMachines = (int)((balance * gridQoSFactor)/taskAvgTime); // ceiling or trunk???
 
 			unsigned int firstTargetFinnishTime, deadline, timeSteps;

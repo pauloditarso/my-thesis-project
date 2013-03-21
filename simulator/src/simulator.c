@@ -194,59 +194,59 @@ int main(int argc, char *argv[]) {
 			switch (ptrAuxList->eventID) {
 			case 0:
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 1:				// Machine Arrival
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 2:				// Machine Departure
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 3:				// Grid Donating
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 4:				// Grid Preempted
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 5:				// Task Arrival
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 6:				// Task Schedule
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 7:				// Task Preempted
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 8:				// Task Finnished
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 9:				// Job Arrival
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 10:			// Job Started
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 11:			// Job Finnished
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 12:			// Allocation Planning
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			case 13:			// Simulation Finnished
 				EventHandler(ptrAuxList, &eventList, &machineList, &taskList, &taskAccountInfoList, gridInfoList, jobList, jobAccountInfoList,
-						balanceAccountInfoList, &orderedTaskList, scheduleList);
+						&balanceAccountInfoList, &orderedTaskList, scheduleList);
 				break;
 			default:
 				printf("unkwonk event!!!\n");
@@ -489,58 +489,58 @@ int main(int argc, char *argv[]) {
 		fclose(ptrFileTaskAccountInfo);
 		// ##### FIM INVARIANTES PARA A LISTA DE EXECUCAO DAS TASKS #####
 
-		// ##### INVARIANTES PARA O CONSUMO DA GRADE E PARA BALANCO DE CREDITOS #####
-		FILE *ptrFileGridAccountInfo;
-		ptrFileGridAccountInfo = fopen("gridaccountinfo.txt", "a+");
-		gridAccountInfo *ptrAuxGridInfo;
-		ptrAuxGridInfo = gridInfoList;
-		unsigned long int credit = 0;
-		while(ptrAuxGridInfo) {
-			credit += (ptrAuxGridInfo->finnishTime - ptrAuxGridInfo->startTime);
-					fprintf(ptrFileGridAccountInfo, "gridAccountID %d machineID %d source %d ST %ld FT %ld\n", ptrAuxGridInfo->gridAccountID,
-							ptrAuxGridInfo->machineID, ptrAuxGridInfo->source, ptrAuxGridInfo->startTime,
-							ptrAuxGridInfo->finnishTime);
-			ptrAuxGridInfo = ptrAuxGridInfo->nextGridAccountInfo;
-		}
-		//	printf("a lista tem %d balances, e o total de creditos doados e %d\n", count, credit);
-		//	printf("\n");
-		fclose(ptrFileGridAccountInfo);
-
-		FILE *ptrFileBalanceAccountInfo;
-		ptrFileBalanceAccountInfo = fopen("balanceaccountinfo.txt", "a+");
-		balanceAccountInfo *ptrAuxBalanceAccountInfo;
-		ptrAuxBalanceAccountInfo = balanceAccountInfoList;
-		unsigned long int consumed = 0, lastValue = 0;
-		while(ptrAuxBalanceAccountInfo->nextBalanceAccountInfo != NULL) {
-
-			if (ptrAuxBalanceAccountInfo->consumed > lastValue) {
-				consumed += lastValue;
-			}
-			else {
-				consumed += ptrAuxBalanceAccountInfo->consumed;
-			}
-			lastValue = ptrAuxBalanceAccountInfo->value;
-
-			fprintf(ptrFileBalanceAccountInfo, "balanceAccountID %ld time %ld consumed %ld value %ld\n", ptrAuxBalanceAccountInfo->balanceAccountID,
-					ptrAuxBalanceAccountInfo->time, ptrAuxBalanceAccountInfo->consumed, ptrAuxBalanceAccountInfo->value);
-
-			ptrAuxBalanceAccountInfo = ptrAuxBalanceAccountInfo->nextBalanceAccountInfo;
-
-		}
-		consumed += ptrAuxBalanceAccountInfo->consumed;
-		fprintf(ptrFileBalanceAccountInfo, "balanceAccountID %ld time %ld consumed %ld value %ld\n", ptrAuxBalanceAccountInfo->balanceAccountID, ptrAuxBalanceAccountInfo->time,
-				ptrAuxBalanceAccountInfo->consumed, ptrAuxBalanceAccountInfo->value);
-		//	printf("a lista de balances tem %d registros\n", count);
-		//	printf("\n");
-		fclose(ptrFileBalanceAccountInfo);
-
-		if ( credit != (ptrAuxBalanceAccountInfo->value + consumed) ) {
-			//		printf("\n");
-			printf("(INVARIANTES) BALANCE DO GRID ERRADO!!!\n");
-			printf("credit %ld (balance+consumed) %ld consumed %ld totalET %ld\n", credit, (ptrAuxBalanceAccountInfo->value + consumed), consumed, totalExecutionTime);
-		}
-		//	printf("doado %d consumido %d balance %d\n", credit, consumed, ptrAuxBalanceAccountInfo->value);
-		// ##### FIM INVARIANTES PARA O CONSUMO DA GRADE E PARA BALANCO DE CREDITOS #####
+//		// ##### INVARIANTES PARA O CONSUMO DA GRADE E PARA BALANCO DE CREDITOS #####
+//		FILE *ptrFileGridAccountInfo;
+//		ptrFileGridAccountInfo = fopen("gridaccountinfo.txt", "a+");
+//		gridAccountInfo *ptrAuxGridInfo;
+//		ptrAuxGridInfo = gridInfoList;
+//		unsigned long int credit = 0;
+//		while(ptrAuxGridInfo) {
+//			credit += (ptrAuxGridInfo->finnishTime - ptrAuxGridInfo->startTime);
+//					fprintf(ptrFileGridAccountInfo, "gridAccountID %d machineID %d source %d ST %ld FT %ld\n", ptrAuxGridInfo->gridAccountID,
+//							ptrAuxGridInfo->machineID, ptrAuxGridInfo->source, ptrAuxGridInfo->startTime,
+//							ptrAuxGridInfo->finnishTime);
+//			ptrAuxGridInfo = ptrAuxGridInfo->nextGridAccountInfo;
+//		}
+//		//	printf("a lista tem %d balances, e o total de creditos doados e %d\n", count, credit);
+//		//	printf("\n");
+//		fclose(ptrFileGridAccountInfo);
+//
+//		FILE *ptrFileBalanceAccountInfo;
+//		ptrFileBalanceAccountInfo = fopen("balanceaccountinfo.txt", "a+");
+//		balanceAccountInfo *ptrAuxBalanceAccountInfo;
+//		ptrAuxBalanceAccountInfo = balanceAccountInfoList;
+//		unsigned long int consumed = 0, lastValue = 0;
+//		while(ptrAuxBalanceAccountInfo->nextBalanceAccountInfo != NULL) {
+//
+//			if (ptrAuxBalanceAccountInfo->consumed > lastValue) {
+//				consumed += lastValue;
+//			}
+//			else {
+//				consumed += ptrAuxBalanceAccountInfo->consumed;
+//			}
+//			lastValue = ptrAuxBalanceAccountInfo->value;
+//
+//			fprintf(ptrFileBalanceAccountInfo, "balanceAccountID %ld time %ld consumed %ld value %ld\n", ptrAuxBalanceAccountInfo->balanceAccountID,
+//					ptrAuxBalanceAccountInfo->time, ptrAuxBalanceAccountInfo->consumed, ptrAuxBalanceAccountInfo->value);
+//
+//			ptrAuxBalanceAccountInfo = ptrAuxBalanceAccountInfo->nextBalanceAccountInfo;
+//
+//		}
+//		consumed += ptrAuxBalanceAccountInfo->consumed;
+//		fprintf(ptrFileBalanceAccountInfo, "balanceAccountID %ld time %ld consumed %ld value %ld\n", ptrAuxBalanceAccountInfo->balanceAccountID, ptrAuxBalanceAccountInfo->time,
+//				ptrAuxBalanceAccountInfo->consumed, ptrAuxBalanceAccountInfo->value);
+//		//	printf("a lista de balances tem %d registros\n", count);
+//		//	printf("\n");
+//		fclose(ptrFileBalanceAccountInfo);
+//
+//		if ( credit != (ptrAuxBalanceAccountInfo->value + consumed) ) {
+//			//		printf("\n");
+//			printf("(INVARIANTES) BALANCE DO GRID ERRADO!!!\n");
+//			printf("credit %ld (balance+consumed) %ld consumed %ld totalET %ld\n", credit, (ptrAuxBalanceAccountInfo->value + consumed), consumed, totalExecutionTime);
+//		}
+//		//	printf("doado %d consumido %d balance %d\n", credit, consumed, ptrAuxBalanceAccountInfo->value);
+//		// ##### FIM INVARIANTES PARA O CONSUMO DA GRADE E PARA BALANCO DE CREDITOS #####
 
 	} else printf("ERROR (Main Simulator): invalid number of input parameters!!!\n");
 

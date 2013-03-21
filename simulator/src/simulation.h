@@ -142,7 +142,7 @@ void IncrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned long i
 
 void DecrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned long int time, unsigned long int value);
 
-unsigned int GetBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned long int time);
+unsigned int GetBalance(balanceAccountInfo **ptrPtrBalanceAccountInfo, unsigned long int time);
 
 void InsertEvent(event *ptrEventList, event *ptrNewEvent);
 
@@ -192,13 +192,13 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 void JobFinnishedOpt(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job *ptrJobList, task **ptrPtrTaskList, task **ptrPtrOrderedTaskList);
 
 void EventHandler(event *ptrCurrentEvent, event **ptrPtrEventList, machine **ptrPtrMachineList, task **ptrPtrTaskList, taskAccountInfo **ptrPtrTaskAccountInfoList,
-		gridAccountInfo *ptrGridInfoList, job *ptrJobList, jobAccountInfo *ptrJobAccountInfo, balanceAccountInfo *ptrBalanceAccountInfo, task **ptrPtrOrderedTaskList,
+		gridAccountInfo *ptrGridInfoList, job *ptrJobList, jobAccountInfo *ptrJobAccountInfo, balanceAccountInfo **ptrPtrBalanceAccountInfo, task **ptrPtrOrderedTaskList,
 		schedule *ptrScheduleList);
 
-void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, balanceAccountInfo *ptrBalanceAccountInfo);
+void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrTaskList, balanceAccountInfo **ptrPtrBalanceAccountInfo);
 
 void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMachineList, task *ptrOrderedTaskList, job *ptrJobList,
-		balanceAccountInfo *ptrBalanceAccountInfo);
+		balanceAccountInfo **ptrPtrBalanceAccountInfo);
 
 double Randn(double mu, double sigma);
 
