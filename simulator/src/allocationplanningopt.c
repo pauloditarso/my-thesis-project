@@ -120,7 +120,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			while(ptrAux1->nextMachineOptSet != NULL) ptrAux1 = ptrAux1->nextMachineOptSet;
 
 			unsigned long int i;
-			for (i = 1; (i <= (jobSize-numberOfLocalMachines) && i <= numberOfGridMachines); i++) {
+			for (i = 1; (i <= jobSize && i <= numberOfGridMachines); i++) {
 
 //				 debug mode
 //				if (ptrCurrentEvent->eventNumber == 9749) {
