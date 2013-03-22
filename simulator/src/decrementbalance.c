@@ -31,6 +31,7 @@ void DecrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned long i
 			ptrNewBalance->nextBalanceAccountInfo = NULL;
 
 			ptrLast->nextBalanceAccountInfo = ptrNewBalance;
+//			balanceCredit = ptrNewBalance->value;
 
 		} else printf("ERROR (decrement balance): merdou o malloc!!!\n");
 

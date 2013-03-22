@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
 	unsigned long int count = 0;
 	unsigned long int totalNumberOfEvents = 0;
 	gridMachinesID = 0; scheduleID = 0;
+//	balanceCredit = 0;
 
 //	unsigned long int totalUtility = 0;
 //	float totalCost = 0.0, totalProfit = 0.0;

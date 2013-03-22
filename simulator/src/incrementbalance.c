@@ -31,6 +31,7 @@ void IncrementBalance(balanceAccountInfo *ptrBalanceAccountInfo, unsigned long i
 			ptrNewBalance->nextBalanceAccountInfo = NULL;
 
 			ptrLast->nextBalanceAccountInfo = ptrNewBalance;
+//			balanceCredit = ptrNewBalance->value;
 
 		} else printf("ERROR (increment balance): merdou o malloc!!!\n");
 
