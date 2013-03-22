@@ -18,8 +18,7 @@ void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMach
 
 		while (ptrAuxGrid) {
 
-			if ( ptrAuxGrid->machineID == ptrCurrentEvent->machineInfo.machineID &&
-					ptrAuxGrid->source == ptrCurrentEvent->machineInfo.source &&
+			if ( ptrAuxGrid->machineID == ptrCurrentEvent->machineInfo.machineID && ptrAuxGrid->source == ptrCurrentEvent->machineInfo.source &&
 					ptrAuxGrid->finnishTime == 0) {
 
 				found = 1;
@@ -48,6 +47,20 @@ void GridPreempted(event *ptrCurrentEvent, event *ptrEventList, machine *ptrMach
 
 		if (!found) {
 			printf("ERROR (grid preempted): didn't find the grid entry!!!\n");
+		}
+		else { // remover da gridAccountList o noh que jah foi finalizado
+
+			if ( ptrAuxGrid != NULL && ptrAuxGrid != ptrAuxLast) {
+
+				gridAccountInfo *ptrRemove;
+				ptrRemove = ptrAuxGrid;
+				ptrAuxLast->nextGridAccountInfo = ptrAuxGrid->nextGridAccountInfo;
+				ptrAuxGrid = ptrAuxGrid->nextGridAccountInfo;
+				free(ptrRemove);
+				ptrRemove = NULL;
+
+			}
+
 		}
 
 //		printf("eventID %d (Grid Preempted) time %d \n", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
