@@ -34,9 +34,10 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 		if (ptrMachineList && ptrOrderedTaskList) {
 
-			unsigned int balance, numberOfGridMachines;
+			unsigned long int balance, numberOfGridMachines;
 			balance = GetBalance(ptrPtrBalanceAccountInfo, ptrCurrentEvent->time);
-			numberOfGridMachines = (int)((balance * gridQoSFactor)/taskAvgTime); // ceiling or trunk???
+			numberOfGridMachines = (long int)((balance * gridQoSFactor)/taskAvgTime); // ceiling or trunk???
+//			printf("numero de maquinas do grid: %d\n", numberOfGridMachines); //debug mode
 
 			unsigned int firstTargetFinnishTime, deadline, timeSteps;
 			firstTargetFinnishTime = (ptrCurrentEvent->jobInfo.arrivalTime + 2 + ptrCurrentEvent->jobInfo.longestTask); // AT + 2min to start a job + LT
@@ -204,8 +205,6 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 				ptrAuxMachine = ptrAuxMachine->nextMachine;
 			} // end of while(ptrAuxMachine)
-
-
 
 			// sweeping the time till deadline
 			unsigned int targetFinnishTime;

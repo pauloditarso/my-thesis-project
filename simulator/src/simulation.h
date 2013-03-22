@@ -30,6 +30,7 @@ float ondemandPriceFactor, inhouseFactor; //, workloadFactor;
 unsigned short int jobSize, simSeed, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines; // TAZER balance E numberOfGridMachines???
 unsigned long int gridMachinesID, scheduleID;
 enum {CONSTANT, LINEAR, STEP} utilityFunction;
+//unsigned long int balanceCredit;
 //char *localMachinesTrace;
 //char *workloadTasksTrace;
 //char *workloadJobsTrace;
