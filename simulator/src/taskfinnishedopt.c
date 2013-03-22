@@ -14,8 +14,8 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 
 		task *ptrAuxTask;
 		ptrAuxTask = ptrTaskList;
-		taskAccountInfo *ptrAuxTaskAccount;
-		ptrAuxTaskAccount = ptrTaskAccountInfoList;
+		taskAccountInfo *ptrAuxTaskAccount, *ptrLastTaskAccount;
+		ptrAuxTaskAccount = ptrLastTaskAccount = ptrTaskAccountInfoList;
 		machine *ptrAuxMachine;
 		ptrAuxMachine = ptrMachineList;
 		job *ptrAuxJob;
@@ -88,7 +88,18 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 //						totalUsagePrice += ptrAuxTaskAccount->cost;
 					}
 
-					ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
+					if ( ptrAuxTaskAccount->status == ACCOUNTFINNISHED && ptrLastTaskAccount != ptrAuxTaskAccount ) {
+						taskAccountInfo *ptrRemove;
+						ptrRemove = ptrAuxTaskAccount;
+						ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
+						ptrLastTaskAccount->nextTaskAccountInfo = ptrAuxTaskAccount;
+						free(ptrRemove);
+						ptrRemove = NULL;
+					}
+					else {
+						ptrLastTaskAccount = ptrAuxTaskAccount;
+						ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
+					}
 
 				}  // end of while(ptrAuxTaskAccount != NULL) (varendo a taskAccountList)
 

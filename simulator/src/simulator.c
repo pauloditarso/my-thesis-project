@@ -457,38 +457,38 @@ int main(int argc, char *argv[]) {
 		}
 		// ##### FIM INVARIANTES PARA A LISTA DE MAQUINAS (CHEGADAS E PARTIDAS) #####
 
-		// ##### INVARIANTES PARA A LISTA DE EXECUCAO DAS TASKS #####
-		FILE *ptrFileTaskAccountInfo;
-		ptrFileTaskAccountInfo = fopen("taskaccountinfo.txt", "a+");
-		taskAccountInfo *ptrAuxTaskAccountInfo;
-		ptrAuxTaskAccountInfo = taskAccountInfoList;
-		unsigned long int totalExecutionTime = 0;
-		while(ptrAuxTaskAccountInfo) {
-
-			if (ptrAuxTaskAccountInfo->source == 1) {
-				totalExecutionTime += (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime);
-			}
-			if ( ptrAuxTaskAccountInfo->runtime < (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime) ) {
-				//			printf("\n");
-				printf("(INVARIANTES) TEMPO DE EXECUCAO MAIOR DO QUE O RUNTIME!!!\n");
-			}
-
-			if ( (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime) < 0 ) {
-				//			printf("\n");
-				printf("(INVARIANTES) FINNISHTIME MENOR DO QUE STARTTIME!!!\n");
-			}
-
-					fprintf(ptrFileTaskAccountInfo,"taskAccountID %d machineID %d source %d taskID %d jobID %d RT %d ET %ld ST %ld FT %ld Status %d Cost %.2f\n", ptrAuxTaskAccountInfo->taskAccountID,
-							ptrAuxTaskAccountInfo->machineID, ptrAuxTaskAccountInfo->source, ptrAuxTaskAccountInfo->taskID, ptrAuxTaskAccountInfo->jobID,
-							ptrAuxTaskAccountInfo->runtime, (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime),
-							ptrAuxTaskAccountInfo->startTime, ptrAuxTaskAccountInfo->finnishTime, ptrAuxTaskAccountInfo->status, ptrAuxTaskAccountInfo->cost);
-
-			ptrAuxTaskAccountInfo = ptrAuxTaskAccountInfo->nextTaskAccountInfo;
-		}
-		//	printf("a lista tem %d tasks\n", count);
-		//	printf("\n");
-		fclose(ptrFileTaskAccountInfo);
-		// ##### FIM INVARIANTES PARA A LISTA DE EXECUCAO DAS TASKS #####
+//		// ##### INVARIANTES PARA A LISTA DE EXECUCAO DAS TASKS #####
+//		FILE *ptrFileTaskAccountInfo;
+//		ptrFileTaskAccountInfo = fopen("taskaccountinfo.txt", "a+");
+//		taskAccountInfo *ptrAuxTaskAccountInfo;
+//		ptrAuxTaskAccountInfo = taskAccountInfoList;
+//		unsigned long int totalExecutionTime = 0;
+//		while(ptrAuxTaskAccountInfo) {
+//
+//			if (ptrAuxTaskAccountInfo->source == 1) {
+//				totalExecutionTime += (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime);
+//			}
+//			if ( ptrAuxTaskAccountInfo->runtime < (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime) ) {
+//				//			printf("\n");
+//				printf("(INVARIANTES) TEMPO DE EXECUCAO MAIOR DO QUE O RUNTIME!!!\n");
+//			}
+//
+//			if ( (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime) < 0 ) {
+//				//			printf("\n");
+//				printf("(INVARIANTES) FINNISHTIME MENOR DO QUE STARTTIME!!!\n");
+//			}
+//
+//					fprintf(ptrFileTaskAccountInfo,"taskAccountID %d machineID %d source %d taskID %d jobID %d RT %d ET %ld ST %ld FT %ld Status %d Cost %.2f\n", ptrAuxTaskAccountInfo->taskAccountID,
+//							ptrAuxTaskAccountInfo->machineID, ptrAuxTaskAccountInfo->source, ptrAuxTaskAccountInfo->taskID, ptrAuxTaskAccountInfo->jobID,
+//							ptrAuxTaskAccountInfo->runtime, (ptrAuxTaskAccountInfo->finnishTime-ptrAuxTaskAccountInfo->startTime),
+//							ptrAuxTaskAccountInfo->startTime, ptrAuxTaskAccountInfo->finnishTime, ptrAuxTaskAccountInfo->status, ptrAuxTaskAccountInfo->cost);
+//
+//			ptrAuxTaskAccountInfo = ptrAuxTaskAccountInfo->nextTaskAccountInfo;
+//		}
+//		//	printf("a lista tem %d tasks\n", count);
+//		//	printf("\n");
+//		fclose(ptrFileTaskAccountInfo);
+//		// ##### FIM INVARIANTES PARA A LISTA DE EXECUCAO DAS TASKS #####
 
 //		// ##### INVARIANTES PARA O CONSUMO DA GRADE E PARA BALANCO DE CREDITOS #####
 //		FILE *ptrFileGridAccountInfo;
