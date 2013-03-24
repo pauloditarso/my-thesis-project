@@ -88,18 +88,19 @@ void TaskFinnishedOpt(event *ptrCurrentEvent, event **ptrPtrEventList, task *ptr
 //						totalUsagePrice += ptrAuxTaskAccount->cost;
 					}
 
-					if ( ptrAuxTaskAccount->status == ACCOUNTFINNISHED && ptrLastTaskAccount != ptrAuxTaskAccount ) {
-						taskAccountInfo *ptrRemove;
-						ptrRemove = ptrAuxTaskAccount;
-						ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
-						ptrLastTaskAccount->nextTaskAccountInfo = ptrAuxTaskAccount;
-						free(ptrRemove);
-						ptrRemove = NULL;
-					}
-					else {
-						ptrLastTaskAccount = ptrAuxTaskAccount;
-						ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
-					}
+//					if ( ptrAuxTaskAccount->status == ACCOUNTFINNISHED && ptrLastTaskAccount != ptrAuxTaskAccount ) {
+//						taskAccountInfo *ptrRemove;
+//						ptrRemove = ptrAuxTaskAccount;
+//						ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
+//						ptrLastTaskAccount->nextTaskAccountInfo = ptrAuxTaskAccount;
+//						free(ptrRemove);
+//						ptrRemove = NULL;
+//					}
+//					else {
+//						ptrLastTaskAccount = ptrAuxTaskAccount;
+//						ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
+//					}
+					ptrAuxTaskAccount = ptrAuxTaskAccount->nextTaskAccountInfo;
 
 				}  // end of while(ptrAuxTaskAccount != NULL) (varendo a taskAccountList)
 
