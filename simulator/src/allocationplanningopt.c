@@ -664,6 +664,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				ptrBestScheduleList = ptrBestScheduleList->nextSchedule;
 			}
 
+			free(ptrBestScheduleQueue->scheduleList);
 			free(ptrBestScheduleQueue);
 			ptrBestScheduleQueue = NULL;
 			ptrBestScheduleList = NULL;
