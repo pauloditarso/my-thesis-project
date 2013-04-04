@@ -52,6 +52,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			if ( (ptrBestScheduleQueue = malloc(sizeof(scheduleQueue))) )  {
 				ptrBestScheduleQueue->targetFinnishtime = 0;
 				if ( !(ptrBestScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o 1o malloc!!!\n");
+				ptrBestScheduleQueue->scheduleList->nextSchedule = NULL;
 				ptrBestScheduleQueue->status = UNFINNISHED;
 				ptrBestScheduleQueue->utility = 0;
 				ptrBestScheduleQueue->cost = 0.0;
@@ -484,17 +485,33 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				if (ptrNewScheduleQueue->profit > ptrBestScheduleQueue->profit) {
 
 					scheduleQueue *ptrAuxScheduleQueue;
+					schedule *ptrAuxScheduleList;
 					ptrAuxScheduleQueue = ptrBestScheduleQueue;
+					ptrAuxScheduleList = ptrBestScheduleQueue->scheduleList;
 					ptrBestScheduleQueue = ptrNewScheduleQueue;
 					ptrBestScheduleList = ptrBestScheduleQueue->scheduleList;
-					free(ptrAuxScheduleQueue->scheduleList);
+					while(ptrAuxScheduleList) {
+						schedule *ptrRemove;
+						ptrRemove = ptrAuxScheduleList;
+						ptrAuxScheduleList = ptrAuxScheduleList->nextSchedule;
+						free(ptrRemove);
+						ptrRemove = NULL;
+					}
 					free(ptrAuxScheduleQueue);
 					ptrAuxScheduleQueue = NULL;
 					ptrNewScheduleQueue = NULL;
 
 				}
 				else {
-					free(ptrNewScheduleQueue->scheduleList);
+					schedule *ptrAuxScheduleList;
+					ptrAuxScheduleList = ptrNewScheduleQueue->scheduleList;
+					while(ptrAuxScheduleList) {
+						schedule *ptrRemove;
+						ptrRemove = ptrAuxScheduleList;
+						ptrAuxScheduleList = ptrAuxScheduleList->nextSchedule;
+						free(ptrRemove);
+						ptrRemove = NULL;
+					}
 					free(ptrNewScheduleQueue);
 					ptrNewScheduleQueue = NULL;
 				}
@@ -582,7 +599,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 						InsertEvent(ptrEventList, ptrNewGridMachine);
 					}
-					else printf("ERROR (allocation planning): merdou o 11o malloc!!!\n");
+					else printf("ERROR (allocation planningOpt): merdou o 11o malloc!!!\n");
 
 					ptrNewGridMachine = NULL;
 
@@ -604,7 +621,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 						InsertEvent(ptrEventList, ptrOutGridMachine);
 					}
-					else printf("ERROR (allocation planning): merdou o 12o malloc!!!\n");
+					else printf("ERROR (allocation planningOpt): merdou o 12o malloc!!!\n");
 
 					ptrOutGridMachine = NULL;
 
@@ -626,7 +643,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 						InsertEvent(ptrEventList, ptrNewEvent);
 					}
-					else printf("ERROR (allocation planning): merdou o 13o malloc!!!\n");
+					else printf("ERROR (allocation planningOpt): merdou o 13o malloc!!!\n");
 
 					ptrNewEvent = NULL;
 
@@ -664,9 +681,18 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 
 				ptrBestScheduleList = ptrBestScheduleList->nextSchedule;
-			}
 
-			free(ptrBestScheduleQueue->scheduleList);
+			} // end of while(ptrBestScheduleList)
+
+			schedule *ptrAuxScheduleList;
+			ptrAuxScheduleList = ptrBestScheduleQueue->scheduleList;
+			while(ptrAuxScheduleList) {
+				schedule *ptrRemove;
+				ptrRemove = ptrAuxScheduleList;
+				ptrAuxScheduleList = ptrAuxScheduleList->nextSchedule;
+				free(ptrRemove);
+				ptrRemove = NULL;
+			}
 			free(ptrBestScheduleQueue);
 			ptrBestScheduleQueue = NULL;
 			ptrBestScheduleList = NULL;
@@ -727,7 +753,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			printf("eventID %d (Allocation Planning) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 			printf("Allocation %d\n", allocated);
 
-		} else printf("ERROR (allocation planning): there is no machine or task list!!!\n");
+		} else printf("ERROR (allocation planningOpt): there is no machine or task list!!!\n");
 
-	} else printf("ERROR (allocation planning): wrong eventID!!!\n");
+	} else printf("ERROR (allocation planningOpt): wrong eventID!!!\n");
 } // end of AllocationPlanningOpt()
