@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
 		utilityFunction = (atoi(argv[12]));
 		simSeed = (atoi(argv[13]));
 
-		ondemandUsagePrice = (0.92*ondemandPriceFactor); reservedUsagePrice = 0.22; reservationPrice = 2984.00;
+		ondemandUsagePrice = (0.8*ondemandPriceFactor); reservedUsagePrice = 0.536; reservationPrice = 1068.00;
 		reservationPricePerDay = (numberOfReservedMachines * reservationPrice)/365;
 
 		srand(simSeed);
