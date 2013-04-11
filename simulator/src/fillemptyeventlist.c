@@ -199,7 +199,8 @@ void FillEmptyEventList(event *ptrEventList) {
 			auxPtrEvent2->jobInfo.finnishTime = 0; // indicates a non-setted finnish time
 			auxPtrEvent2->jobInfo.longestTask = longestTask;
 			auxPtrEvent2->jobInfo.deadline = (jobArrivalTime + DEADLINE);
-			auxPtrEvent2->jobInfo.maxUtility = (workload);
+			auxPtrEvent2->jobInfo.maxUtility = ((jobSize*reservationPrice*5*1.4)/365);
+//			auxPtrEvent2->jobInfo.maxUtility = (workload);
 			auxPtrEvent2->jobInfo.utility = 0;
 			auxPtrEvent2->jobInfo.cost = 0.00;
 			auxPtrEvent2->jobInfo.nextJob = NULL;
