@@ -147,7 +147,7 @@ void FillEmptyEventList(event *ptrEventList) {
 	} // end for (filling event list with on-demand machines)
 
 	// task and job arrival events
-	unsigned int jobArrivalTime = (int)Randn(1080, 60); // first job arrives at 6pm of the first day;
+	unsigned int jobArrivalTime = (int)Randn(720, 60); // first job arrives at 12pm of the first day;
 	unsigned int maximumNumberOfJobs = (int)floor(simulationTime/DAY_TIME); // maximum of one job a day
 	unsigned int longestTask, workload; //, jobSize, deadline, jobLength;
 	unsigned int taskSdvTime = (int)taskAvgTime*0.1;

@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 	if (argc == 14) {
 
 		optFlag = (atoi(argv[1]));
-		simulationTime = (atoi(argv[2]) * 24 * 60); // simulationTime is a global variable (minutes) based on the input parameter (days)
+		simulationTime = ((atoi(argv[2]) * 24 * 60) + 1440); // simulationTime is a global variable (minutes) based on the input parameter (days)
 		jobSize = (atoi(argv[3]));
 		gridQoSFactor = (atof(argv[4]));
 		ondemandPriceFactor = (atof(argv[5]));
