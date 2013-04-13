@@ -34,10 +34,10 @@ void JobFinnishedOpt(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, 
 		}
 		if (ptrAuxJobList == NULL) printf("ERROR (job finnishedOpt): job not found!!!\n");
 
-		int utility = 0;
+		float utility = 0.0;
 		switch(utilityFunction) {
 			case CONSTANT:
-				if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) <= ptrAuxJobList->deadline ) {
+				if (ptrAuxJobList->finnishTime <= ptrAuxJobList->deadline) {
 					utility = ptrAuxJobList->maxUtility;
 				}
 				else {
@@ -45,27 +45,29 @@ void JobFinnishedOpt(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, 
 				}
 				break;
 			case LINEAR:
-				if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) < ptrAuxJobList->deadline ) {
-					utility = ( (-1)*(ptrAuxJobList->maxUtility/(ptrCurrentEvent->jobInfo.deadline-ptrCurrentEvent->jobInfo.arrivalTime))*(ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) + ptrAuxJobList->maxUtility );
+				if (ptrAuxJobList->finnishTime < ptrAuxJobList->deadline) {
+//					utility = ( (-1)*(ptrAuxJobList->maxUtility/(float)(ptrCurrentEvent->jobInfo.deadline - ptrCurrentEvent->jobInfo.arrivalTime))*(float)(ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) + ptrAuxJobList->maxUtility );
+					utility = ( ptrAuxJobList->maxUtility * ( 1 -
+							( (float)(ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime)/(float)(ptrCurrentEvent->jobInfo.deadline - ptrCurrentEvent->jobInfo.arrivalTime) ) ) );
 				}
 				else {
 					utility = 0;
 				}
 				break;
 			case STEP:
-				if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) <= (ptrAuxJobList->deadline/3) ) {
+				if ( ptrAuxJobList->finnishTime <= (ptrAuxJobList->deadline/3) ) {
 					utility = ptrAuxJobList->maxUtility;
 				}
 				else {
-					if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) <= (2*ptrAuxJobList->deadline/3) ) {
+					if ( ptrAuxJobList->finnishTime <= (2*ptrAuxJobList->deadline/3) ) {
 						utility = (2*ptrAuxJobList->maxUtility/3);
 					}
 					else {
-						if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) <= ptrAuxJobList->deadline ) {
+						if ( ptrAuxJobList->finnishTime <= ptrAuxJobList->deadline ) {
 							utility = (ptrAuxJobList->maxUtility/3);
 						}
 						else {
-							if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) > ptrAuxJobList->deadline ) {
+							if ( ptrAuxJobList->finnishTime > ptrAuxJobList->deadline ) {
 								utility = 0;
 							}
 							else {
@@ -79,7 +81,13 @@ void JobFinnishedOpt(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, 
 				break;
 		} // end of switch(utilityFunction)
 
-		if (ptrAuxJobList->utility != utility) printf("ERROR (job finnishedOpt): different utility values!!!\n");
+//		debug mode
+//		printf("ptr->utility %.2f utility %.2f\n", ptrAuxJobList->utility, utility);
+		if ((int)ptrAuxJobList->utility != (int)utility) printf("ERROR (job finnishedOpt): different utility values!!!\n");
+//		float roundedAux1, roundedAux2;
+//		roundedAux1 = ceilf(ptrAuxJobList->utility * 100) / 100;
+//		roundedAux2 = ceilf(utility * 100) / 100;
+//		if (roundedAux1 != roundedAux2) printf("ERROR (job finnishedOpt): different utility values!!!\n");
 
 		// desalocando memoria da lista de tasks
 		task *ptrAuxTaskList;
@@ -111,7 +119,7 @@ void JobFinnishedOpt(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, 
 
 
 		printf("eventID %d (Job Finnished) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-		printf("JobID %d AR %ld FT %ld LT %d Deadline %ld MU %ld Utility %ld Cost %.2f Profit %.2f\n", ptrAuxJobList->jobID, ptrAuxJobList->arrivalTime, ptrAuxJobList->finnishTime,
+		printf("JobID %d AR %ld FT %ld LT %d Deadline %ld MU %.2f Utility %.2f Cost %.2f Profit %.2f\n", ptrAuxJobList->jobID, ptrAuxJobList->arrivalTime, ptrAuxJobList->finnishTime,
 				ptrAuxJobList->longestTask, ptrAuxJobList->deadline, ptrAuxJobList->maxUtility, ptrAuxJobList->utility, ptrAuxJobList->cost,
 				(ptrAuxJobList->utility - ptrAuxJobList->cost));
 

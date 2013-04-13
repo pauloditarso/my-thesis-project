@@ -35,7 +35,7 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 		}
 		if (ptrAuxJobList == NULL) printf("ERROR (job finnished): job not found!!!\n");
 
-		int utility = 0;
+		float utility = 0.0;
 		switch(utilityFunction) {
 			case CONSTANT:
 				if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) <= ptrAuxJobList->deadline ) {
@@ -47,7 +47,7 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 				break;
 			case LINEAR:
 				if ( (ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) < ptrAuxJobList->deadline ) {
-					utility = ( (-1)*(ptrAuxJobList->maxUtility/(ptrCurrentEvent->jobInfo.deadline-ptrCurrentEvent->jobInfo.arrivalTime))*(ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) + ptrAuxJobList->maxUtility );
+					utility = ( (-1)*(ptrAuxJobList->maxUtility/(float)(ptrCurrentEvent->jobInfo.deadline-ptrCurrentEvent->jobInfo.arrivalTime))*(float)(ptrAuxJobList->finnishTime - ptrAuxJobList->arrivalTime) + ptrAuxJobList->maxUtility );
 				}
 				else {
 					utility = 0;
@@ -97,7 +97,7 @@ void JobFinnished(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, job
 
 
 		printf("eventID %d (Job Finnished) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
-		printf("JobID %d AR %ld FT %ld LT %d Deadline %ld MU %ld Utility %ld Cost %.2f Profit %.2f\n", ptrAuxJobList->jobID, ptrAuxJobList->arrivalTime, ptrAuxJobList->finnishTime,
+		printf("JobID %d AR %ld FT %ld LT %d Deadline %ld MU %.2f Utility %.2f Cost %.2f Profit %.2f\n", ptrAuxJobList->jobID, ptrAuxJobList->arrivalTime, ptrAuxJobList->finnishTime,
 				ptrAuxJobList->longestTask, ptrAuxJobList->deadline, ptrAuxJobList->maxUtility, ptrAuxJobList->utility, ptrAuxJobList->cost,
 				(ptrAuxJobList->utility - ptrAuxJobList->cost));
 
