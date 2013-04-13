@@ -45,10 +45,10 @@ typedef struct task {
 
 typedef struct job {
 	unsigned int jobID, jobSize, longestTask;
-	unsigned long int arrivalTime, finnishTime, deadline, maxUtility;
+	unsigned long int arrivalTime, finnishTime, deadline;
 //	enum {JOBQUEUED, JOBSTARTED, JOBFINNISHED} status;
-	unsigned long int utility;
-	float cost;
+//	unsigned long int utility;
+	float maxUtility, utility, cost;
 	struct job *nextJob;
 } job;
 
@@ -80,8 +80,8 @@ typedef struct scheduleQueue {
 	unsigned long int targetFinnishtime;
 	schedule *scheduleList;
 	enum {UNFINNISHED, FAILED, SUCCESSFUL} status;
-	unsigned long int utility;
-	float cost, profit;
+//	unsigned long int utility;
+	float utility, cost, profit;
 	struct scheduleQueue *previousSchedule;
 } scheduleQueue;
 

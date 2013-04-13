@@ -199,9 +199,9 @@ void FillEmptyEventList(event *ptrEventList) {
 			auxPtrEvent2->jobInfo.finnishTime = 0; // indicates a non-setted finnish time
 			auxPtrEvent2->jobInfo.longestTask = longestTask;
 			auxPtrEvent2->jobInfo.deadline = (jobArrivalTime + DEADLINE);
-			auxPtrEvent2->jobInfo.maxUtility = ((jobSize*reservationPrice*5*1.4)/365);
+			auxPtrEvent2->jobInfo.maxUtility = (((float)jobSize*reservationPrice*5.0*1.4)/(float)365);
 //			auxPtrEvent2->jobInfo.maxUtility = (workload);
-			auxPtrEvent2->jobInfo.utility = 0;
+			auxPtrEvent2->jobInfo.utility = 0.0;
 			auxPtrEvent2->jobInfo.cost = 0.00;
 			auxPtrEvent2->jobInfo.nextJob = NULL;
 			auxPtrEvent2->nextEvent = NULL;
@@ -212,7 +212,7 @@ void FillEmptyEventList(event *ptrEventList) {
 			printf("ERROR (fill): merdou o malloc!!!\n");
 		}
 
-		jobArrivalTime += (int)Randn(DAY_TIME, 60); if (jobArrivalTime > 524880) break; // no arrivals after noom of the 365th day
+		jobArrivalTime += (int)Randn(DAY_TIME, 60); if (jobArrivalTime > (simulationTime - 1440 - (6*60))) break; // no arrivals after noom of the last day
 
 	}
 

@@ -39,7 +39,8 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			numberOfGridMachines = (long int)((balance * gridQoSFactor)/taskAvgTime); // ceiling or trunk???
 //			printf("numero de maquinas do grid: %d\n", numberOfGridMachines); //debug mode
 
-			unsigned int firstTargetFinnishTime, deadline, timeSteps;
+			unsigned long int firstTargetFinnishTime, deadline;
+			unsigned int timeSteps;
 			firstTargetFinnishTime = (ptrCurrentEvent->jobInfo.arrivalTime + 2 + ptrCurrentEvent->jobInfo.longestTask); // AT + 2min to start a job + LT
 			deadline = ptrCurrentEvent->jobInfo.deadline;
 			timeSteps = 1; // steps, in minutes, for the optimizing proccess
@@ -54,7 +55,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				if ( !(ptrBestScheduleQueue->scheduleList = malloc(sizeof(schedule))) ) printf("ERROR (allocation planningOpt): merdou o 1o malloc!!!\n");
 				ptrBestScheduleQueue->scheduleList->nextSchedule = NULL;
 				ptrBestScheduleQueue->status = UNFINNISHED;
-				ptrBestScheduleQueue->utility = 0;
+				ptrBestScheduleQueue->utility = 0.0;
 				ptrBestScheduleQueue->cost = 0.0;
 				ptrBestScheduleQueue->profit = -100000000;
 				ptrBestScheduleQueue->previousSchedule = NULL;
@@ -209,7 +210,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 			} // end of while(ptrAuxMachine)
 
 			// sweeping the time till deadline
-			unsigned int targetFinnishTime;
+			unsigned long int targetFinnishTime;
 			for (targetFinnishTime = firstTargetFinnishTime; targetFinnishTime <= deadline; targetFinnishTime += timeSteps) {
 
 //				debug mode
@@ -218,8 +219,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 //				printf("***************************************************\n");
 
 				unsigned int count = 0;
-				unsigned int targetUtility = 0;
-				float targetCost = 0.0;
+				float targetUtility = 0.0, targetCost = 0.0;
 
 				task *ptrAuxOrderedTask;
 				ptrAuxOrderedTask = ptrOrderedTaskList;
@@ -248,7 +248,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 					ptrNewScheduleQueue->scheduleList->source = 0;
 					ptrNewScheduleQueue->scheduleList->nextSchedule = NULL;
 					ptrNewScheduleQueue->status = UNFINNISHED;
-					ptrNewScheduleQueue->utility = 0;
+					ptrNewScheduleQueue->utility = 0.0;
 					ptrNewScheduleQueue->cost = 0.0;
 					ptrNewScheduleQueue->profit = 0.0;
 					ptrNewScheduleQueue->previousSchedule = NULL;
@@ -399,41 +399,38 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 
 					// calculating the utility based on the target finish time
 					switch(utilityFunction) {
-						case CONSTANT:
-							if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) <= ptrCurrentEvent->jobInfo.deadline ) {
+						case 0:
+							if (targetFinnishTime <= ptrCurrentEvent->jobInfo.deadline) {
 								targetUtility = ptrCurrentEvent->jobInfo.maxUtility;
 							}
 							else {
 								targetUtility = 0;
 							}
 							break;
-						case LINEAR:
-							if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) < ptrCurrentEvent->jobInfo.deadline ) {
-								targetUtility = ( (-1)*(ptrCurrentEvent->jobInfo.maxUtility/(ptrCurrentEvent->jobInfo.deadline-ptrCurrentEvent->jobInfo.arrivalTime))*(targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) + ptrCurrentEvent->jobInfo.maxUtility );
+						case 1:
+							if (targetFinnishTime < ptrCurrentEvent->jobInfo.deadline) {
+//								targetUtility = ( (-1)*(ptrCurrentEvent->jobInfo.maxUtility/(ptrCurrentEvent->jobInfo.deadline - ptrCurrentEvent->jobInfo.arrivalTime))*(targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) + ptrCurrentEvent->jobInfo.maxUtility );
+								targetUtility = ( ptrCurrentEvent->jobInfo.maxUtility * (1 -
+										( (float)(targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime)/(float)(ptrCurrentEvent->jobInfo.deadline - ptrCurrentEvent->jobInfo.arrivalTime) ) ) );
 							}
 							else {
 								targetUtility = 0;
 							}
-//							debug mode
-//							if (ptrCurrentEvent->eventNumber == 9748 && targetFinnishTime == 28654) {
-//								printf("targetUtility %d x %d maxUtility %d deadline %d targetFT %d jobArrival %d\n", targetUtility, (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime),
-//										ptrCurrentEvent->jobInfo.maxUtility, ptrCurrentEvent->jobInfo.deadline, targetFinnishTime, ptrCurrentEvent->jobInfo.arrivalTime);
-//							}
 							break;
-						case STEP:
-							if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) <= (ptrCurrentEvent->jobInfo.deadline/3) ) {
+						case 2:
+							if ( targetFinnishTime <= (ptrCurrentEvent->jobInfo.deadline/3) ) {
 								targetUtility = ptrCurrentEvent->jobInfo.maxUtility;
 							}
 							else {
-								if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) <= (2*ptrCurrentEvent->jobInfo.deadline/3) ) {
+								if ( targetFinnishTime <= (2*ptrCurrentEvent->jobInfo.deadline/3) ) {
 									targetUtility = (2*ptrCurrentEvent->jobInfo.maxUtility/3);
 								}
 								else {
-									if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) <= ptrCurrentEvent->jobInfo.deadline ) {
+									if ( targetFinnishTime <= ptrCurrentEvent->jobInfo.deadline ) {
 										targetUtility = (ptrCurrentEvent->jobInfo.maxUtility/3);
 									}
 									else {
-										if ( (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime) > ptrCurrentEvent->jobInfo.deadline ) {
+										if ( targetFinnishTime > ptrCurrentEvent->jobInfo.deadline ) {
 											targetUtility = 0;
 										}
 										else {
@@ -452,10 +449,15 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 					targetUtility = 0;
 				}
 
+// 				debug mode
+//				printf("targetUtility %.2f x %ld maxUtility %.2f deadline %ld targetFT %ld jobArrival %ld\n",
+//						targetUtility, (targetFinnishTime - ptrCurrentEvent->jobInfo.arrivalTime),	ptrCurrentEvent->jobInfo.maxUtility,
+//						ptrCurrentEvent->jobInfo.deadline, targetFinnishTime, ptrCurrentEvent->jobInfo.arrivalTime);
+
 				// calculating the costs based on the machine used times
 //				FILE *ptrFileDebug;
 //				ptrFileDebug = fopen("debug.txt", "a+");
-//				fprintf(ptrFileDebug, "********************* targetFT %d *********************\n", targetFinnishTime);
+//				fprintf(ptrFileDebug, "********************* targetFT %ld *********************\n", targetFinnishTime);
 				unsigned int totalUsedTime = 0;
 				ptrAuxOptSet = ptrMachineOptSetList;
 				while(ptrAuxOptSet) {
@@ -477,8 +479,8 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 				targetCost += reservationPricePerDay;
 				ptrNewScheduleQueue->utility = targetUtility;
 				ptrNewScheduleQueue->cost = targetCost;
-				ptrNewScheduleQueue->profit = (float)targetUtility - targetCost;
-//				fprintf(ptrFileDebug, "profit %.2f targetUtility %d targetCost %.2f\n", ((float)targetUtility - targetCost), targetUtility, targetCost); // debug mode
+				ptrNewScheduleQueue->profit = targetUtility - targetCost;
+//				fprintf(ptrFileDebug, "profit %.2f targetUtility %.2f targetCost %.2f\n", (targetUtility - targetCost), targetUtility, targetCost); // debug mode
 //				fclose(ptrFileDebug);
 
 				// comparing to find out the best profit scenario
