@@ -83,7 +83,9 @@ void JobFinnishedOpt(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, 
 
 //		debug mode
 //		printf("ptr->utility %.2f utility %.2f\n", ptrAuxJobList->utility, utility);
-		if ((int)ptrAuxJobList->utility != (int)utility) printf("ERROR (job finnishedOpt): different utility values!!!\n");
+		int diffUtility = (int) truncf(fabs(ptrAuxJobList->utility - utility));
+		if (diffUtility != 0) printf("ERROR (job finnishedOpt): different utility values!!!\n");
+//		if ((int)ptrAuxJobList->utility != (int)utility) printf("ERROR (job finnishedOpt): different utility values!!!\n");
 //		float roundedAux1, roundedAux2;
 //		roundedAux1 = ceilf(ptrAuxJobList->utility * 100) / 100;
 //		roundedAux2 = ceilf(utility * 100) / 100;
