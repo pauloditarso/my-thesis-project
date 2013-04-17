@@ -107,7 +107,8 @@ void AllocationPlanning(event *ptrCurrentEvent, event *ptrEventList, machine *pt
 						found = 1;
 						allocated = 1;
 						ptrAuxTask->status = STARTED; // LEMBAR QUE ESTOU AQUI A UM SEGUNDO DE COMECAR A EXECUCAO EFETIVAMENTE
-						unsigned int avgUpTime = (int)Randn(gridAvgUptime, (gridAvgUptime*0.1));
+//						unsigned int avgUpTime = (int)Randn(gridAvgUptime, (gridAvgUptime*0.1));
+						unsigned int avgUpTime = (int)Uniform(15, 25);
 //						printf("DT %d\n", departureTime); // debug mode
 
 						// insert a machine arrival event into the event list
