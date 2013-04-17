@@ -46,8 +46,10 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.macosx.exe.release.212166373.878784713" name="uniform.c" rcbsApplicability="disable" resourcePath="src/uniform.c" toolsToInvoke="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.release.928892059.1772745118">
-						<tool id="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.release.928892059.1772745118" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.release.928892059"/>
+					<fileInfo id="cdt.managedbuild.config.macosx.exe.release.212166373.1329317246" name="taskunschedule.c" rcbsApplicability="disable" resourcePath="src/taskunschedule.c" toolsToInvoke="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.release.928892059.2085037552">
+						<tool id="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.release.928892059.2085037552" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.release.928892059">
+							<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.211215968" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+						</tool>
 					</fileInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
@@ -75,6 +77,17 @@
 		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
-	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+		<buildTargets>
+			<target name="all" path="src" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments/>
+				<buildTarget>all</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+		</buildTargets>
+	</storageModule>
 </cproject>
