@@ -24,7 +24,7 @@
 
 unsigned short int optFlag;
 unsigned long int simulationTime;
-unsigned int taskAvgTime, gridAvgUptime;
+unsigned int taskAvgTime, taskSdvTime, gridAvgUptime;
 float gridQoSFactor, reservedUsagePrice, ondemandUsagePrice, reservationPricePerDay, reservationPrice;
 float ondemandPriceFactor, inhouseFactor; //, workloadFactor;
 unsigned short int jobSize, simSeed, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines; // TAZER balance E numberOfGridMachines???
@@ -202,5 +202,7 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 		balanceAccountInfo **ptrPtrBalanceAccountInfo);
 
 double Randn(double mu, double sigma);
+
+double Uniform(double a, double b);
 
 #endif /* SIMULATION_H_ */
