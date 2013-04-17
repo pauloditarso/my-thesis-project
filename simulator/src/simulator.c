@@ -51,7 +51,13 @@ int main(int argc, char *argv[]) {
 		numberOfLocalMachines = (atoi(argv[7]));
 		numberOfReservedMachines = atoi(argv[8]);
 		numberOfOnDemandMachines = atoi(argv[9]);
-		taskAvgTime = (atoi(argv[10]));
+		if (atoi(argv[10]) == 0) {
+			taskAvgTime = 10;
+			taskSdvTime = 5;
+		} else {
+			taskAvgTime = 47;
+			taskSdvTime = 26;
+		}
 		gridAvgUptime = (atoi(argv[11]));
 		utilityFunction = (atoi(argv[12]));
 		simSeed = (atoi(argv[13]));

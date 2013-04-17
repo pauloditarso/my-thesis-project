@@ -130,7 +130,8 @@ void AllocationPlanningOpt(event *ptrCurrentEvent, event *ptrEventList, machine 
 //					printf("numberOfGridMachines %ld", i);
 //				}
 
-				unsigned int avgUpTime = (int)Randn(gridAvgUptime, (gridAvgUptime*0.1));
+//				unsigned int avgUpTime = (int)Randn(gridAvgUptime, (gridAvgUptime*0.1));
+				unsigned int avgUpTime = (int)Uniform(15, 25);
 
 				if (ptrMachineOptSetList->machineID == 0) {  // means there are no machines in the list yet
 

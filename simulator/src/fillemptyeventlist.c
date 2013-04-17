@@ -150,7 +150,7 @@ void FillEmptyEventList(event *ptrEventList) {
 	unsigned int jobArrivalTime = (int)Randn(720, 60); // first job arrives at 12pm of the first day;
 	unsigned int maximumNumberOfJobs = (int)floor(simulationTime/DAY_TIME); // maximum of one job a day
 	unsigned int longestTask, workload; //, jobSize, deadline, jobLength;
-	unsigned int taskSdvTime = (int)taskAvgTime*0.1;
+//	unsigned int taskSdvTime = (int)taskAvgTime*0.1;
 
 	for (i = 0; i < maximumNumberOfJobs; i++) {
 
@@ -163,6 +163,11 @@ void FillEmptyEventList(event *ptrEventList) {
 
 		for (j = 0; j < jobSize; j++) {
 
+			double runtime = -1;
+			while (runtime < 0) {
+				runtime = Randn(taskAvgTime, taskSdvTime);
+			}
+
 			if( (auxPtrEvent1 = malloc(sizeof(event))) ) {
 
 				auxPtrEvent1->eventNumber = 0;
@@ -172,7 +177,7 @@ void FillEmptyEventList(event *ptrEventList) {
 				auxPtrEvent1->taskInfo.arrivalTime = jobArrivalTime;
 				auxPtrEvent1->taskInfo.jobID = (i + 1);
 				auxPtrEvent1->taskInfo.jobSize = jobSize;
-				auxPtrEvent1->taskInfo.runtime = (int)Randn(taskAvgTime, taskSdvTime);
+				auxPtrEvent1->taskInfo.runtime = (int)truncl(runtime);
 				auxPtrEvent1->taskInfo.status = QUEUED;
 				auxPtrEvent1->taskInfo.numberOfSubmissions = 0;
 				auxPtrEvent1->taskInfo.nextTask = NULL;
@@ -199,7 +204,7 @@ void FillEmptyEventList(event *ptrEventList) {
 			auxPtrEvent2->jobInfo.finnishTime = 0; // indicates a non-setted finnish time
 			auxPtrEvent2->jobInfo.longestTask = longestTask;
 			auxPtrEvent2->jobInfo.deadline = (jobArrivalTime + DEADLINE);
-			auxPtrEvent2->jobInfo.maxUtility = (((float)jobSize*reservationPrice)/(float)365);
+			auxPtrEvent2->jobInfo.maxUtility = (((float)jobSize*reservationPrice)*1.5/(float)365);
 //			auxPtrEvent2->jobInfo.maxUtility = (workload);
 			auxPtrEvent2->jobInfo.utility = 0.0;
 			auxPtrEvent2->jobInfo.cost = 0.00;
