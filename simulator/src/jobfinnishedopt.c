@@ -119,6 +119,8 @@ void JobFinnishedOpt(event *ptrCurrentEvent, jobAccountInfo *ptrJobAccountInfo, 
 
 		}
 
+		// calculating the aggregated utility, cost and profit
+		aggregatedUtility += ptrAuxJobList->utility; aggregatedCost += ptrAuxJobList->cost; aggregatedProfit += (ptrAuxJobList->utility - ptrAuxJobList->cost);
 
 		printf("eventID %d (Job Finnished) time %ld ", ptrCurrentEvent->eventID, ptrCurrentEvent->time);
 		printf("JobID %d AR %ld FT %ld LT %d Deadline %ld MU %.2f Utility %.2f Cost %.2f Profit %.2f\n", ptrAuxJobList->jobID, ptrAuxJobList->arrivalTime, ptrAuxJobList->finnishTime,

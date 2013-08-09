@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
 	unsigned long int count = 0;
 	unsigned long int totalNumberOfEvents = 0;
 	gridMachinesID = 0; scheduleID = 0;
+	aggregatedUtility = 0; aggregatedCost =0; aggregatedProfit = 0;
 //	balanceCredit = 0;
 
 //	unsigned long int totalUtility = 0;
@@ -559,9 +560,9 @@ int main(int argc, char *argv[]) {
 //			simSeed, utilityFunction,(clock() - start) / CLOCKS_PER_SEC);
 
 	printf("SimMode: %d SimTime (days): %d JobSize: %d GridQoS: %.2f OnDPFactor: %.2f IhFactor: %.2f Machines ([InH, Res, OnD]): [%d, %d, %d] TaskAvg: %d "
-			"GridAvg: %d UF: %d Seed: %d #Events: %ld ExecTime (seconds): %ld\n", optFlag, (int)(simulationTime/1440), jobSize, gridQoSFactor, ondemandPriceFactor,
+			"GridAvg: %d UF: %d Seed: %d #Events: %ld ExecTime (seconds): %ld AggUtility: %.2f AggCost %.2f AggProfit %.2f\n", optFlag, (int)(simulationTime/1440), jobSize, gridQoSFactor, ondemandPriceFactor,
 			inhouseFactor, numberOfLocalMachines, numberOfReservedMachines, numberOfOnDemandMachines, taskAvgTime, gridAvgUptime, utilityFunction, simSeed,
-			totalNumberOfEvents, (unsigned long int)(newEnd - newStart));
+			totalNumberOfEvents, (unsigned long int)(newEnd - newStart), aggregatedUtility, aggregatedCost, aggregatedProfit);
 
 //	event teste;
 //	printf("tamanho das estruturas: %d\n", sizeof(teste));
