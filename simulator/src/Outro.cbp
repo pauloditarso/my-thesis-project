@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Outro" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Outro" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Outro" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="Outro.cbp" />
+		<Unit filename="allocationplanning.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="allocationplanningopt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="decrementbalance.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="eventhandler.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="events.txt" />
+		<Unit filename="fillemptyeventlist.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="getbalance.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="grid-machines.txt" />
+		<Unit filename="griddonating.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="gridpreempted.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="incrementbalance.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="insertafterevent.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="insertevent.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="insertgridlist.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="insertjobaccountlist.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="inserttaskaccountlist.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="jobarrival.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="jobfinnished.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="jobfinnishedopt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="jobstarted.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="local-machines.txt" />
+		<Unit filename="machinearrival.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="machinedeparture.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="passouporaqui.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="randn.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="removeaccountlist.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="removeevent.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="resultado-default1.txt" />
+		<Unit filename="simulation.h" />
+		<Unit filename="simulator.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="taskarrival.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="taskfinnished.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="taskfinnishedopt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="tasks2jobs.R" />
+		<Unit filename="taskschedule.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="taskunschedule.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="uniform.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="variantes.txt" />
+		<Unit filename="what-to-do-next.txt" />
+		<Unit filename="workload-jobs.txt" />
+		<Unit filename="workload-jobs.txt.bkp" />
+		<Unit filename="workload-tasks.txt" />
+		<Unit filename="workload-tasks.txt.bkp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

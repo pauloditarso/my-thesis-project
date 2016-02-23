@@ -1,0 +1,15 @@
+Number					Events Description		Related Events			Related Events
+												(normal simulation)		(optimized simulation)
+0 	(SIMSTARTED)		Simulation Started		all;					all;
+1 	(MACHARRIVAL)		Machine Arrival			3; 6;					3; 9;
+2 	(MACHDEPARTURE)		Machine Departure		4; 7;					4;
+3 	(GRIDDONATING)		Grid Donating			1; 8;					1; 8;
+4	(GRIDPREEMPTED)		Grid Preempted			2; 6;					2; 9;
+5 	(TASKARRIVAL)		Task Arrival			6; 9;					9;
+6 	(TASKSCHEDULE)		Task Schedule			1; 4; 5; 7;				1; 4; 9;
+7 	(TASKPREEMPETED)	Task Preempted			2; 6;					(theoretically, this will not happen)
+8 	(TASKFINNISHED)		Task Finnished			3; 11;					3; 9; 11;
+9 	(JOBARRIVAL)		Job Arrival				5;						1; 4; 5; 6; 8; 10;
+10	(JOBSTARTED)		Job Started				6;						9;
+11	(JOBFINNISHED)		Job Finnished			8;						8;
+12	(SIMFINNISHED)		Simulation Finnished	all;					all;

@@ -1,0 +1,95 @@
+* DESALOCAR A MEMORIA USADA NO SCHEDULING;
+
+* VERIFICAR SE NAO EXISTE LOOP INFINITO NO SCHEDULING, QUANDO TENHO MUITAS MAQUINAS;
+
+* CONSERTAR O SEGMENTATION FAULT QND ENTRO COM ZERO MAQUINAS NA CLOUD
+
+* TESTAR, TESTAR, TESTAR!!!! E PLANEJAR OS EXPERIMENTOS!!!
+
+* ideias recentes:
+	- para o caso de doar maquinas da cloud para o grid, eh simplesmente criar os eventos de GRIDDONATING e GRIDPREEMPTED jah
+	na criacao dos eventos de TASKSCHEDULE (ou talvez no TASKFINNISHED);
+		(essa alternativa eh para melhor utilizar as maquinas da cloud, utilizando-as por horas completas para melhorar o custo)
+		(utilizacao seja computando uma task ou doando para a grade, jah que o custo do uso da hora serah o mesmo)
+		
+	- para contabilizar o custo na versao otimizada talvez seja melhor adicionar parametros na estrutura de alucacao e jah levar
+	o custo e a utilidade na hora do escalonamento e tentar puxar essas informacoes no JOBFINNISHED;
+		(lembrar que essas informacoes sao faceis de buscar na hora do escalonamento otimo, por causa da variavel timeLeft)
+
+* VERIFICAR SE O CALCULO DO PROFIT PARA CADA TARGET FINISH TIME ESTAH CORRETO!!!!
+
+* ANALISAR SE REALMENTE EH INTERESSANTE COLOCAR A TASK COMO RUNNING PELO MENOS UM MINUTO DA EXECUCAO REAL;
+  (UM MINUTO NO AllopationPlanning() E PODE SER MAIS DE UM MINUTO NO AllocationPlanningOpt()
+
+* LEMBRAR DE NAO CHAMAR AllocatingPlanningOpt() QND A TASK TERMINAR (em TaskFinnished()) POIS TODAS AS TASKS JAH ESTAO ALOCADAS
+  (TALVEZ CRIAR UM TaskFinnishedOpt() OU IMPLEMENTAR EM TaskFinnished() MESMO)
+  (EH SOH OLHAR UM SEGUNDO A FRENTE NA FILA DE EVENTOS E VER SE JAH NAO TEM ALGO ALOCADO PARA AQUELA MAQUINA)
+
+
+* implementar a fase de planning (com o estabelecimento dos contratos);
+	(isso implica na entrada das maquinas da cloud)
+	(lembrar da solucao de soh comprar maquinas na cloud para a hora de precisa, ou seja, a ultima)
+	(fazer um pre-processamento da quantidade necesseria para contratacao na cloud)
+	
+	- receber de entrada da simulacao (???):
+		* workloads de jobs e tasks;
+			- talvez sejam gerados internamente de forma "aleatoria";
+		* quantidade reservada de maquinas na cloud (em cada provedor, inclusive o spot-market);
+			- depois devo verificar como serah o fator de variabilidade nos precos;
+		* fator de "consumo" da grade (pdpc);
+		* quantidade de dias (ou horas) de simulacao;
+		* fator de variacao na demanda;
+		* rodada da simulacao ([minima-maxima]);
+		* fator de execucao do workload in-house (lambda);
+		
+	- opcoes:
+		* trazer a complexidade do planning para JobArrival() e deixar TaskSchedule() 
+		  para o efetivo escalonamento da task em tal horario, tal maquina; ou deixar a 
+		  complexidade em TaskSchedule();
+		* abrir um novo projeto; ou criar novas funcoes no mesmo projeto;
+		(prefiro a complexidade em JobArrival() e novas funcoes!!!)
+		   
+	- fazer um FOR para os pontos desejados de terminos (a cada hora, ex);
+	- criar um evento CheckPoint para cada ponto deste e tomar acoes em cada check point
+		* terminou realmente o job no ponto desejado?
+		* caso nao, esse check point nao interessa 
+		   [encerrar ou nao a simulacao? (indo pro final dela)?]
+		   [ou continuar pq existem outras apps?]
+		* caso sim, calcular o profit
+	- tirar (ou nao) a complexidade de TASKSCHEDULE e colocar em TASKARRIVAL (OU JOBARRIVAL)???
+	- lembrar que um ou mais jobs podem ser executados simultaneamente (vide logo abaixo)
+	
+* implementar os tipos de provedores e os precos incorridos por eles;
+   - entrada dos varios tipos de provedores cloud (spot entra mais tarde);
+   - precos de acordo com uma instancia de referencia da amazon (High-CPU???);
+   - IMPLEMENTAR O CUSTO A PARTIR DA UTILIZACAO DAS MAQUINAS NA CLOUD!!!
+      * por falta de informacao, vou assumir que ao iniciar duas vezes a mesma instancia dentro de uma hora serah cobrada as duas inicializacoes;
+         (solucao mais facil de implementar: ceil(runtime/60min);
+      * ISSO PODE PREJUDICAR OS RESULTADOS EM COMPARACAO A UMA HEURISTICA ORACULA QUE SABE QND VAO TERMINAR AS TASKS;
+      * uma contra-partida (cujo desenvolvimento eh mais complicado) eh computar as execucoes e gaps entre elas e ver se cabe em porcoes (multiplos) de uma hora;
+
+* verificar a relacao numero de tasks vs runtime medio vs tempo medio do job;
+
+* verificar (e tentar unificar) os modelos desenvolvidos para os trabalhos de short- e long-term management;
+	(tentar utilizar um unico modelo, alterando apenas as funcoes de utilidade);
+	(definir como serah a instanciacao dos parametros, verificando os trabalhos anteriores);
+	INSTANCIA ESCOLHIDA EM PRIMEIRA ANALISE: (LINUX INSTANCES) HIGH-CPU EXTRA-LARGE (OnDemand) e HIGH-CPU EXTRA-LARGE HEAVY UTILIZATION (Reserved);
+	(talvez seja interessante variar isto tambem!!!!)
+	
+* implementar as funcoes de utility;
+	como???
+	- primeiro, fazer o registro (na accountList) de todas as execucoes de tasks, inclusive as que falharam;
+	(talvez nao seja importante no primeiro momento, pois assume-se que apenas as maquinas na grade falham)
+	(mas as maquinas na cloud podem falhar tambem, caso contrato acabe, por exemplo)
+	- fazer um registro similar ao accountList para os Jobs;
+	(a partir deste registro e da funcao de utility a gente contabiliza o utilidade produzida)
+
+* implementar mais INVARIANTES em decorrencia da fase de planning!!!!
+(NAO VOU TRATAR O CASO DA EXECUCAO SIMULTANEA DE VARIOS JOBS, OU SEJA, UM JOB POR VEZ!!!)
+	
+* metodologia de avaliacao do ambiente proposto
+	- fazer a avaliacao numa ordem diferente do artigo long-term management
+		* avaliar um escalonamento "naive" apenas com maquinas locais e a cloud
+		* avaliar um escalonamento "naive" introduzindo a grade
+		* avaliar um escalonamento "enviesado" (ou seja, usando dados do ano anterior), com e sem a grade
+		* avaliar um escalonamento "inteligente" (alguma variacao do bin-packinng)
