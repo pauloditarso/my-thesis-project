@@ -88,19 +88,20 @@ int main(int argc, char *argv[]) {
 		FillEmptyEventList(eventList);
 
 		// IMPLEMENTAR AS VARIANTES PARA O FILLEMPTYEVENTLIST();
-		//	ptrAuxAux = eventList;
-		//	int count1 = 0;
-		//	while(ptrAuxAux) {
-		//		count1++;
-		//		if (ptrAuxAux->eventID == 1 || ptrAuxAux->eventID == 2) {
-		//			printf("eventID %d time %d machineID %d source %d status %d AT %d DT %d UP %.2f RP %.2f\n", ptrAuxAux->eventID, ptrAuxAux->time, ptrAuxAux->machineInfo.machineID,
-		//					ptrAuxAux->machineInfo.source, ptrAuxAux->machineInfo.status, ptrAuxAux->machineInfo.arrivalTime, ptrAuxAux->machineInfo.departureTime,
-		//					ptrAuxAux->machineInfo.usagePrice, ptrAuxAux->machineInfo.reservationPrice);
-		//		}
-		//		ptrAuxAux = ptrAuxAux->nextEvent;
-		//	}
-		//	printf("a lista tem %d eventos\n", count1);
-		//	printf("\n");
+		  event *ptrAuxAux;
+			ptrAuxAux = eventList;
+			int count1 = 0;
+			while(ptrAuxAux) {
+				count1++;
+				if (ptrAuxAux->eventID == 1 || ptrAuxAux->eventID == 2) {
+					printf("eventID %d time %d machineID %d source %d status %d AT %d DT %d UP %.2f RP %.2f\n", ptrAuxAux->eventID, ptrAuxAux->time, ptrAuxAux->machineInfo.machineID,
+							ptrAuxAux->machineInfo.source, ptrAuxAux->machineInfo.status, ptrAuxAux->machineInfo.arrivalTime, ptrAuxAux->machineInfo.departureTime,
+							ptrAuxAux->machineInfo.usagePrice, ptrAuxAux->machineInfo.reservationPrice);
+				}
+				ptrAuxAux = ptrAuxAux->nextEvent;
+			}
+			printf("a lista tem %d eventos\n", count1);
+			printf("\n");
 
 		// starting a machine list
 		if ( (machineList = malloc(sizeof(machine))) ) {
@@ -571,4 +572,3 @@ int main(int argc, char *argv[]) {
 
 	return EXIT_SUCCESS;
 }
-
